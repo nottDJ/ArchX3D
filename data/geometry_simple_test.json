@@ -1,0 +1,91 @@
+{
+    "metadata": {
+        "source": "D:\\program\\ArchX3D\\test_floorplan.dxf",
+        "layers_used": [
+            "WALLS"
+        ],
+        "scale_factor": 1.0,
+        "arc_segments": 16,
+        "segment_count": 5,
+        "bounding_box": {
+            "min": [
+                0.0,
+                0.0
+            ],
+            "max": [
+                10.0,
+                6.0
+            ]
+        },
+        "entity_counts": {
+            "LINE": 5,
+            "LWPOLYLINE": 0,
+            "POLYLINE": 0,
+            "ARC": 0,
+            "CIRCLE": 0
+        },
+        "units": "meters"
+    },
+    "walls": [
+        {
+            "start": [
+                0.0,
+                0.0
+            ],
+            "end": [
+                10.0,
+                0.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                10.0,
+                0.0
+            ],
+            "end": [
+                10.0,
+                6.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                10.0,
+                6.0
+            ],
+            "end": [
+                0.0,
+                6.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                0.0,
+                6.0
+            ],
+            "end": [
+                0.0,
+                0.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                6.0,
+                0.0
+            ],
+            "end": [
+                6.0,
+                6.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        }
+    ]
+}

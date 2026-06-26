@@ -1,0 +1,23 @@
+{
+    "wall_height": 3.0,
+    "wall_thickness": 0.15,
+    "layer_names": ["WALLS"],
+    "auto_detect_layer": true,
+    "scale_factor": 1.0,
+    "arc_segments": 16,
+    "deduplicate": true,
+    "render": {
+        "resolution_x": 960,
+        "resolution_y": 540,
+        "frames": 120,
+        "fps": 24,
+        "engine": "EEVEE"
+    },
+    "export": {
+        "glb": true,
+        "blend": true
+    },
+    "skip_styling": false,
+    "generate_ceiling": true,
+    "generate_floor": true
+}

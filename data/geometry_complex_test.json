@@ -1,0 +1,607 @@
+{
+    "metadata": {
+        "source": "D:\\program\\ArchX3D\\test_complex.dxf",
+        "layers_used": [
+            "WALLS"
+        ],
+        "scale_factor": 1.0,
+        "arc_segments": 16,
+        "segment_count": 48,
+        "bounding_box": {
+            "min": [
+                0.0,
+                -1.5
+            ],
+            "max": [
+                14.0,
+                9.0
+            ]
+        },
+        "entity_counts": {
+            "LINE": 14,
+            "LWPOLYLINE": 1,
+            "POLYLINE": 0,
+            "ARC": 1,
+            "CIRCLE": 1
+        },
+        "units": "meters"
+    },
+    "walls": [
+        {
+            "start": [
+                0.0,
+                0.0
+            ],
+            "end": [
+                8.0,
+                0.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                8.0,
+                0.0
+            ],
+            "end": [
+                8.0,
+                6.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                8.0,
+                6.0
+            ],
+            "end": [
+                0.0,
+                6.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                0.0,
+                6.0
+            ],
+            "end": [
+                0.0,
+                0.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                8.0,
+                0.0
+            ],
+            "end": [
+                14.0,
+                0.0
+            ],
+            "source_entity": "LWPOLYLINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                14.0,
+                0.0
+            ],
+            "end": [
+                14.0,
+                6.0
+            ],
+            "source_entity": "LWPOLYLINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                14.0,
+                6.0
+            ],
+            "end": [
+                8.0,
+                6.0
+            ],
+            "source_entity": "LWPOLYLINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                8.0,
+                0.0
+            ],
+            "end": [
+                8.0,
+                2.5
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                8.0,
+                3.5
+            ],
+            "end": [
+                8.0,
+                6.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                0.0,
+                6.0
+            ],
+            "end": [
+                4.0,
+                6.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                4.0,
+                6.0
+            ],
+            "end": [
+                4.0,
+                9.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                4.0,
+                9.0
+            ],
+            "end": [
+                0.0,
+                9.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                0.0,
+                9.0
+            ],
+            "end": [
+                0.0,
+                6.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                4.0,
+                6.0
+            ],
+            "end": [
+                14.0,
+                6.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                14.0,
+                6.0
+            ],
+            "end": [
+                14.0,
+                9.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                14.0,
+                9.0
+            ],
+            "end": [
+                4.0,
+                9.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                0.5,
+                0.0
+            ],
+            "end": [
+                0.528822,
+                -0.292635
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                0.528822,
+                -0.292635
+            ],
+            "end": [
+                0.614181,
+                -0.574025
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                0.614181,
+                -0.574025
+            ],
+            "end": [
+                0.752796,
+                -0.833355
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                0.752796,
+                -0.833355
+            ],
+            "end": [
+                0.93934,
+                -1.06066
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                0.93934,
+                -1.06066
+            ],
+            "end": [
+                1.166645,
+                -1.247204
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                1.166645,
+                -1.247204
+            ],
+            "end": [
+                1.425975,
+                -1.385819
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                1.425975,
+                -1.385819
+            ],
+            "end": [
+                1.707365,
+                -1.471178
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                1.707365,
+                -1.471178
+            ],
+            "end": [
+                2.0,
+                -1.5
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                2.0,
+                -1.5
+            ],
+            "end": [
+                2.292635,
+                -1.471178
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                2.292635,
+                -1.471178
+            ],
+            "end": [
+                2.574025,
+                -1.385819
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                2.574025,
+                -1.385819
+            ],
+            "end": [
+                2.833355,
+                -1.247204
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                2.833355,
+                -1.247204
+            ],
+            "end": [
+                3.06066,
+                -1.06066
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                3.06066,
+                -1.06066
+            ],
+            "end": [
+                3.247204,
+                -0.833355
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                3.247204,
+                -0.833355
+            ],
+            "end": [
+                3.385819,
+                -0.574025
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                3.385819,
+                -0.574025
+            ],
+            "end": [
+                3.471178,
+                -0.292635
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                3.471178,
+                -0.292635
+            ],
+            "end": [
+                3.5,
+                -0.0
+            ],
+            "source_entity": "ARC",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                11.3,
+                3.0
+            ],
+            "end": [
+                11.277164,
+                3.114805
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                11.277164,
+                3.114805
+            ],
+            "end": [
+                11.212132,
+                3.212132
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                11.212132,
+                3.212132
+            ],
+            "end": [
+                11.114805,
+                3.277164
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                11.114805,
+                3.277164
+            ],
+            "end": [
+                11.0,
+                3.3
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                11.0,
+                3.3
+            ],
+            "end": [
+                10.885195,
+                3.277164
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                10.885195,
+                3.277164
+            ],
+            "end": [
+                10.787868,
+                3.212132
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                10.787868,
+                3.212132
+            ],
+            "end": [
+                10.722836,
+                3.114805
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                10.722836,
+                3.114805
+            ],
+            "end": [
+                10.7,
+                3.0
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                10.7,
+                3.0
+            ],
+            "end": [
+                10.722836,
+                2.885195
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                10.722836,
+                2.885195
+            ],
+            "end": [
+                10.787868,
+                2.787868
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                10.787868,
+                2.787868
+            ],
+            "end": [
+                10.885195,
+                2.722836
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                10.885195,
+                2.722836
+            ],
+            "end": [
+                11.0,
+                2.7
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                11.0,
+                2.7
+            ],
+            "end": [
+                11.114805,
+                2.722836
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                11.114805,
+                2.722836
+            ],
+            "end": [
+                11.212132,
+                2.787868
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                11.212132,
+                2.787868
+            ],
+            "end": [
+                11.277164,
+                2.885195
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        },
+        {
+            "start": [
+                11.277164,
+                2.885195
+            ],
+            "end": [
+                11.3,
+                3.0
+            ],
+            "source_entity": "CIRCLE",
+            "layer": "WALLS"
+        }
+    ]
+}

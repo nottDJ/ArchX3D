@@ -1,0 +1,31 @@
+{
+    "rooms": [
+        {
+            "room_type": "Living Room",
+            "description": "This spacious 5x6m area is designed as the primary communal living space, emphasizing comfort, light, and open flow with a Scandinavian design approach.",
+            "wall_color_hex": "#F8F8F8",
+            "floor_material": "Light Oak Wood",
+            "furniture_assets": [
+                "Low-poly_3_seater_sofa_grey",
+                "Low-poly_round_coffee_table_birch",
+                "Low-poly_armchair_white_fabric",
+                "Low-poly_minimalist_TV_stand_white",
+                "Low-poly_textured_rug_light_grey"
+            ]
+        },
+        {
+            "room_type": "Bedroom",
+            "description": "The second 5x6m room serves as a serene private bedroom, maintaining the Scandinavian aesthetic with calming colors and functional furnishings.",
+            "wall_color_hex": "#E0FFFF",
+            "floor_material": "Light Oak Wood",
+            "furniture_assets": [
+                "Low-poly_queen_bed_frame_wood",
+                "Low-poly_nightstand_simple_x2",
+                "Low-poly_wardrobe_sliding_doors_white",
+                "Low-poly_simple_desk_wood",
+                "Low-poly_accent_chair_white_wood"
+            ]
+        }
+    ],
+    "overall_style": "Scandinavian"
+}

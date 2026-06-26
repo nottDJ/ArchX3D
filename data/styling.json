@@ -1,0 +1,31 @@
+{
+    "rooms": [
+        {
+            "room_type": "Living Room",
+            "description": "Spacious main living area, well-suited for relaxation and social gatherings given its generous 6x6m dimensions.",
+            "wall_color_hex": "#F8F8F8",
+            "floor_material": "Light Oak Wood",
+            "furniture_assets": [
+                "Scandinavian Sofa 3-Seater",
+                "Round Coffee Table Birch",
+                "Armchair Grey Fabric",
+                "Minimalist Floor Lamp",
+                "Low Bookshelf White"
+            ]
+        },
+        {
+            "room_type": "Bedroom",
+            "description": "A comfortable 4x6m bedroom, providing ample space for a sleeping area and personal storage.",
+            "wall_color_hex": "#E8E8E8",
+            "floor_material": "Light Oak Wood",
+            "furniture_assets": [
+                "Platform Bed Queen Size",
+                "Bedside Table Simple",
+                "Two-Door Wardrobe White",
+                "Small Desk Light Wood",
+                "Dining Chair Minimalist"
+            ]
+        }
+    ],
+    "overall_style": "Scandinavian Modern"
+}
