@@ -2,14 +2,20 @@
 ArchX3D — Blender 3D Generator
 ================================
 Runs inside Blender's Python environment (bpy).
-Reads geometry.json + styling.json + config.json and generates:
+Reads geometry.json + scene_graph.json + config.json and generates:
   - 3D walls (extruded + solidified)
   - Floor plane
   - Ceiling plane (optional)
-  - Materials (from styling or defaults)
-  - 3-point lighting
+  - Materials from the observed room finishes
+  - Procedural furniture and decor from the vision scene graph
+  - Luminaires recovered from the reference imagery
   - Camera orbit animation
   - Exports: .glb (web) + .blend (editing)
+
+Data sources, in order of preference:
+  1. ``data/scene_graph.json`` — the vision pipeline's output (furnished)
+  2. ``data/styling.json``     — the legacy text-only styling (colours only)
+  3. built-in defaults
 
 Invoked headless: blender --background --python blender_generator.py
 """
@@ -26,13 +32,39 @@ import math
 # ---------------------------------------------------------------------------
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODULES_DIR = os.path.join(BASE_DIR, 'modules')
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
 GEOMETRY_PATH = os.path.join(DATA_DIR, 'geometry.json')
 STYLING_PATH = os.path.join(DATA_DIR, 'styling.json')
+SCENE_GRAPH_PATH = os.path.join(DATA_DIR, 'scene_graph.json')
 CONFIG_PATH = os.path.join(BASE_DIR, 'config.json')
 OUTPUT_GLB_PATH = os.path.join(OUTPUT_DIR, 'model.glb')
 OUTPUT_BLEND_PATH = os.path.join(OUTPUT_DIR, 'scene.blend')
+
+# Blender's bundled Python does not see the project on sys.path.
+if MODULES_DIR not in sys.path:
+    sys.path.insert(0, MODULES_DIR)
+
+# The vision modules imported here are deliberately stdlib-only so they load
+# inside Blender. If they are unavailable the generator still runs, producing
+# the unfurnished architectural shell.
+try:
+    import blender_furniture
+    from vision import assets as vision_assets
+    from vision import catalog as vision_catalog
+    from vision.schema import SceneGraph
+    # The appearance layer: species materials, palette tinting, style policy,
+    # lighting reconstruction and viewpoint cameras. Split out of this file so
+    # each concern is separately readable and the bpy-free parts are testable.
+    from blender import camera as bl_camera
+    from blender import lighting as bl_lighting
+    from blender import materials as bl_materials
+    from blender import styles as bl_styles
+    VISION_AVAILABLE = True
+except ImportError as _exc:  # pragma: no cover - depends on install layout
+    print(f"[WARN] Vision modules unavailable ({_exc}); furniture will be skipped.")
+    VISION_AVAILABLE = False
 
 # ---------------------------------------------------------------------------
 # Default Configuration
@@ -158,6 +190,22 @@ def load_styling():
     except Exception as e:
         print(f"[WARN] Failed to load styling: {e}. Using defaults.")
         return None
+
+
+def load_scene_graph():
+    """Load the vision scene graph — optional. Returns None if unavailable."""
+    if not VISION_AVAILABLE or not os.path.exists(SCENE_GRAPH_PATH):
+        return None
+    try:
+        graph = SceneGraph.load(SCENE_GRAPH_PATH)
+    except Exception as e:
+        print(f"[WARN] Failed to load scene_graph.json: {e}")
+        return None
+
+    print(f"[SCENE] Loaded scene graph v{graph.schema_version}: "
+          f"{graph.room.room_type} ({graph.room.style}), "
+          f"{len(graph.objects)} objects, {len(graph.lights)} lights")
+    return graph
 
 
 # ---------------------------------------------------------------------------
@@ -371,70 +419,66 @@ def setup_lighting(center_x, center_y, max_dim, config):
     print("[OK] 3-point lighting configured (Key + Fill + Rim + World)")
 
 
-def setup_camera_and_animation(center_x, center_y, max_dim, config):
-    """Set up an orbiting camera pointing at the building center."""
-    scene = bpy.context.scene
-    render_cfg = config.get("render", {})
-    wall_height = config.get("wall_height", 3.0)
+def iter_action_fcurves(action):
+    """Yield an Action's F-Curves across Blender API generations.
 
-    # Camera at an elevated angle looking down at the model
-    cam_distance = max_dim * 1.5
-    cam_z = wall_height * 2.5
-    bpy.ops.object.camera_add(
-        location=(center_x, center_y - cam_distance, cam_z)
-    )
-    camera = bpy.context.active_object
-    camera.name = "MainCamera"
-    camera.data.lens = 28  # Wide-angle for architectural views
-    camera.data.clip_start = 0.01
-    camera.data.clip_end = 500.0
+    Blender 4.4 moved F-Curves under Action layers → strips → channelbags, and
+    5.0 removed the flat ``action.fcurves`` accessor entirely. Handle both so
+    the orbit animation works on either.
+    """
+    if action is None:
+        return
 
-    # Track-to target at building center
-    bpy.ops.object.empty_add(
-        type='PLAIN_AXES',
-        location=(center_x, center_y, wall_height * 0.4)
-    )
-    target = bpy.context.active_object
-    target.name = "CameraTarget"
+    flat = getattr(action, "fcurves", None)
+    if flat is not None:
+        for fcurve in flat:
+            yield fcurve
+        return
 
-    track = camera.constraints.new(type='TRACK_TO')
-    track.target = target
-    track.track_axis = 'TRACK_NEGATIVE_Z'
-    track.up_axis = 'UP_Y'
+    for layer in getattr(action, "layers", []) or []:
+        for strip in getattr(layer, "strips", []) or []:
+            for bag in getattr(strip, "channelbags", []) or []:
+                for fcurve in getattr(bag, "fcurves", []) or []:
+                    yield fcurve
 
-    # Orbit pivot
-    bpy.ops.object.empty_add(
-        type='PLAIN_AXES',
-        location=(center_x, center_y, 0)
-    )
-    pivot = bpy.context.active_object
-    pivot.name = "CameraOrbitPivot"
-    camera.parent = pivot
-    camera.matrix_parent_inverse = pivot.matrix_world.inverted()
 
-    # Animation: full 360° orbit
-    frame_count = render_cfg.get("frames", 120)
-    fps = render_cfg.get("fps", 24)
+def set_linear_interpolation(obj):
+    """Force LINEAR interpolation on every keyframe of an object."""
+    anim = getattr(obj, "animation_data", None)
+    if not anim or not anim.action:
+        return
 
-    scene.frame_start = 1
-    scene.frame_end = frame_count
-    scene.render.fps = fps
+    count = 0
+    for fcurve in iter_action_fcurves(anim.action):
+        for keyframe in fcurve.keyframe_points:
+            keyframe.interpolation = 'LINEAR'
+            count += 1
 
-    pivot.rotation_euler = (0, 0, 0)
-    pivot.keyframe_insert(data_path="rotation_euler", frame=1)
-    pivot.rotation_euler = (0, 0, 2 * math.pi)
-    pivot.keyframe_insert(data_path="rotation_euler", frame=frame_count + 1)
+    if count == 0:
+        print("[WARN] Could not reach keyframes to set linear interpolation; "
+              "the orbit may ease in and out.")
 
-    # Make the rotation interpolation linear (no ease-in/out)
-    if pivot.animation_data and pivot.animation_data.action:
-        for fcurve in pivot.animation_data.action.fcurves:
-            for kp in fcurve.keyframe_points:
-                kp.interpolation = 'LINEAR'
 
-    scene.camera = camera
-    print(f"[OK] Camera configured: orbit, {frame_count} frames @ {fps}fps")
+def setup_camera_and_animation(center_x, center_y, max_dim, config, graph=None):
+    """Build the walkthrough orbit plus a camera per stored reference viewpoint.
 
-    return camera
+    The viewpoint cameras are not made active. They exist so a preview can be
+    rendered from each and compared against the photograph it was fitted to —
+    see ``vision.similarity``.
+    """
+    if not VISION_AVAILABLE:
+        return None
+
+    cameras = bl_camera.build(graph, center_x, center_y, max_dim, config)
+
+    for note in cameras.notes:
+        print(f"[CAMERA] {note}")
+    print(f"[CAMERA] {cameras.summary()}")
+
+    for image_id, camera in sorted(cameras.by_image.items()):
+        print(f"[CAMERA]   {camera.name}: reproduces {camera['archx3d_source_image']}")
+
+    return cameras.walkthrough
 
 
 # ---------------------------------------------------------------------------
@@ -572,6 +616,246 @@ def resolve_materials(styling):
 
 
 # ---------------------------------------------------------------------------
+# Scene Graph → Materials
+# ---------------------------------------------------------------------------
+
+def library_for(graph):
+    """Build the material library, configured by the scene's dominant style."""
+    style, confidence = _dominant_style(graph)
+    library = bl_materials.MaterialLibrary(style=style, style_confidence=confidence)
+    print(f"[STYLE] {bl_styles.describe(style)} (confidence {confidence:.2f})")
+    return library
+
+
+def _dominant_style(graph):
+    """Area-weighted style across the rooms that have one.
+
+    Mirrors ``vision.appearance.dominant_style`` but reads the persisted graph
+    rather than the in-flight room records, so it works on a reloaded scene.
+    """
+    scores = {}
+    for room in graph.rooms:
+        if room.style and room.style != "unknown":
+            weight = max(room.area, 1.0) * max(room.style_confidence, 0.2)
+            scores[room.style] = scores.get(room.style, 0.0) + weight
+    if not scores:
+        return "unknown", 0.0
+    best = max(sorted(scores), key=lambda key: scores[key])
+    return best, min(1.0, scores[best] / sum(scores.values()))
+
+
+def palette_for(graph, room_id):
+    """The colour palette of a room, or the largest room's as a fallback.
+
+    Objects that never got a room assignment still deserve a coherent scheme,
+    and the primary room's palette is the best available answer.
+    """
+    room = graph.room_by_id(room_id) if room_id else None
+    if room is not None and room.palette is not None:
+        return room.palette
+    for candidate in sorted(graph.rooms, key=lambda r: -r.area):
+        if candidate.palette is not None:
+            return candidate.palette
+    return None
+
+
+def resolve_materials_from_graph(graph, library):
+    """Wall / floor / ceiling materials from the observed finishes.
+
+    Per-room finishes take precedence; the graph-level ones are the fallback
+    for consumers that predate per-room appearance.
+    """
+    primary = max(graph.rooms, key=lambda r: r.area) if graph.rooms else None
+    room_palette = primary.palette if primary is not None else None
+
+    wall_finish = (primary.wall_finish if primary else None) or (
+        graph.walls[0].finish if graph.walls else None
+    )
+    floor_finish = (primary.floor_finish if primary else None) or graph.floor
+    ceiling_finish = (primary.ceiling_finish if primary else None) or graph.ceiling
+
+    return (
+        library.surface(wall_finish, "wall", room_palette, "WallMaterial"),
+        library.surface(floor_finish, "floor", room_palette, "FloorMaterial"),
+        library.surface(ceiling_finish, "ceiling", room_palette, "CeilingMaterial"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# Scene Graph → Furniture
+# ---------------------------------------------------------------------------
+
+def build_furniture(graph, library, include_uncertain=False):
+    """Instantiate every buildable object from the scene graph.
+
+    Objects flagged uncertain are skipped by default: the brief is explicit
+    that an omission is preferable to a guess.
+    """
+    if not VISION_AVAILABLE:
+        return []
+
+    buildable = graph.buildable_objects(include_uncertain=include_uncertain)
+    skipped = len(graph.objects) - len(buildable)
+
+    built = []
+    for scene_object in buildable:
+        variant = vision_assets.get_variant(scene_object.asset)
+        builder_name = variant.builder if variant else "build_box_furniture"
+        params = dict(variant.params) if variant else {}
+
+        # Materials are resolved per object against its own room's palette, so
+        # a bedroom's scheme does not leak into the living room.
+        slots = library.for_object(scene_object, palette_for(graph, scene_object.room_id))
+        obj = blender_furniture.build_object(scene_object, slots, builder_name, params)
+        if obj is not None:
+            built.append(obj)
+
+    print(f"[FURNITURE] Built {len(built)} objects"
+          + (f", skipped {skipped} uncertain" if skipped else ""))
+
+    # Report what was withheld so the omission is visible, not silent.
+    if skipped:
+        withheld = sorted({o.category for o in graph.objects if o not in buildable})
+        print(f"[FURNITURE] Withheld (low confidence): {', '.join(withheld)}")
+
+    return built
+
+
+def build_openings(graph, library):
+    """Cut doors and windows out of the wall mesh with boolean modifiers."""
+    if not graph.openings:
+        return 0
+
+    walls = bpy.data.objects.get("Walls")
+    if walls is None:
+        return 0
+
+    cut = 0
+    for opening in graph.openings:
+        if opening.uncertain:
+            continue
+
+        wall = graph.wall_by_id(opening.wall_id)
+        rotation = wall.angle_deg if wall else 0.0
+
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(
+            opening.position.x,
+            opening.position.y,
+            opening.sill_height + opening.height / 2.0,
+        ))
+        cutter = bpy.context.active_object
+        cutter.name = f"Cutter_{opening.id}"
+        # Over-deep on the wall normal so the boolean fully penetrates.
+        cutter.scale = (opening.width, 1.5, opening.height)
+        cutter.rotation_euler = (0.0, 0.0, math.radians(rotation))
+
+        modifier = walls.modifiers.new(name=f"Opening_{opening.id}", type='BOOLEAN')
+        modifier.operation = 'DIFFERENCE'
+        modifier.object = cutter
+
+        bpy.context.view_layer.objects.active = walls
+        try:
+            bpy.ops.object.modifier_apply(modifier=modifier.name)
+            cut += 1
+        except RuntimeError as exc:
+            print(f"[OPENINGS] ! {opening.id} boolean failed: {exc}")
+            walls.modifiers.remove(modifier)
+
+        bpy.data.objects.remove(cutter, do_unlink=True)
+
+    print(f"[OPENINGS] Cut {cut}/{len(graph.openings)} openings into the walls")
+    return cut
+
+
+def build_architecture(graph, library):
+    """Build columns, beams, partitions and similar structural elements."""
+    if not VISION_AVAILABLE or not graph.architecture:
+        return 0
+
+    built = 0
+    for element in graph.architecture:
+        if element.uncertain:
+            continue
+        part = blender_furniture.Part()
+        part.box_base(
+            (0, 0),
+            (element.dimensions.width, element.dimensions.depth, element.dimensions.height),
+            0.0,
+        )
+        decision = library.resolve(element.finish.material, "object")
+        material = library.get(element.finish.color_hex, decision.material)
+        obj = part.to_object(f"arch_{element.id}", [material])
+        obj.location = (element.position.x, element.position.y, element.position.z)
+        obj.rotation_euler = (0.0, 0.0, math.radians(element.rotation_z))
+        built += 1
+
+    if built:
+        print(f"[ARCHITECTURE] Built {built} structural elements")
+    return built
+
+
+# ---------------------------------------------------------------------------
+# Scene Graph → Lighting
+# ---------------------------------------------------------------------------
+
+def setup_lighting_from_graph(graph, center_x, center_y, max_dim, config):
+    """Build the lighting rig from the graph's environment and luminaires.
+
+    Returns True when the graph supplied something usable; the caller falls
+    back to the generic rig when it did not.
+    """
+    style, _ = _dominant_style(graph)
+    report = bl_lighting.build(graph, style=style, config=config)
+
+    for note in report.notes:
+        print(f"[LIGHTING] {note}")
+    print(f"[LIGHTING] {report.summary()}")
+
+    # A rig with no fixtures *and* no sun lights nothing; anything else is a
+    # legitimate scene (a daylit room needs no lamps).
+    return report.fixtures > 0 or report.sun
+
+
+# ---------------------------------------------------------------------------
+# Evaluation Previews
+# ---------------------------------------------------------------------------
+
+def render_previews(graph, config):
+    """Render one deterministic preview per stored viewpoint.
+
+    The whole pipeline lives in ``modules/render``; this is only the hook that
+    starts it. It runs in-process because the scene is already built here —
+    reloading the .blend we just exported would double the cost for nothing.
+
+    Skipped when ARCHX3D_SKIP_PREVIEW=1, and a no-op when the graph carries no
+    viewpoints (no reference photographs were supplied).
+    """
+    if os.environ.get("ARCHX3D_SKIP_PREVIEW") == "1":
+        print("[PREVIEW] Skipped (ARCHX3D_SKIP_PREVIEW=1)")
+        return None
+    if graph is None or not getattr(graph, "viewpoints", None):
+        return None
+
+    try:
+        from render import preview as render_preview
+    except ImportError as exc:
+        print(f"[PREVIEW] Render pipeline unavailable ({exc})")
+        return None
+
+    try:
+        report = render_preview.render_after_generation(graph, config, base_dir=BASE_DIR)
+    except Exception as exc:  # A diagnostic pass must never fail the build.
+        print(f"[PREVIEW] Preview pass failed: {exc}")
+        return None
+
+    for note in report.notes:
+        print(f"[PREVIEW] {note}")
+    print(f"[PREVIEW] {report.summary()}")
+    print(f"[PREVIEW] Manifest: {report.manifest_path}")
+    return report
+
+
+# ---------------------------------------------------------------------------
 # Main Entry Point
 # ---------------------------------------------------------------------------
 
@@ -586,10 +870,18 @@ def main():
     # Load all data
     config = load_config()
     geometry = load_geometry()
-    styling = load_styling()
+    graph = load_scene_graph()
+    styling = load_styling() if graph is None else None
 
-    # Build materials
-    wall_mat, floor_mat, ceiling_mat = resolve_materials(styling)
+    include_uncertain = config.get("include_uncertain_objects", False)
+    library = library_for(graph) if (graph is not None and VISION_AVAILABLE) else None
+
+    # Build materials — the scene graph's observed finishes take precedence
+    # over the legacy text styling, which takes precedence over defaults.
+    if graph is not None and library is not None:
+        wall_mat, floor_mat, ceiling_mat = resolve_materials_from_graph(graph, library)
+    else:
+        wall_mat, floor_mat, ceiling_mat = resolve_materials(styling)
 
     # Build geometry
     walls_obj = create_walls(geometry, config, wall_mat)
@@ -605,16 +897,40 @@ def main():
     if config.get("generate_ceiling", True):
         create_ceiling(geometry, config, ceiling_mat)
 
-    # Lighting & Camera
-    setup_lighting(cx, cy, max_dim, config)
+    # Furniture, openings and structure from the vision scene graph
+    if graph is not None and library is not None:
+        build_openings(graph, library)
+        build_architecture(graph, library)
+        build_furniture(graph, library, include_uncertain=include_uncertain)
+        for line in library.log:
+            print(f"[MATERIALS] {line}")
+        print(f"[MATERIALS] {library.summary()}")
+
+    # Lighting — prefer the luminaires actually observed in the reference images
+    used_graph_lighting = False
+    if graph is not None:
+        used_graph_lighting = setup_lighting_from_graph(graph, cx, cy, max_dim, config)
+    if not used_graph_lighting:
+        print("[LIGHTING] Falling back to the generic 3-point rig")
+        setup_lighting(cx, cy, max_dim, config)
+
     setup_render(config)
-    setup_camera_and_animation(cx, cy, max_dim, config)
+    setup_camera_and_animation(cx, cy, max_dim, config, graph)
 
     # Export
     export_scene(config)
 
-    # Render frames for video
-    render_frames()
+    # Evaluation previews — one deterministic low-resolution image per stored
+    # viewpoint, for `vision.similarity` to score. Rendered here, in the
+    # process that just built the scene, rather than by reloading the .blend.
+    render_previews(graph, config)
+
+    # Render frames for video. `main.py --skip-render` sets this so the
+    # expensive frame loop is skipped when only the GLB is wanted.
+    if os.environ.get("ARCHX3D_SKIP_RENDER") == "1":
+        print("[RENDER] Frame rendering skipped (ARCHX3D_SKIP_RENDER=1)")
+    else:
+        render_frames()
 
     print("=" * 60)
     print("  ArchX3D — Generation Complete!")

@@ -1,7 +1,9 @@
 {
     "wall_height": 3.0,
     "wall_thickness": 0.15,
-    "layer_names": ["WALLS"],
+    "layer_names": [
+        "WALLS"
+    ],
     "auto_detect_layer": true,
     "scale_factor": 1.0,
     "arc_segments": 16,
@@ -17,7 +19,52 @@
         "glb": true,
         "blend": true
     },
+    "preview": {
+        "width": 640,
+        "height": 360,
+        "match_aspect": true,
+        "engine": "EEVEE",
+        "samples": 16,
+        "transparent": false,
+        "view_transform": "Standard",
+        "scheduler": "sequential",
+        "workers": 1,
+        "group_by_room": false,
+        "cache_enabled": true,
+        "include_neighbours": false,
+        "timeout": 600,
+        "passes": [
+            "albedo",
+            "depth",
+            "normal",
+            "material_id",
+            "object_id"
+        ],
+        "depth_range": 20.0
+    },
+    "vision": {
+        "enabled": true,
+        "model": "gemini-2.5-pro",
+        "fallback_model": "gemini-2.5-flash",
+        "cache": true,
+        "cache_dir": ".cache/vision",
+        "max_images": 6,
+        "images_dir": "reference_images",
+        "include_uncertain": false
+    },
+    "include_uncertain_objects": false,
     "skip_styling": false,
     "generate_ceiling": true,
-    "generate_floor": true
+    "generate_floor": true,
+    "evaluation": {
+        "weights": {
+            "colour": 0.2,
+            "material": 0.15,
+            "lighting": 0.2,
+            "layout": 0.2,
+            "objects": 0.25
+        },
+        "html": true,
+        "overlays": true
+    }
 }

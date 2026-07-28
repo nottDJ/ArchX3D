@@ -1,6 +1,19 @@
 ezdxf>=1.1.0
-google-generativeai>=0.3.0
 opencv-python>=4.8.0
 fastapi>=0.111.0
 uvicorn[standard]>=0.30.0
 python-multipart>=0.0.9
+
+# --- Vision pipeline ---------------------------------------------------------
+# Pillow downscales reference images before upload (optional but recommended:
+# without it the originals are sent, costing more tokens and latency).
+Pillow>=10.0.0
+
+# google-generativeai has reached end of support upstream. The vision client
+# prefers google-genai when installed and falls back to the legacy SDK, so
+# installing google-genai is a drop-in upgrade.
+google-genai>=1.0.0
+google-generativeai>=0.3.0
+
+# --- Tests -------------------------------------------------------------------
+pytest>=8.0.0

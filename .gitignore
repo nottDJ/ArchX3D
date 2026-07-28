@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Vision response cache — content-addressed, regenerated on demand
+.cache/
+
+# Blender backups
+*.blend1
+
+# Evaluation previews and the reports scored from them — both regenerated from
+# the scene graph and the .blend, and deliberately not deliverables
+# (see docs/RENDER_PIPELINE.md and docs/EVALUATION.md)
+output/preview/
+output/evaluation/
+
+# Environment
+.env
+.env.local
+
+# Wizard project workspaces (uploads + per-project outputs)
+projects/
+
+# Web app
+web/node_modules/
+web/.next/
+web/tsconfig.tsbuildinfo
+# CommonJS build of lib/, produced by `npm test` for the node:test runner
+web/.test-build/

@@ -17,11 +17,15 @@ import sys
 import subprocess
 import logging
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import Body, FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "modules"))
+import project_api  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Paths — resolved relative to this file so it works regardless of CWD
@@ -73,6 +77,165 @@ app.add_middleware(
 # e.g. http://localhost:8000/output/model.glb
 # ---------------------------------------------------------------------------
 app.mount("/output", StaticFiles(directory=OUTPUT_DIR), name="output")
+
+# Per-project uploads and results, so the wizard can show thumbnails and the
+# viewer can load the generated model.
+os.makedirs(project_api.PROJECTS_DIR, exist_ok=True)
+app.mount("/projects", StaticFiles(directory=project_api.PROJECTS_DIR), name="projects")
+
+
+# ---------------------------------------------------------------------------
+# Generation Wizard API
+# ---------------------------------------------------------------------------
+#
+# Step 1  POST   /api/projects                      create + upload DXF
+# Step 2  POST   /api/projects/{id}/images          upload one or more images
+# Step 3  POST   /api/projects/{id}/analyse         start analysis (background)
+#         GET    /api/jobs/{job_id}                 poll progress
+#         GET    /api/projects/{id}/review          detections for review
+#         POST   /api/projects/{id}/edits           apply the user's decisions
+# Step 4  POST   /api/projects/{id}/generate        build the Blender scene
+# Step 5  GET    /api/projects/{id}/model.glb       the finished model
+
+
+@app.post("/api/projects", tags=["Wizard"])
+async def create_project(file: UploadFile = File(...)):
+    """Step 1 — create a project from a DXF floor plan."""
+    manifest = project_api.create_project()
+    try:
+        contents = await file.read()
+        manifest = project_api.attach_dxf(
+            manifest["project_id"], file.filename or "plan.dxf", contents
+        )
+    except ValueError as exc:
+        project_api.delete_project(manifest["project_id"])
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    log.info(f"Project {manifest['project_id']} created from {manifest['dxf']['filename']}")
+    return manifest
+
+
+@app.post("/api/projects/{project_id}/images", tags=["Wizard"])
+async def upload_images(project_id: str, files: List[UploadFile] = File(...)):
+    """Step 2 — attach one or more reference images.
+
+    Accepts a multi-select or a drag-and-drop of several files in one request.
+    Rejected files are returned with reasons rather than dropped silently.
+    """
+    uploads = [(f.filename or "image.jpg", await f.read()) for f in files]
+    try:
+        result = project_api.attach_images(project_id, uploads)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    log.info(f"Project {project_id}: +{len(result['accepted'])} images, "
+             f"{len(result['rejected'])} rejected")
+    return result
+
+
+@app.delete("/api/projects/{project_id}/images/{filename}", tags=["Wizard"])
+async def delete_image(project_id: str, filename: str):
+    try:
+        return project_api.remove_image(project_id, filename)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+@app.get("/api/projects/{project_id}", tags=["Wizard"])
+async def get_project(project_id: str):
+    try:
+        return project_api.load_manifest(project_id)
+    except (FileNotFoundError, ValueError) as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+@app.post("/api/projects/{project_id}/analyse", tags=["Wizard"])
+async def analyse_project(project_id: str, options: Optional[Dict[str, Any]] = Body(default=None)):
+    """Step 3 — run DXF extraction and vision analysis in the background."""
+    try:
+        job = project_api.start_analysis(project_id, options or {})
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return job.to_dict()
+
+
+@app.get("/api/jobs/{job_id}", tags=["Wizard"])
+async def get_job(job_id: str):
+    """Poll a background job. Used by both the analysis and generate steps."""
+    job = project_api.JOBS.get(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="job not found")
+    return job.to_dict()
+
+
+@app.get("/api/projects/{project_id}/review", tags=["Wizard"])
+async def get_review(project_id: str):
+    """Step 3 — everything the validation page renders."""
+    try:
+        return project_api.get_review(project_id)
+    except (FileNotFoundError, ValueError) as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+@app.post("/api/projects/{project_id}/edits", tags=["Wizard"])
+async def apply_edits(project_id: str, edits: Dict[str, Any] = Body(...)):
+    """Step 3 — apply the user's corrections before generation."""
+    try:
+        return project_api.apply_review_edits(project_id, edits)
+    except (FileNotFoundError, ValueError) as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+@app.post("/api/projects/{project_id}/validate", tags=["Wizard"])
+async def validate_project(
+    project_id: str, options: Optional[Dict[str, Any]] = Body(default=None)
+):
+    """Step 3 — deterministic re-check of the edited scene graph.
+
+    Runs no model and no network call, so it is safe to invoke after every
+    edit. Report-only unless ``apply_corrections`` is set; even then a locked
+    object is never moved, and a hand-edited one is only moved when
+    ``respect_user_edits`` is explicitly false.
+    """
+    options = options or {}
+    try:
+        return project_api.recheck_project(
+            project_id,
+            apply_corrections=bool(options.get("apply_corrections", False)),
+            respect_user_edits=bool(options.get("respect_user_edits", True)),
+        )
+    except (FileNotFoundError, ValueError) as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+@app.post("/api/projects/{project_id}/generate", tags=["Wizard"])
+async def generate_project(project_id: str, options: Optional[Dict[str, Any]] = Body(default=None)):
+    """Step 4 — build the Blender scene from the reviewed graph."""
+    try:
+        job = project_api.start_generation(project_id, options or {})
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return job.to_dict()
+
+
+@app.get("/api/projects/{project_id}/model.glb", tags=["Wizard"])
+async def get_model(project_id: str):
+    """Step 5 — the generated model, for the browser viewer."""
+    try:
+        root = project_api.project_dir(project_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    path = os.path.join(root, "output", "model.glb")
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="model not generated yet")
+    return FileResponse(path, media_type="model/gltf-binary", filename="model.glb")
 
 
 # ---------------------------------------------------------------------------

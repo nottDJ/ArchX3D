@@ -1,0 +1,3130 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-07-26T08:43:18",
+  "images": [
+    {
+      "image_id": "img0",
+      "file": "living_view_a.jpg",
+      "image_class": "interior_render",
+      "analysis_mode": "full",
+      "medium": "render",
+      "synthetic": true,
+      "room_type_hint": "living_room",
+      "geometry_trust": 0.55,
+      "confidence": 0.95,
+      "source": "model",
+      "contributes_appearance": true,
+      "notes": [
+        "photographic content; class deferred to the model",
+        "model classified as interior_render (render)"
+      ],
+      "metrics": {
+        "mean_saturation": 0.4153,
+        "flat_background_share": 0.1047,
+        "edge_density": 0.0771,
+        "palette_diversity": 0.0859,
+        "mean_gradient": 0.0259
+      }
+    },
+    {
+      "image_id": "img1",
+      "file": "living_view_b.jpg",
+      "image_class": "interior_render",
+      "analysis_mode": "full",
+      "medium": "render",
+      "synthetic": true,
+      "room_type_hint": "living_room",
+      "geometry_trust": 0.55,
+      "confidence": 0.95,
+      "source": "model",
+      "contributes_appearance": true,
+      "notes": [
+        "photographic content; class deferred to the model",
+        "model classified as interior_render (render)"
+      ],
+      "metrics": {
+        "mean_saturation": 0.399,
+        "flat_background_share": 0.0588,
+        "edge_density": 0.1038,
+        "palette_diversity": 0.0879,
+        "mean_gradient": 0.032
+      }
+    }
+  ],
+  "image_summary": {
+    "total": 2,
+    "by_class": {
+      "interior_render": 2
+    },
+    "by_mode": {
+      "full": 2
+    },
+    "appearance_sources": 2,
+    "geometry_only": 0,
+    "skipped": 0,
+    "photographs": 0,
+    "synthetic": 2
+  },
+  "rooms": [
+    {
+      "id": "room_0",
+      "room_type": "living_room",
+      "style": "modern",
+      "area": 45.5,
+      "width": 7.8,
+      "depth": 5.8,
+      "ceiling_height": 3.0,
+      "confidence": 0.95,
+      "polygon": [
+        [
+          -6.325,
+          -3.625
+        ],
+        [
+          0.375,
+          -3.625
+        ],
+        [
+          0.675,
+          -3.525
+        ],
+        [
+          0.925,
+          -3.075
+        ],
+        [
+          0.925,
+          1.625
+        ],
+        [
+          0.825,
+          1.925
+        ],
+        [
+          0.375,
+          2.175
+        ],
+        [
+          -6.325,
+          2.175
+        ],
+        [
+          -6.625,
+          2.075
+        ],
+        [
+          -6.875,
+          1.625
+        ],
+        [
+          -6.875,
+          -3.075
+        ],
+        [
+          -6.675,
+          -3.475
+        ]
+      ],
+      "bounds_min": [
+        -6.9,
+        -3.6500000000000004
+      ],
+      "bounds_max": [
+        0.9000000000000004,
+        2.1500000000000004
+      ],
+      "connected_to": [
+        "room_1",
+        "room_2",
+        "room_3",
+        "room_4"
+      ],
+      "source_images": [
+        "img0",
+        "img1"
+      ],
+      "has_imagery": true,
+      "finishes": {
+        "wall": {
+          "material": "paint_matte",
+          "color_hex": "#E5E0DA",
+          "roughness": 0.92,
+          "metallic": 0.0,
+          "finish": "matte",
+          "description": "Light beige painted walls",
+          "confidence": 0.945
+        },
+        "floor": {
+          "material": "wood_light",
+          "color_hex": "#D4BDA2",
+          "roughness": 0.293,
+          "metallic": 0.0,
+          "finish": "satin",
+          "description": "Light wood plank flooring",
+          "confidence": 0.974
+        },
+        "ceiling": {
+          "material": "gypsum",
+          "color_hex": "#F3F3F3",
+          "roughness": 0.9,
+          "metallic": 0.0,
+          "finish": "matte",
+          "description": "Plain white gypsum ceiling",
+          "confidence": 0.945
+        },
+        "ceiling_type": "plain"
+      },
+      "object_count": 40,
+      "objects": [
+        {
+          "id": "room_0__sectional_1",
+          "category": "sectional",
+          "label": "Grey fabric sectional sofa",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -5.1973,
+            "y": -1.4397,
+            "z": 0.0
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 2.7328,
+            "depth": 2.196,
+            "height": 1.0
+          },
+          "material": "fabric",
+          "color_hex": "#73787C",
+          "asset": "sectional_l_wide",
+          "confidence": 0.974,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "snapped_to_wall_0",
+            "faces_room_0__tv_1_limited_by_wall",
+            "asset: proportions match (0.90)",
+            "asset: style 'modern' suits sectional_l_wide",
+            "faces_room_0__tv_1_limited_by_wall"
+          ],
+          "distance_to_nearest_wall": 1.223
+        },
+        {
+          "id": "room_0__tv_unit_1",
+          "category": "tv_unit",
+          "label": "Light wood TV unit",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -2.9663,
+            "y": -2.0939,
+            "z": 0.0
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 1.7568,
+            "depth": 0.549,
+            "height": 0.61
+          },
+          "material": "wood_light",
+          "color_hex": "#D4BDA2",
+          "asset": "tv_unit_low_wide",
+          "confidence": 0.974,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "snapped_to_wall_0",
+            "asset: proportions match (0.90)",
+            "asset: style 'modern' suits tv_unit_low_wide",
+            "clamped_into_room"
+          ],
+          "distance_to_nearest_wall": 0.4
+        },
+        {
+          "id": "room_0__coffee_table_1",
+          "category": "coffee_table",
+          "label": "Light wood and black coffee table",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -1.5801,
+            "y": -1.8492,
+            "z": 0.0
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.96,
+            "depth": 0.6,
+            "height": 0.42
+          },
+          "material": "wood_light",
+          "color_hex": "#827A6C",
+          "asset": "table_rect_tapered",
+          "confidence": 0.973,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "asset: proportions match (0.90)",
+            "asset: style 'modern' suits table_rect_tapered"
+          ],
+          "distance_to_nearest_wall": 1.219
+        },
+        {
+          "id": "room_0__cabinet_1",
+          "category": "cabinet",
+          "label": "Light wood lower kitchen cabinet",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -2.956,
+            "y": -2.3125,
+            "z": 0.0
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 1.2962,
+            "depth": 0.549,
+            "height": 1.098
+          },
+          "material": "laminate",
+          "color_hex": "#C6AF94",
+          "asset": "cabinet_doors",
+          "confidence": 0.945,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "snapped_to_wall_0",
+            "asset: only variant",
+            "dropped_to_floor"
+          ],
+          "distance_to_nearest_wall": 0.4
+        },
+        {
+          "id": "room_0__cabinet_2",
+          "category": "cabinet",
+          "label": "Light wood upper kitchen cabinet",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -2.8326,
+            "y": -1.7914,
+            "z": 0.0
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 1.525,
+            "depth": 0.549,
+            "height": 1.098
+          },
+          "material": "laminate",
+          "color_hex": "#C6AF94",
+          "asset": "cabinet_doors",
+          "confidence": 0.803,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x1.25 from box aspect",
+            "ray_above_horizon",
+            "fallback_position",
+            "snapped_to_wall_0",
+            "asset: only variant",
+            "dropped_to_floor"
+          ],
+          "distance_to_nearest_wall": 0.4
+        },
+        {
+          "id": "room_0__dining_table_1",
+          "category": "dining_table",
+          "label": "Round wood dining table",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.0257,
+            "y": -2.7682,
+            "z": 0.0
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 1.28,
+            "depth": 0.9,
+            "height": 0.75
+          },
+          "material": "wood",
+          "color_hex": "#BA9B7E",
+          "asset": "dining_rect_legs",
+          "confidence": 0.945,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "asset: proportions match (0.90)",
+            "asset: style 'modern' suits dining_rect_legs"
+          ],
+          "distance_to_nearest_wall": 0.57
+        },
+        {
+          "id": "room_0__kitchen_counter_1",
+          "category": "kitchen_counter",
+          "label": "Light beige kitchen counter",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -2.4616,
+            "y": -1.2537,
+            "z": 0.0
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 2.379,
+            "depth": 0.732,
+            "height": 1.0
+          },
+          "material": "laminate",
+          "color_hex": "#D1C0AF",
+          "asset": "kitchen_counter_run",
+          "confidence": 0.945,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.81 from box aspect",
+            "snapped_to_wall_0",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.491
+        },
+        {
+          "id": "room_0__dining_chair_2",
+          "category": "dining_chair",
+          "label": "Wood dining chair",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -2.0539,
+            "y": -2.915,
+            "z": 0.0
+          },
+          "rotation_z": 180.0,
+          "dimensions": {
+            "width": 0.47,
+            "depth": 0.52,
+            "height": 0.92
+          },
+          "material": "wood",
+          "color_hex": "#B7987A",
+          "asset": "chair_dining_wood",
+          "confidence": 0.935,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "arranged_around_room_0__dining_table_1",
+            "asset: proportions match (0.99)",
+            "asset: style 'modern' suits chair_dining_wood"
+          ],
+          "distance_to_nearest_wall": 0.36
+        },
+        {
+          "id": "room_0__dining_chair_3",
+          "category": "dining_chair",
+          "label": "Wood dining chair",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -2.3456,
+            "y": -3.3721,
+            "z": 0.0
+          },
+          "rotation_z": 270.0,
+          "dimensions": {
+            "width": 0.47,
+            "depth": 0.52,
+            "height": 0.92
+          },
+          "material": "wood",
+          "color_hex": "#B7987A",
+          "asset": "chair_dining_wood",
+          "confidence": 0.935,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "arranged_around_room_0__dining_table_1",
+            "asset: proportions match (0.99)",
+            "asset: style 'modern' suits chair_dining_wood"
+          ],
+          "distance_to_nearest_wall": 0.359
+        },
+        {
+          "id": "room_0__dining_chair_1",
+          "category": "dining_chair",
+          "label": "Wood dining chair",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -2.3592,
+            "y": -2.8966,
+            "z": 0.0
+          },
+          "rotation_z": 180.0,
+          "dimensions": {
+            "width": 0.47,
+            "depth": 0.52,
+            "height": 0.92
+          },
+          "material": "wood",
+          "color_hex": "#B59678",
+          "asset": "chair_dining_wood",
+          "confidence": 0.93,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "arranged_around_room_0__dining_table_1",
+            "asset: proportions match (0.99)",
+            "asset: style 'modern' suits chair_dining_wood"
+          ],
+          "distance_to_nearest_wall": 0.95
+        },
+        {
+          "id": "room_0__side_table_1",
+          "category": "side_table",
+          "label": "Light wood round side table",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -1.694,
+            "y": -2.2712,
+            "z": 0.0
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.451,
+            "depth": 0.41,
+            "height": 0.451
+          },
+          "material": "wood_light",
+          "color_hex": "#D4B89C",
+          "asset": "side_table_simple",
+          "confidence": 0.9,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 1.515
+        },
+        {
+          "id": "room_0__dining_chair_4",
+          "category": "dining_chair",
+          "label": "Wood dining chair",
+          "group": "furniture",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.0462,
+            "y": -3.3651,
+            "z": 0.0
+          },
+          "rotation_z": 90.0,
+          "dimensions": {
+            "width": 0.47,
+            "depth": 0.52,
+            "height": 0.92
+          },
+          "material": "wood",
+          "color_hex": "#A07F60",
+          "asset": "chair_dining_wood",
+          "confidence": 0.7,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img1"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "partially_visible",
+            "base_occluded",
+            "arranged_around_room_0__dining_table_1",
+            "asset: proportions match (0.99)",
+            "asset: style 'modern' suits chair_dining_wood"
+          ],
+          "distance_to_nearest_wall": 1.598
+        },
+        {
+          "id": "room_0__ac_unit_1",
+          "category": "ac_unit",
+          "label": "Black metal floor lamp",
+          "group": "appliance",
+          "room_id": "room_0",
+          "position": {
+            "x": -1.707,
+            "y": -2.527,
+            "z": 1.5407
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.8784,
+            "depth": 0.2684,
+            "height": 0.366
+          },
+          "material": "metal",
+          "color_hex": "#1A1A1A",
+          "asset": "ac_wall_split",
+          "confidence": 0.95,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "support corrected floor -> wall from catalog prior",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.144
+        },
+        {
+          "id": "room_0__microwave_1",
+          "category": "microwave",
+          "label": "Stainless steel built-in microwave",
+          "group": "appliance",
+          "room_id": "room_0",
+          "position": {
+            "x": -0.9128,
+            "y": -3.3752,
+            "z": 1.0
+          },
+          "rotation_z": 90.0,
+          "dimensions": {
+            "width": 0.4,
+            "depth": 0.4,
+            "height": 0.3
+          },
+          "material": "metal",
+          "color_hex": "#A0A0A0",
+          "asset": "microwave_box",
+          "confidence": 0.9,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img1"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "wall_position_defaulted",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.21
+        },
+        {
+          "id": "room_0__oven_1",
+          "category": "oven",
+          "label": "Stainless steel built-in oven",
+          "group": "appliance",
+          "room_id": "room_0",
+          "position": {
+            "x": -1.0247,
+            "y": -3.3752,
+            "z": 0.0
+          },
+          "rotation_z": 90.0,
+          "dimensions": {
+            "width": 0.48,
+            "depth": 0.58,
+            "height": 0.6
+          },
+          "material": "metal",
+          "color_hex": "#A0A0A0",
+          "asset": "oven_box",
+          "confidence": 0.9,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img1"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "wall_position_defaulted",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.3
+        },
+        {
+          "id": "room_0__tv_1",
+          "category": "tv",
+          "label": "Black flat screen TV",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -5.1568,
+            "y": -3.6973,
+            "z": 1.2358
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 1.1712,
+            "depth": 0.0854,
+            "height": 0.854
+          },
+          "material": "plastic",
+          "color_hex": "#1A1A1A",
+          "asset": "tv_panel",
+          "confidence": 0.974,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.053
+        },
+        {
+          "id": "room_0__rug_1",
+          "category": "rug",
+          "label": "Light grey area rug",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -2.3678,
+            "y": 0.5776,
+            "z": 0.0
+          },
+          "rotation_z": 70.0,
+          "dimensions": {
+            "width": 2.3424,
+            "depth": 2.074,
+            "height": 0.0244
+          },
+          "material": "carpet",
+          "color_hex": "#D4D2CF",
+          "asset": "rug_rect",
+          "confidence": 0.973,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 1.141
+        },
+        {
+          "id": "room_0__curtains_1",
+          "category": "curtains",
+          "label": "Brown fabric curtains",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": 0.9168,
+            "y": 0.494,
+            "z": 0.02
+          },
+          "rotation_z": 90.0,
+          "dimensions": {
+            "width": 1.5616,
+            "depth": 0.1464,
+            "height": 2.85
+          },
+          "material": "fabric",
+          "color_hex": "#7D6855",
+          "asset": "curtain_pair",
+          "confidence": 0.945,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "support corrected ceiling -> wall from catalog prior",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.083
+        },
+        {
+          "id": "room_0__curtains_2",
+          "category": "curtains",
+          "label": "Brown fabric curtains",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": 0.9168,
+            "y": -3.3483,
+            "z": 0.02
+          },
+          "rotation_z": 90.0,
+          "dimensions": {
+            "width": 1.5616,
+            "depth": 0.1464,
+            "height": 2.85
+          },
+          "material": "fabric",
+          "color_hex": "#7D6855",
+          "asset": "curtain_pair",
+          "confidence": 0.945,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "support corrected ceiling -> wall from catalog prior",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.083
+        },
+        {
+          "id": "room_0__plant_1",
+          "category": "plant",
+          "label": "Green potted plant",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -1.7882,
+            "y": -3.2928,
+            "z": 0.0
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.5856,
+            "depth": 0.732,
+            "height": 1.464
+          },
+          "material": "plastic",
+          "color_hex": "#4E9349",
+          "asset": "plant_tall",
+          "confidence": 0.943,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 1.403
+        },
+        {
+          "id": "room_0__bowl_2",
+          "category": "bowl",
+          "label": "Light ceramic bowl",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.8367,
+            "y": -3.2301,
+            "z": 0.61
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.164,
+            "depth": 0.205,
+            "height": 0.082
+          },
+          "material": "ceramic",
+          "color_hex": "#AAAAAA",
+          "asset": "bowl_round",
+          "confidence": 0.94,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__cushion_1",
+          "category": "cushion",
+          "label": "Grey fabric cushion",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.9268,
+            "y": -3.2668,
+            "z": 0.4941
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.2952,
+            "depth": 0.369,
+            "height": 0.123
+          },
+          "material": "fabric",
+          "color_hex": "#73787B",
+          "asset": "cushion_square",
+          "confidence": 0.94,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__cushion_2",
+          "category": "cushion",
+          "label": "Grey fabric cushion",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.6572,
+            "y": -3.4795,
+            "z": 0.4941
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.2952,
+            "depth": 0.369,
+            "height": 0.123
+          },
+          "material": "fabric",
+          "color_hex": "#73787B",
+          "asset": "cushion_square",
+          "confidence": 0.94,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0",
+            "img1"
+          ],
+          "observation_count": 2,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__bowl_1",
+          "category": "bowl",
+          "label": "Dark decorative bowl",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -1.9945,
+            "y": -2.4381,
+            "z": 0.42
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.13,
+            "depth": 0.1625,
+            "height": 0.065
+          },
+          "material": "ceramic",
+          "color_hex": "#333333",
+          "asset": "bowl_round",
+          "confidence": 0.9,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img1"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__curtains_3",
+          "category": "curtains",
+          "label": "Brown fabric curtains",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": 0.93,
+            "y": -0.7972,
+            "z": 0.0236
+          },
+          "rotation_z": 90.0,
+          "dimensions": {
+            "width": 1.28,
+            "depth": 0.12,
+            "height": 2.4
+          },
+          "material": "fabric",
+          "color_hex": "#8B735C",
+          "asset": "curtain_pair",
+          "confidence": 0.9,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img1"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "support corrected ceiling -> wall from catalog prior",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.07
+        },
+        {
+          "id": "room_0__curtains_4",
+          "category": "curtains",
+          "label": "Brown fabric curtains",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": 0.93,
+            "y": -0.75,
+            "z": 0.58
+          },
+          "rotation_z": 90.0,
+          "dimensions": {
+            "width": 1.28,
+            "depth": 0.12,
+            "height": 2.4
+          },
+          "material": "fabric",
+          "color_hex": "#8B735C",
+          "asset": "curtain_pair",
+          "confidence": 0.9,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img1"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "support corrected ceiling -> wall from catalog prior",
+            "wall_position_defaulted",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.07
+        },
+        {
+          "id": "room_0__painting_1",
+          "category": "painting",
+          "label": "Framed abstract painting",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.0,
+            "y": 2.215,
+            "z": 1.05
+          },
+          "rotation_z": 180.0,
+          "dimensions": {
+            "width": 0.64,
+            "depth": 0.05,
+            "height": 1.0
+          },
+          "material": "wood",
+          "color_hex": "#303030",
+          "asset": "painting_frame",
+          "confidence": 0.9,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "wall_position_defaulted",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.035
+        },
+        {
+          "id": "room_0__painting_2",
+          "category": "painting",
+          "label": "Framed abstract painting",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.0,
+            "y": 2.215,
+            "z": 1.05
+          },
+          "rotation_z": 180.0,
+          "dimensions": {
+            "width": 0.64,
+            "depth": 0.05,
+            "height": 1.0
+          },
+          "material": "wood",
+          "color_hex": "#303030",
+          "asset": "painting_frame",
+          "confidence": 0.9,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "wall_position_defaulted",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.035
+        },
+        {
+          "id": "room_0__plant_2",
+          "category": "plant",
+          "label": "Small green potted plant",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -1.6139,
+            "y": -2.6276,
+            "z": 0.42
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.39,
+            "depth": 0.39,
+            "height": 0.78
+          },
+          "material": "plastic",
+          "color_hex": "#4F7942",
+          "asset": "plant_tall",
+          "confidence": 0.9,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img1"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__shelves_1",
+          "category": "shelves",
+          "label": "Light wood built-in shelves",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": 0.8192,
+            "y": -0.75,
+            "z": 1.317
+          },
+          "rotation_z": 90.0,
+          "dimensions": {
+            "width": 0.976,
+            "depth": 0.3416,
+            "height": 0.366
+          },
+          "material": "wood_light",
+          "color_hex": "#D4C3A9",
+          "asset": "shelf_floating",
+          "confidence": 0.9,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img1"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "wall_position_defaulted",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.181
+        },
+        {
+          "id": "room_0__flower_vase_1",
+          "category": "flower_vase",
+          "label": "Black vase with plant",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -1.6206,
+            "y": -2.9146,
+            "z": 0.42
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.1681,
+            "depth": 0.164,
+            "height": 0.287
+          },
+          "material": "ceramic",
+          "color_hex": "#1A1A1A",
+          "asset": "vase_round",
+          "confidence": 0.85,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__cushion_3",
+          "category": "cushion",
+          "label": "Grey fabric cushion",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.352,
+            "y": -3.4588,
+            "z": 0.4941
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.2952,
+            "depth": 0.369,
+            "height": 0.123
+          },
+          "material": "fabric",
+          "color_hex": "#6C757D",
+          "asset": "cushion_square",
+          "confidence": 0.8,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "partially_visible",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__cushion_4",
+          "category": "cushion",
+          "label": "Grey fabric cushion",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -2.6356,
+            "y": -3.4345,
+            "z": 0.4941
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.2952,
+            "depth": 0.369,
+            "height": 0.123
+          },
+          "material": "fabric",
+          "color_hex": "#6C757D",
+          "asset": "cushion_square",
+          "confidence": 0.8,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "partially_visible",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__cushion_5",
+          "category": "cushion",
+          "label": "Grey fabric cushion",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -4.701,
+            "y": -2.8467,
+            "z": 0.4941
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.2952,
+            "depth": 0.369,
+            "height": 0.123
+          },
+          "material": "fabric",
+          "color_hex": "#6C757D",
+          "asset": "cushion_square",
+          "confidence": 0.8,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "partially_visible",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__cushion_6",
+          "category": "cushion",
+          "label": "Grey fabric cushion",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -4.4551,
+            "y": -2.8467,
+            "z": 0.4941
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.2952,
+            "depth": 0.369,
+            "height": 0.123
+          },
+          "material": "fabric",
+          "color_hex": "#6C757D",
+          "asset": "cushion_square",
+          "confidence": 0.8,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "partially_visible",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__cushion_7",
+          "category": "cushion",
+          "label": "Grey fabric cushion",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -4.2304,
+            "y": -2.8764,
+            "z": 0.4941
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.2952,
+            "depth": 0.369,
+            "height": 0.123
+          },
+          "material": "fabric",
+          "color_hex": "#6C757D",
+          "asset": "cushion_square",
+          "confidence": 0.8,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "partially_visible",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__cushion_8",
+          "category": "cushion",
+          "label": "Grey fabric cushion",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -4.0268,
+            "y": -2.8467,
+            "z": 0.4941
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.2952,
+            "depth": 0.369,
+            "height": 0.123
+          },
+          "material": "fabric",
+          "color_hex": "#6C757D",
+          "asset": "cushion_square",
+          "confidence": 0.8,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "partially_visible",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__cushion_9",
+          "category": "cushion",
+          "label": "Grey fabric cushion",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.7216,
+            "y": -2.8807,
+            "z": 0.4941
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.2952,
+            "depth": 0.369,
+            "height": 0.123
+          },
+          "material": "fabric",
+          "color_hex": "#6C757D",
+          "asset": "cushion_square",
+          "confidence": 0.8,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "partially_visible",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__cushion_10",
+          "category": "cushion",
+          "label": "Grey fabric cushion",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.9862,
+            "y": -2.4974,
+            "z": 0.4941
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.2952,
+            "depth": 0.369,
+            "height": 0.123
+          },
+          "material": "fabric",
+          "color_hex": "#6C757D",
+          "asset": "cushion_square",
+          "confidence": 0.8,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "width adjusted x0.80 from box aspect",
+            "partially_visible",
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        },
+        {
+          "id": "room_0__books_1",
+          "category": "books",
+          "label": "Stack of books",
+          "group": "decor",
+          "room_id": "room_0",
+          "position": {
+            "x": -3.5485,
+            "y": -3.2802,
+            "z": 0.61
+          },
+          "rotation_z": 0.0,
+          "dimensions": {
+            "width": 0.1625,
+            "depth": 0.104,
+            "height": 0.13
+          },
+          "material": "unknown",
+          "color_hex": "#A0A0A0",
+          "asset": "books_stack",
+          "confidence": 0.7,
+          "band": "accept",
+          "uncertain": false,
+          "will_build": true,
+          "source_images": [
+            "img0"
+          ],
+          "observation_count": 1,
+          "flags": [
+            "asset: only variant"
+          ],
+          "distance_to_nearest_wall": 0.0
+        }
+      ],
+      "lights": [
+        {
+          "id": "room_0__cove_light_1",
+          "kind": "cove_light",
+          "mounting": "ceiling",
+          "position": {
+            "x": -3.0,
+            "y": -0.75,
+            "z": 2.8
+          },
+          "color_temperature_k": 2700.0,
+          "power_w": 58.8,
+          "confidence": 0.8,
+          "uncertain": false,
+          "source_images": [
+            "img1"
+          ]
+        },
+        {
+          "id": "room_0__floor_lamp_2",
+          "kind": "floor_lamp",
+          "mounting": "floor",
+          "position": {
+            "x": 0.4903,
+            "y": -0.8576,
+            "z": 0.0
+          },
+          "color_temperature_k": 2700.0,
+          "power_w": 79.2,
+          "confidence": 0.973,
+          "uncertain": false,
+          "source_images": [
+            "img0",
+            "img1"
+          ]
+        },
+        {
+          "id": "room_0__led_strip_1",
+          "kind": "led_strip",
+          "mounting": "ceiling",
+          "position": {
+            "x": -3.0,
+            "y": -0.75,
+            "z": 2.85
+          },
+          "color_temperature_k": 2700.0,
+          "power_w": 49.8,
+          "confidence": 0.945,
+          "uncertain": false,
+          "source_images": [
+            "img0",
+            "img1"
+          ]
+        },
+        {
+          "id": "room_0__pendant_light_1",
+          "kind": "pendant_light",
+          "mounting": "ceiling",
+          "position": {
+            "x": -4.95,
+            "y": -2.2,
+            "z": 1.9
+          },
+          "color_temperature_k": 2700.0,
+          "power_w": 67.9,
+          "confidence": 0.99,
+          "uncertain": false,
+          "source_images": [
+            "img0",
+            "img1"
+          ]
+        },
+        {
+          "id": "room_0__pendant_light_2",
+          "kind": "pendant_light",
+          "mounting": "ceiling",
+          "position": {
+            "x": -1.05,
+            "y": -2.2,
+            "z": 1.9
+          },
+          "color_temperature_k": 2700.0,
+          "power_w": 67.9,
+          "confidence": 0.99,
+          "uncertain": false,
+          "source_images": [
+            "img0",
+            "img1"
+          ]
+        },
+        {
+          "id": "room_0__pendant_light_3",
+          "kind": "pendant_light",
+          "mounting": "ceiling",
+          "position": {
+            "x": -4.95,
+            "y": 0.7,
+            "z": 1.9
+          },
+          "color_temperature_k": 2700.0,
+          "power_w": 67.9,
+          "confidence": 0.99,
+          "uncertain": false,
+          "source_images": [
+            "img0",
+            "img1"
+          ]
+        },
+        {
+          "id": "room_0__pendant_light_4",
+          "kind": "pendant_light",
+          "mounting": "ceiling",
+          "position": {
+            "x": -1.05,
+            "y": 0.7,
+            "z": 1.9
+          },
+          "color_temperature_k": 2700.0,
+          "power_w": 67.9,
+          "confidence": 0.99,
+          "uncertain": false,
+          "source_images": [
+            "img0",
+            "img1"
+          ]
+        },
+        {
+          "id": "room_0__recessed_light_1",
+          "kind": "recessed_light",
+          "mounting": "ceiling",
+          "position": {
+            "x": -4.95,
+            "y": -0.75,
+            "z": 2.95
+          },
+          "color_temperature_k": 2700.0,
+          "power_w": 32.9,
+          "confidence": 0.86,
+          "uncertain": false,
+          "source_images": [
+            "img0",
+            "img1"
+          ]
+        },
+        {
+          "id": "room_0__recessed_light_2",
+          "kind": "recessed_light",
+          "mounting": "ceiling",
+          "position": {
+            "x": -1.05,
+            "y": -0.75,
+            "z": 2.95
+          },
+          "color_temperature_k": 2700.0,
+          "power_w": 32.9,
+          "confidence": 0.86,
+          "uncertain": false,
+          "source_images": [
+            "img0",
+            "img1"
+          ]
+        }
+      ],
+      "openings": [
+        {
+          "id": "room_0__window_back_1",
+          "kind": "window",
+          "width": 1.14,
+          "height": 1.82,
+          "confidence": 0.95
+        },
+        {
+          "id": "room_0__window_back_2",
+          "kind": "window",
+          "width": 1.14,
+          "height": 1.82,
+          "confidence": 0.95
+        },
+        {
+          "id": "room_0__window_back_3",
+          "kind": "window",
+          "width": 1.14,
+          "height": 1.82,
+          "confidence": 0.95
+        },
+        {
+          "id": "room_0__window_back_4",
+          "kind": "window",
+          "width": 1.14,
+          "height": 1.82,
+          "confidence": 0.95
+        },
+        {
+          "id": "room_0__window_left_1",
+          "kind": "window",
+          "width": 2.04,
+          "height": 2.38,
+          "confidence": 0.95
+        }
+      ]
+    },
+    {
+      "id": "room_1",
+      "room_type": "unknown",
+      "style": "unknown",
+      "area": 33.1,
+      "width": 5.75,
+      "depth": 5.8,
+      "ceiling_height": 3.0,
+      "confidence": 0.0,
+      "polygon": [
+        [
+          1.675,
+          -3.625
+        ],
+        [
+          6.325,
+          -3.625
+        ],
+        [
+          6.775,
+          -3.375
+        ],
+        [
+          6.875,
+          -3.075
+        ],
+        [
+          6.875,
+          1.625
+        ],
+        [
+          6.625,
+          2.075
+        ],
+        [
+          6.325,
+          2.175
+        ],
+        [
+          1.675,
+          2.175
+        ],
+        [
+          1.225,
+          1.925
+        ],
+        [
+          1.125,
+          1.625
+        ],
+        [
+          1.125,
+          -3.075
+        ],
+        [
+          1.225,
+          -3.375
+        ]
+      ],
+      "bounds_min": [
+        1.0999999999999996,
+        -3.6500000000000004
+      ],
+      "bounds_max": [
+        6.85,
+        2.1500000000000004
+      ],
+      "connected_to": [
+        "room_0",
+        "room_2"
+      ],
+      "source_images": [],
+      "has_imagery": false,
+      "finishes": {
+        "wall": {
+          "material": "paint_matte",
+          "color_hex": "#E5E0DA",
+          "roughness": 0.92,
+          "metallic": 0.0,
+          "finish": "matte",
+          "description": "Light beige painted walls",
+          "confidence": 0.945
+        },
+        "floor": {
+          "material": "wood_light",
+          "color_hex": "#D4BDA2",
+          "roughness": 0.293,
+          "metallic": 0.0,
+          "finish": "satin",
+          "description": "Light wood plank flooring",
+          "confidence": 0.974
+        },
+        "ceiling": {
+          "material": "gypsum",
+          "color_hex": "#F3F3F3",
+          "roughness": 0.9,
+          "metallic": 0.0,
+          "finish": "matte",
+          "description": "Plain white gypsum ceiling",
+          "confidence": 0.945
+        },
+        "ceiling_type": "plain"
+      },
+      "object_count": 0,
+      "objects": [],
+      "lights": [],
+      "openings": []
+    },
+    {
+      "id": "room_2",
+      "room_type": "unknown",
+      "style": "unknown",
+      "area": 27.6,
+      "width": 9.75,
+      "depth": 2.8,
+      "ceiling_height": 3.0,
+      "confidence": 0.0,
+      "polygon": [
+        [
+          -2.325,
+          2.375
+        ],
+        [
+          6.525,
+          2.425
+        ],
+        [
+          6.775,
+          2.625
+        ],
+        [
+          6.875,
+          2.925
+        ],
+        [
+          6.825,
+          4.825
+        ],
+        [
+          6.625,
+          5.075
+        ],
+        [
+          6.325,
+          5.175
+        ],
+        [
+          -2.525,
+          5.125
+        ],
+        [
+          -2.775,
+          4.925
+        ],
+        [
+          -2.875,
+          4.625
+        ],
+        [
+          -2.875,
+          2.925
+        ],
+        [
+          -2.775,
+          2.625
+        ]
+      ],
+      "bounds_min": [
+        -2.9000000000000004,
+        2.3499999999999996
+      ],
+      "bounds_max": [
+        6.85,
+        5.15
+      ],
+      "connected_to": [
+        "room_0",
+        "room_1",
+        "room_3"
+      ],
+      "source_images": [],
+      "has_imagery": false,
+      "finishes": {
+        "wall": {
+          "material": "paint_matte",
+          "color_hex": "#E5E0DA",
+          "roughness": 0.92,
+          "metallic": 0.0,
+          "finish": "matte",
+          "description": "Light beige painted walls",
+          "confidence": 0.945
+        },
+        "floor": {
+          "material": "wood_light",
+          "color_hex": "#D4BDA2",
+          "roughness": 0.293,
+          "metallic": 0.0,
+          "finish": "satin",
+          "description": "Light wood plank flooring",
+          "confidence": 0.974
+        },
+        "ceiling": {
+          "material": "gypsum",
+          "color_hex": "#F3F3F3",
+          "roughness": 0.9,
+          "metallic": 0.0,
+          "finish": "matte",
+          "description": "Plain white gypsum ceiling",
+          "confidence": 0.945
+        },
+        "ceiling_type": "plain"
+      },
+      "object_count": 0,
+      "objects": [],
+      "lights": [],
+      "openings": []
+    },
+    {
+      "id": "room_3",
+      "room_type": "unknown",
+      "style": "unknown",
+      "area": 10.6,
+      "width": 3.8,
+      "depth": 2.8,
+      "ceiling_height": 3.0,
+      "confidence": 0.0,
+      "polygon": [
+        [
+          -6.325,
+          2.375
+        ],
+        [
+          -3.625,
+          2.375
+        ],
+        [
+          -3.325,
+          2.475
+        ],
+        [
+          -3.075,
+          2.925
+        ],
+        [
+          -3.075,
+          4.625
+        ],
+        [
+          -3.175,
+          4.925
+        ],
+        [
+          -3.625,
+          5.175
+        ],
+        [
+          -6.325,
+          5.175
+        ],
+        [
+          -6.625,
+          5.075
+        ],
+        [
+          -6.875,
+          4.625
+        ],
+        [
+          -6.875,
+          2.925
+        ],
+        [
+          -6.775,
+          2.625
+        ]
+      ],
+      "bounds_min": [
+        -6.9,
+        2.3499999999999996
+      ],
+      "bounds_max": [
+        -3.0999999999999996,
+        5.15
+      ],
+      "connected_to": [
+        "room_0",
+        "room_2"
+      ],
+      "source_images": [],
+      "has_imagery": false,
+      "finishes": {
+        "wall": {
+          "material": "paint_matte",
+          "color_hex": "#E5E0DA",
+          "roughness": 0.92,
+          "metallic": 0.0,
+          "finish": "matte",
+          "description": "Light beige painted walls",
+          "confidence": 0.945
+        },
+        "floor": {
+          "material": "wood_light",
+          "color_hex": "#D4BDA2",
+          "roughness": 0.293,
+          "metallic": 0.0,
+          "finish": "satin",
+          "description": "Light wood plank flooring",
+          "confidence": 0.974
+        },
+        "ceiling": {
+          "material": "gypsum",
+          "color_hex": "#F3F3F3",
+          "roughness": 0.9,
+          "metallic": 0.0,
+          "finish": "matte",
+          "description": "Plain white gypsum ceiling",
+          "confidence": 0.945
+        },
+        "ceiling_type": "plain"
+      },
+      "object_count": 0,
+      "objects": [],
+      "lights": [],
+      "openings": []
+    },
+    {
+      "id": "room_4",
+      "room_type": "unknown",
+      "style": "unknown",
+      "area": 2.6,
+      "width": 2.35,
+      "depth": 1.3,
+      "ceiling_height": 3.0,
+      "confidence": 0.0,
+      "polygon": [
+        [
+          -5.275,
+          -5.125
+        ],
+        [
+          -4.725,
+          -5.125
+        ],
+        [
+          -4.075,
+          -4.825
+        ],
+        [
+          -3.825,
+          -4.375
+        ],
+        [
+          -3.925,
+          -4.075
+        ],
+        [
+          -4.375,
+          -3.825
+        ],
+        [
+          -5.625,
+          -3.825
+        ],
+        [
+          -5.925,
+          -3.925
+        ],
+        [
+          -6.175,
+          -4.375
+        ],
+        [
+          -6.075,
+          -4.675
+        ]
+      ],
+      "bounds_min": [
+        -6.2,
+        -5.15
+      ],
+      "bounds_max": [
+        -3.8499999999999996,
+        -3.85
+      ],
+      "connected_to": [
+        "room_0"
+      ],
+      "source_images": [],
+      "has_imagery": false,
+      "finishes": {
+        "wall": {
+          "material": "paint_matte",
+          "color_hex": "#E5E0DA",
+          "roughness": 0.92,
+          "metallic": 0.0,
+          "finish": "matte",
+          "description": "Light beige painted walls",
+          "confidence": 0.945
+        },
+        "floor": {
+          "material": "wood_light",
+          "color_hex": "#D4BDA2",
+          "roughness": 0.293,
+          "metallic": 0.0,
+          "finish": "satin",
+          "description": "Light wood plank flooring",
+          "confidence": 0.974
+        },
+        "ceiling": {
+          "material": "gypsum",
+          "color_hex": "#F3F3F3",
+          "roughness": 0.9,
+          "metallic": 0.0,
+          "finish": "matte",
+          "description": "Plain white gypsum ceiling",
+          "confidence": 0.945
+        },
+        "ceiling_type": "plain"
+      },
+      "object_count": 0,
+      "objects": [],
+      "lights": [],
+      "openings": []
+    }
+  ],
+  "unassigned_objects": [],
+  "relationships": [
+    {
+      "subject": "room_0__ac_unit_1",
+      "predicate": "beside",
+      "object": "room_0__sectional_1",
+      "confidence": 0.95,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__books_1",
+      "predicate": "on_top_of",
+      "object": "room_0__tv_unit_1",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__bowl_1",
+      "predicate": "on_top_of",
+      "object": "room_0__coffee_table_1",
+      "confidence": 0.9,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__bowl_2",
+      "predicate": "on_top_of",
+      "object": "room_0__tv_unit_1",
+      "confidence": 0.94,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cabinet_1",
+      "predicate": "above",
+      "object": "room_0__kitchen_counter_1",
+      "confidence": 0.9,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cabinet_2",
+      "predicate": "above",
+      "object": "room_0__kitchen_counter_1",
+      "confidence": 0.9,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__coffee_table_1",
+      "predicate": "beside",
+      "object": "room_0__sectional_1",
+      "confidence": 0.945,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cushion_1",
+      "predicate": "on_top_of",
+      "object": "room_0__sectional_1",
+      "confidence": 0.8,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cushion_10",
+      "predicate": "on_top_of",
+      "object": "room_0__sectional_1",
+      "confidence": 0.8,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cushion_2",
+      "predicate": "on_top_of",
+      "object": "room_0__sectional_1",
+      "confidence": 0.8,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cushion_3",
+      "predicate": "on_top_of",
+      "object": "room_0__sectional_1",
+      "confidence": 0.8,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cushion_4",
+      "predicate": "on_top_of",
+      "object": "room_0__sectional_1",
+      "confidence": 0.8,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cushion_5",
+      "predicate": "on_top_of",
+      "object": "room_0__sectional_1",
+      "confidence": 0.8,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cushion_6",
+      "predicate": "on_top_of",
+      "object": "room_0__sectional_1",
+      "confidence": 0.8,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cushion_7",
+      "predicate": "on_top_of",
+      "object": "room_0__sectional_1",
+      "confidence": 0.8,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cushion_8",
+      "predicate": "on_top_of",
+      "object": "room_0__sectional_1",
+      "confidence": 0.8,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__cushion_9",
+      "predicate": "on_top_of",
+      "object": "room_0__sectional_1",
+      "confidence": 0.8,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__dining_chair_1",
+      "predicate": "surrounds",
+      "object": "room_0__dining_table_1",
+      "confidence": 0.93,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__dining_chair_2",
+      "predicate": "surrounds",
+      "object": "room_0__dining_table_1",
+      "confidence": 0.935,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__dining_chair_3",
+      "predicate": "surrounds",
+      "object": "room_0__dining_table_1",
+      "confidence": 0.935,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__dining_chair_4",
+      "predicate": "surrounds",
+      "object": "room_0__dining_table_1",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__flower_vase_1",
+      "predicate": "on_top_of",
+      "object": "room_0__coffee_table_1",
+      "confidence": 0.85,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__microwave_1",
+      "predicate": "mounted_on",
+      "object": "room_0__shelves_1",
+      "confidence": 0.9,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__microwave_1",
+      "predicate": "on_top_of",
+      "object": "room_0__kitchen_counter_1",
+      "confidence": 0.45,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__oven_1",
+      "predicate": "mounted_on",
+      "object": "room_0__shelves_1",
+      "confidence": 0.9,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__oven_1",
+      "predicate": "under",
+      "object": "room_0__microwave_1",
+      "confidence": 0.9,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__plant_1",
+      "predicate": "beside",
+      "object": "room_0__sectional_1",
+      "confidence": 0.943,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__plant_2",
+      "predicate": "on_top_of",
+      "object": "room_0__coffee_table_1",
+      "confidence": 0.9,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__rug_1",
+      "predicate": "centered_under",
+      "object": "room_0__coffee_table_1",
+      "confidence": 0.9,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__sectional_1",
+      "predicate": "faces",
+      "object": "room_0__tv_1",
+      "confidence": 0.9,
+      "satisfied": false
+    },
+    {
+      "subject": "room_0__side_table_1",
+      "predicate": "beside",
+      "object": "room_0__sectional_1",
+      "confidence": 0.9,
+      "satisfied": true
+    },
+    {
+      "subject": "room_0__tv_unit_1",
+      "predicate": "under",
+      "object": "room_0__tv_1",
+      "confidence": 0.974,
+      "satisfied": true
+    }
+  ],
+  "totals": {
+    "rooms": 5,
+    "rooms_with_imagery": 1,
+    "objects": 40,
+    "buildable": 40,
+    "uncertain": 0,
+    "lights": 9,
+    "openings": 5
+  },
+  "confidence": {
+    "objects": 40,
+    "mean": 0.889,
+    "median": 0.9,
+    "min": 0.7,
+    "max": 0.974,
+    "accepted": 40,
+    "uncertain": 0
+  },
+  "warnings": [
+    "4 of 5 rooms have no reference imagery and were left unfurnished",
+    "4 room(s) have no reference image and will be built empty: room_1, room_2, room_3, room_4",
+    "14 placement problem(s) could not be fixed automatically"
+  ],
+  "ignored": [
+    {
+      "reason": "relationship_dangling_reference",
+      "count": 17,
+      "explanation": "relationship referenced an object that was dropped"
+    }
+  ],
+  "validation": {
+    "corrected": 115,
+    "uncorrected": 14,
+    "by_kind": {
+      "outside_room": 1,
+      "floating_object": 2,
+      "overlap": 112,
+      "unresolved_overlap": 14
+    },
+    "issues": [
+      {
+        "kind": "outside_room",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "",
+        "detail": "centre moved 0.94 m to re-enter the room",
+        "corrected": true
+      },
+      {
+        "kind": "floating_object",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "",
+        "detail": "floor object sat at z=1.900 m",
+        "corrected": true
+      },
+      {
+        "kind": "floating_object",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "",
+        "detail": "floor object sat at z=1.900 m",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__sectional_1",
+        "target": "room_0__tv_unit_1",
+        "detail": "overlapped room_0__tv_unit_1 by 0.549 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__sectional_1",
+        "target": "room_0__cabinet_2",
+        "detail": "overlapped room_0__cabinet_2 by 0.043 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__sectional_1",
+        "target": "room_0__dining_table_1",
+        "detail": "overlapped room_0__dining_table_1 by 0.616 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__sectional_1",
+        "target": "room_0__kitchen_counter_1",
+        "detail": "overlapped room_0__kitchen_counter_1 by 0.144 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__sectional_1",
+        "target": "room_0__dining_chair_2",
+        "detail": "overlapped room_0__dining_chair_2 by 0.296 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__sectional_1",
+        "target": "room_0__dining_chair_1",
+        "detail": "overlapped room_0__dining_chair_1 by 0.470 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__sectional_1",
+        "target": "room_0__rug_1",
+        "detail": "overlapped room_0__rug_1 by 1.871 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "room_0__dining_chair_4",
+        "detail": "overlapped room_0__dining_chair_4 by 0.192 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "room_0__rug_1",
+        "detail": "overlapped room_0__rug_1 by 0.549 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "room_0__cushion_1",
+        "detail": "overlapped room_0__cushion_1 by 0.077 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "room_0__cushion_2",
+        "detail": "overlapped room_0__cushion_2 by 0.034 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "room_0__cushion_5",
+        "detail": "overlapped room_0__cushion_5 by 0.199 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "room_0__cushion_6",
+        "detail": "overlapped room_0__cushion_6 by 0.295 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "room_0__cushion_7",
+        "detail": "overlapped room_0__cushion_7 by 0.295 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "room_0__cushion_8",
+        "detail": "overlapped room_0__cushion_8 by 0.295 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "room_0__cushion_9",
+        "detail": "overlapped room_0__cushion_9 by 0.295 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__tv_unit_1",
+        "target": "room_0__cushion_10",
+        "detail": "overlapped room_0__cushion_10 by 0.123 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__coffee_table_1",
+        "target": "room_0__cabinet_2",
+        "detail": "overlapped room_0__cabinet_2 by 0.152 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__coffee_table_1",
+        "target": "room_0__dining_table_1",
+        "detail": "overlapped room_0__dining_table_1 by 0.096 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__coffee_table_1",
+        "target": "room_0__kitchen_counter_1",
+        "detail": "overlapped room_0__kitchen_counter_1 by 0.553 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__coffee_table_1",
+        "target": "room_0__dining_chair_2",
+        "detail": "overlapped room_0__dining_chair_2 by 0.186 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__coffee_table_1",
+        "target": "room_0__side_table_1",
+        "detail": "overlapped room_0__side_table_1 by 0.058 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__coffee_table_1",
+        "target": "room_0__rug_1",
+        "detail": "overlapped room_0__rug_1 by 0.600 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__cabinet_2",
+        "detail": "overlapped room_0__cabinet_2 by 0.207 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__dining_table_1",
+        "detail": "overlapped room_0__dining_table_1 by 0.276 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__kitchen_counter_1",
+        "detail": "overlapped room_0__kitchen_counter_1 by 0.098 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__dining_chair_2",
+        "detail": "overlapped room_0__dining_chair_2 by 0.168 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__dining_chair_3",
+        "detail": "overlapped room_0__dining_chair_3 by 0.332 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__dining_chair_1",
+        "detail": "overlapped room_0__dining_chair_1 by 0.252 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__side_table_1",
+        "detail": "overlapped room_0__side_table_1 by 0.079 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__rug_1",
+        "detail": "overlapped room_0__rug_1 by 0.549 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__plant_1",
+        "detail": "overlapped room_0__plant_1 by 0.181 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__cushion_2",
+        "detail": "overlapped room_0__cushion_2 by 0.169 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__cushion_3",
+        "detail": "overlapped room_0__cushion_3 by 0.276 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_1",
+        "target": "room_0__cushion_4",
+        "detail": "overlapped room_0__cushion_4 by 0.145 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__dining_table_1",
+        "detail": "overlapped room_0__dining_table_1 by 0.539 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__kitchen_counter_1",
+        "detail": "overlapped room_0__kitchen_counter_1 by 0.549 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__dining_chair_2",
+        "detail": "overlapped room_0__dining_chair_2 by 0.290 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__dining_chair_3",
+        "detail": "overlapped room_0__dining_chair_3 by 0.053 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__dining_chair_1",
+        "detail": "overlapped room_0__dining_chair_1 by 0.091 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__side_table_1",
+        "detail": "overlapped room_0__side_table_1 by 0.115 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__dining_chair_4",
+        "detail": "overlapped room_0__dining_chair_4 by 0.085 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__rug_1",
+        "detail": "overlapped room_0__rug_1 by 0.549 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__plant_1",
+        "detail": "overlapped room_0__plant_1 by 0.202 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__cushion_1",
+        "detail": "overlapped room_0__cushion_1 by 0.112 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__cushion_2",
+        "detail": "overlapped room_0__cushion_2 by 0.068 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__cushion_8",
+        "detail": "overlapped room_0__cushion_8 by 0.032 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__cabinet_2",
+        "target": "room_0__cushion_9",
+        "detail": "overlapped room_0__cushion_9 by 0.295 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__kitchen_counter_1",
+        "detail": "overlapped room_0__kitchen_counter_1 by 0.032 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__dining_chair_2",
+        "detail": "overlapped room_0__dining_chair_2 by 0.052 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__dining_chair_1",
+        "detail": "overlapped room_0__dining_chair_1 by 0.096 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__dining_chair_4",
+        "detail": "overlapped room_0__dining_chair_4 by 0.322 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__rug_1",
+        "detail": "overlapped room_0__rug_1 by 0.890 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__bowl_2",
+        "detail": "overlapped room_0__bowl_2 by 0.164 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__cushion_1",
+        "detail": "overlapped room_0__cushion_1 by 0.222 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__cushion_2",
+        "detail": "overlapped room_0__cushion_2 by 0.295 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__cushion_3",
+        "detail": "overlapped room_0__cushion_3 by 0.295 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__cushion_4",
+        "detail": "overlapped room_0__cushion_4 by 0.295 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__cushion_9",
+        "detail": "overlapped room_0__cushion_9 by 0.075 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_table_1",
+        "target": "room_0__books_1",
+        "detail": "overlapped room_0__books_1 by 0.042 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__kitchen_counter_1",
+        "target": "room_0__dining_chair_2",
+        "detail": "overlapped room_0__dining_chair_2 by 0.384 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__kitchen_counter_1",
+        "target": "room_0__dining_chair_1",
+        "detail": "overlapped room_0__dining_chair_1 by 0.293 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__kitchen_counter_1",
+        "target": "room_0__rug_1",
+        "detail": "overlapped room_0__rug_1 by 0.732 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__kitchen_counter_1",
+        "target": "room_0__plant_1",
+        "detail": "overlapped room_0__plant_1 by 0.511 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__kitchen_counter_1",
+        "target": "room_0__bowl_1",
+        "detail": "overlapped room_0__bowl_1 by 0.024 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__kitchen_counter_1",
+        "target": "room_0__plant_2",
+        "detail": "overlapped room_0__plant_2 by 0.041 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_chair_2",
+        "target": "room_0__side_table_1",
+        "detail": "overlapped room_0__side_table_1 by 0.278 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_chair_2",
+        "target": "room_0__rug_1",
+        "detail": "overlapped room_0__rug_1 by 0.245 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_chair_2",
+        "target": "room_0__plant_1",
+        "detail": "overlapped room_0__plant_1 by 0.039 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_chair_1",
+        "target": "room_0__rug_1",
+        "detail": "overlapped room_0__rug_1 by 0.122 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__side_table_1",
+        "target": "room_0__plant_1",
+        "detail": "overlapped room_0__plant_1 by 0.336 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__side_table_1",
+        "target": "room_0__bowl_1",
+        "detail": "overlapped room_0__bowl_1 by 0.108 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__side_table_1",
+        "target": "room_0__plant_2",
+        "detail": "overlapped room_0__plant_2 by 0.201 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_chair_4",
+        "target": "room_0__bowl_2",
+        "detail": "overlapped room_0__bowl_2 by 0.083 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_chair_4",
+        "target": "room_0__cushion_1",
+        "detail": "overlapped room_0__cushion_1 by 0.023 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_chair_4",
+        "target": "room_0__cushion_2",
+        "detail": "overlapped room_0__cushion_2 by 0.135 m; separated",
+        "corrected": true
+      },
+      {
+        "kind": "overlap",
+        "severity": "warning",
+        "subject": "room_0__dining_chair_4",
+        "target": "room_0__cushion_3",
+        "detail": "overlapped room_0__cushion_3 by 0.295 m; separated",
+        "corrected": true
+      }
+    ]
+  },
+  "elapsed_s": 3.4
+}
