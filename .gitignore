@@ -18,6 +18,9 @@ venv/
 output/preview/
 output/evaluation/
 output/refinement/
+# Walkthrough frames: ~120 PNGs per build, regenerated every run.
+output/frames/
+output/sequence/
 
 # Environment
 .env

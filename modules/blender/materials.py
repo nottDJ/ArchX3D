@@ -53,6 +53,7 @@ not exist in the running version is skipped rather than raising.
 
 from __future__ import annotations
 
+import contextlib
 import dataclasses
 from typing import Dict, List, Optional, Sequence, Tuple
 
@@ -495,7 +496,21 @@ def build_material(name: str, color_hex: str, material: str,
     datablock["archx3d_material"] = material
     datablock["archx3d_family"] = catalog.material_family(material)
     datablock["archx3d_texture"] = prior.texture
+
+    # The flat stand-ins for the procedural graph, recorded at the moment we
+    # still know what the graph was *made of*. glTF has no way to carry a node
+    # network: it takes a flat factor or an image texture and nothing else, so
+    # a recipe that links a wave into Base Color exports as pure white. Keeping
+    # the intended colour here lets `flattened_for_export` put it back for the
+    # duration of the export without disturbing the graph the .blend keeps.
+    datablock["archx3d_base_color"] = key_hex(color_hex)
+    datablock["archx3d_roughness"] = _clamp_roughness(prior.roughness + roughness_bias)
     return datablock
+
+
+def key_hex(color_hex: str) -> str:
+    """Normalise a colour to the ``#RRGGBB`` form the custom properties use."""
+    return colour.to_hex(colour.to_unit(color_hex))
 
 
 def _apply_family_traits(bsdf, prior) -> None:
@@ -624,3 +639,88 @@ class MaterialLibrary:
             families[family] = families.get(family, 0) + 1
         breakdown = ", ".join(f"{name} x{count}" for name, count in sorted(families.items()))
         return f"{self.created} procedural materials ({breakdown})"
+
+
+# ---------------------------------------------------------------------------
+# Export
+# ---------------------------------------------------------------------------
+
+
+#: Sockets worth flattening, and the custom property holding the flat value.
+#: Only inputs glTF represents as a scalar/colour factor are listed — flattening
+#: Normal would throw away the bump with nothing to show for it.
+_EXPORT_FLATTEN = (
+    (("Base Color",), "archx3d_base_color", "colour"),
+    (("Roughness",), "archx3d_roughness", "scalar"),
+)
+
+
+@contextlib.contextmanager
+def flattened_for_export():
+    """Reduce procedural inputs to flat factors for the duration of an export.
+
+    glTF carries a flat factor or an image texture; it has no representation
+    for a shader graph. Blender's exporter therefore drops a linked Base Color
+    and writes ``baseColorFactor`` as white — so a walnut floor, a green plant
+    and a grey sofa all arrive in the viewer as the same untextured white, and
+    the model looks unfinished in exactly the way that suggests materials were
+    never assigned at all.
+
+    Every material records what its graph was built to look like
+    (``archx3d_base_color`` / ``archx3d_roughness``). This unlinks the
+    procedural input, substitutes that value, yields, and puts the graph back.
+
+    The alternative — baking each graph to an image — would preserve the grain
+    itself, but needs a UV unwrap per object and a render pass per material.
+    That is worth doing one day; it is not worth blocking a correctly coloured
+    export on. The flat colour is what the procedural graph averages to, so
+    this is a loss of texture detail, not a loss of intent.
+
+    Restoration runs in a ``finally``, because the .blend is saved *after* the
+    GLB and must keep the full graph — the preview renders and the evaluation
+    engine read the procedural detail this throws away.
+    """
+    restores: List[Tuple[object, object, object, object]] = []
+
+    for material in bpy.data.materials:
+        if not material.use_nodes or material.node_tree is None:
+            continue
+        bsdf = next(
+            (n for n in material.node_tree.nodes if n.type == "BSDF_PRINCIPLED"),
+            None,
+        )
+        if bsdf is None:
+            continue
+
+        for names, prop, kind in _EXPORT_FLATTEN:
+            stored = material.get(prop)
+            if stored is None:
+                continue
+            socket = next((bsdf.inputs.get(n) for n in names if bsdf.inputs.get(n)), None)
+            if socket is None or not socket.is_linked:
+                continue
+
+            link = socket.links[0]
+            previous = socket.default_value
+            if hasattr(previous, "__len__"):
+                previous = tuple(previous)
+            restores.append((material.node_tree, link.from_socket, socket, previous))
+
+            material.node_tree.links.remove(link)
+            try:
+                if kind == "colour":
+                    socket.default_value = colour.hex_to_linear(str(stored))
+                else:
+                    socket.default_value = float(stored)
+            except (TypeError, ValueError):
+                pass
+
+    try:
+        yield len(restores)
+    finally:
+        for tree, from_socket, to_socket, previous in reversed(restores):
+            try:
+                to_socket.default_value = previous
+            except (TypeError, ValueError):
+                pass
+            tree.links.new(from_socket, to_socket)

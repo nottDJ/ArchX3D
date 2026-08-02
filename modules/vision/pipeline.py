@@ -24,6 +24,7 @@ Failure of any single image degrades the result rather than failing the run.
 
 from __future__ import annotations
 
+import math
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -49,6 +50,7 @@ from .cache import ResponseCache
 from .schema import (
     SCHEMA_VERSION,
     Finish,
+    Opening,
     Room,
     SceneGraph,
     Vec3,
@@ -226,6 +228,10 @@ def analyse(
     dominant_style = _dominant_style(room_records)
     builder_histogram = assets.assign_assets(all_objects, dominant_style)
 
+    # Openings the drawing states outrank openings a photograph suggested, and
+    # they are the only complete set — one image sees one corner of one room.
+    all_openings = _merge_cad_openings(cad_document, walls, all_openings, log)
+
     graph = _assemble(room_records, walls, all_objects, all_lights, all_openings,
                       all_architecture, all_relationships, regions, all_viewpoints)
 
@@ -348,6 +354,93 @@ def _semantic():
         return semantic
     except ImportError:
         return None
+
+
+def _merge_cad_openings(document, walls, observed, log):
+    """Add the drawing's doors and windows to whatever the imagery found.
+
+    The drawing is authoritative here and the imagery is not, for a reason that
+    is structural rather than a matter of degree: a plan shows *every* opening
+    in the building, positioned exactly, while a photograph shows the two or
+    three in one corner of one room and gives their position only by inference.
+
+    So CAD openings are taken wholesale, and an observed opening is dropped
+    when the drawing already declares one in the same place — the drawing's
+    version has a real width and a real host wall.
+    """
+    if document is None:
+        return observed
+
+    try:
+        from cad import openings as cad_openings  # noqa: PLC0415
+    except ImportError:  # pragma: no cover - cad package is optional
+        return observed
+
+    try:
+        found = cad_openings.from_document(document)
+    except Exception as exc:  # pragma: no cover - never fail the build for this
+        log(f"[OPENINGS] ! could not read openings from the drawing: {exc}")
+        return observed
+
+    if not found:
+        return observed
+
+    converted: List[Opening] = []
+    for index, item in enumerate(found):
+        wall_id = _nearest_wall_id(item.x, item.y, walls)
+        converted.append(Opening(
+            id=f"cad_{item.kind}_{index}",
+            kind=item.kind,
+            wall_id=wall_id,
+            position=Vec3(item.x, item.y, item.sill_height + item.height / 2.0),
+            width=item.width,
+            height=item.height,
+            sill_height=item.sill_height,
+            confidence=item.confidence,
+            uncertain=False,
+        ))
+
+    # An observed opening within half a metre of a stated one is the same
+    # opening seen twice; cutting both would widen the hole.
+    kept = [
+        o for o in observed
+        if not any(_close(o.position.x, o.position.y, c.position.x, c.position.y, 0.5)
+                   for c in converted)
+    ]
+    dropped = len(observed) - len(kept)
+
+    log(f"[OPENINGS] {cad_openings.summarise(found)}"
+        + (f"; {dropped} image-derived opening(s) superseded" if dropped else ""))
+    return converted + kept
+
+
+def _nearest_wall_id(x: float, y: float, walls) -> str:
+    """Host wall for an opening, by distance to the wall's centre line.
+
+    The host determines the angle the cutter is rotated to, so a wrong answer
+    cuts a slot across the wall instead of through it.
+    """
+    best_id, best_distance = "", float("inf")
+    for wall in walls or []:
+        distance = _point_to_wall(x, y, wall)
+        if distance < best_distance:
+            best_id, best_distance = wall.id, distance
+    return best_id
+
+
+def _point_to_wall(x: float, y: float, wall) -> float:
+    x0, y0 = wall.start[0], wall.start[1]
+    x1, y1 = wall.end[0], wall.end[1]
+    dx, dy = x1 - x0, y1 - y0
+    length_sq = dx * dx + dy * dy
+    if length_sq <= 1e-12:
+        return math.hypot(x - x0, y - y0)
+    t = max(0.0, min(1.0, ((x - x0) * dx + (y - y0) * dy) / length_sq))
+    return math.hypot(x - (x0 + t * dx), y - (y0 + t * dy))
+
+
+def _close(ax: float, ay: float, bx: float, by: float, tolerance: float) -> bool:
+    return math.hypot(ax - bx, ay - by) <= tolerance
 
 
 def _cad_document(geometry: Dict[str, Any]):

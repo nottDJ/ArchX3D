@@ -22,6 +22,7 @@ Invoked headless: blender --background --python blender_generator.py
 
 import bpy
 import bmesh
+import contextlib
 import json
 import os
 import sys
@@ -560,6 +561,36 @@ def render_frames():
 # Export
 # ---------------------------------------------------------------------------
 
+
+def _supported_gltf_options(options):
+    """Drop options the running Blender's glTF exporter does not define.
+
+    The exporter's property set changes between releases, and passing an
+    unknown keyword raises — which would lose the GLB entirely over an option
+    that is a refinement, not a requirement. Same defensive posture the
+    materials module takes with renamed Principled sockets.
+    """
+    try:
+        known = set(bpy.ops.export_scene.gltf.get_rna_type().properties.keys())
+    except Exception:  # pragma: no cover - depends on Blender internals
+        return {"filepath": options["filepath"], "export_format": options["export_format"]}
+
+    kept = {k: v for k, v in options.items() if k in known or k == "filepath"}
+    for dropped in sorted(set(options) - set(kept)):
+        print(f"[EXPORT] note: this Blender's glTF exporter has no '{dropped}'")
+    return kept
+
+
+@contextlib.contextmanager
+def _flattened_materials():
+    """Flatten procedural material inputs for export, if the module is present."""
+    if not VISION_AVAILABLE or not hasattr(bl_materials, "flattened_for_export"):
+        yield 0
+        return
+    with bl_materials.flattened_for_export() as count:
+        yield count
+
+
 def export_scene(config, graph=None):
     """Export the scene in configured formats.
 
@@ -581,13 +612,24 @@ def export_scene(config, graph=None):
 
     if export_cfg.get("glb", True):
         try:
-            bpy.ops.export_scene.gltf(
-                filepath=OUTPUT_GLB_PATH,
-                export_format='GLB',
+            options = _supported_gltf_options({
+                "filepath": OUTPUT_GLB_PATH,
+                "export_format": "GLB",
                 # Carries the archx3d_* custom properties into glTF `extras`.
                 # Without this the tagging above would be written and dropped.
-                export_extras=True,
-            )
+                "export_extras": True,
+                # Punctual lights via KHR_lights_punctual. Off by default in the
+                # exporter, so the reconstructed lighting rig — which is the
+                # whole point of the lighting module — never reached the viewer.
+                "export_lights": True,
+                "export_cameras": True,
+            })
+            # Procedural Base Color/Roughness cannot survive glTF; substitute the
+            # flat values they were built from, export, then restore the graphs.
+            with _flattened_materials() as flattened:
+                if flattened:
+                    print(f"[EXPORT] flattened {flattened} procedural input(s) for glTF")
+                bpy.ops.export_scene.gltf(**options)
             glb_size = os.path.getsize(OUTPUT_GLB_PATH)
             print(f"[EXPORT] GLB saved: {OUTPUT_GLB_PATH} ({glb_size:,} bytes)")
         except Exception as e:
@@ -791,9 +833,58 @@ def build_openings(graph, library):
             walls.modifiers.remove(modifier)
 
         bpy.data.objects.remove(cutter, do_unlink=True)
+        _fill_opening(opening, rotation, library)
 
     print(f"[OPENINGS] Cut {cut}/{len(graph.openings)} openings into the walls")
     return cut
+
+
+#: Thickness of a door leaf and of a glazing pane, in metres.
+DOOR_LEAF_M = 0.045
+GLAZING_M = 0.012
+#: Reveal between the opening edge and the leaf or pane it holds.
+FRAME_REVEAL_M = 0.06
+
+
+def _fill_opening(opening, rotation, library):
+    """Put a leaf or a pane back into the hole just cut.
+
+    A cut alone reads as a missing wall, not as a door — the eye needs
+    something in the gap to interpret it. Openings are filled with a single
+    thin slab rather than a modelled frame and mullions: at walkthrough
+    distance the silhouette and the material are what carry the reading, and a
+    slab costs two triangles where a modelled frame costs hundreds across the
+    thirty-odd openings a house has.
+
+    Doors are inset to sit in the reveal; glazing is centred in the wall.
+    """
+    if library is None:
+        return None
+
+    is_door = opening.kind == "door"
+    depth = DOOR_LEAF_M if is_door else GLAZING_M
+    inset = FRAME_REVEAL_M if is_door else 0.0
+
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(
+        opening.position.x,
+        opening.position.y,
+        opening.sill_height + opening.height / 2.0,
+    ))
+    panel = bpy.context.active_object
+    panel.name = f"{'Door' if is_door else 'Glazing'}_{opening.id}"
+    panel.scale = (
+        max(0.05, opening.width - inset),
+        depth,
+        max(0.05, opening.height - inset),
+    )
+    panel.rotation_euler = (0.0, 0.0, math.radians(rotation))
+
+    # Timber for a leaf, glass for a pane — the glass recipe carries the
+    # transmission that makes a window read as a window.
+    material = library.get("#8B6F47" if is_door else "#BFD4DC",
+                           "wood" if is_door else "glass")
+    panel.data.materials.append(material)
+    return panel
 
 
 def build_architecture(graph, library):
