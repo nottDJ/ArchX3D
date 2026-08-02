@@ -222,6 +222,16 @@ Return raw JSON only — no markdown fences, no commentary.
       "object": "<object id>",
       "confidence": 0.0
     }}
+  ],
+
+  "labels": [
+    {{
+      "id": "<short unique slug, e.g. 'label_1'>",
+      "text": "<the text EXACTLY as printed, e.g. 'MASTER BEDROOM'>",
+      "bbox": [0,0,0,0],
+      "room_type": "<room type it names, or 'unknown'>",
+      "confidence": 0.0
+    }}
   ]
 }}
 
@@ -238,10 +248,12 @@ ROUTING — what to fill in, based on the class you assigned
   Leave `lights` empty unless fixtures are genuinely drawn.
   Leave `finishes` empty unless surfaces are clearly coloured — a plan's fill
   colours are usually diagrammatic, not real materials.
+  **Fill `labels`.** See below — on a plan this is the most useful thing you
+  can report.
 
 • cad_drawing / wireframe / architectural_elevation
   This is a technical drawing, NOT a picture of a real room.
-  Fill ONLY `openings` and `architecture`.
+  Fill ONLY `openings`, `architecture` and `labels`.
   Leave `objects`, `lights` and `finishes` COMPLETELY EMPTY.
   A CAD drawing has no wall colour, no floor material and no furniture — line
   weights and hatching are notation, not appearance. Reporting them would
@@ -267,6 +279,31 @@ GUIDANCE
   `"is_on": false`.
 • If the image shows more than one room (e.g. through an opening), describe
   ONLY the room the camera is in, and note the opening.
+
+════════════════════════════════════════════════════════════════════
+LABELS — plans and technical drawings only
+════════════════════════════════════════════════════════════════════
+On a plan, the printed room names are the single most valuable thing in the
+image. We hold the same names with their true coordinates, so reporting where
+each one sits on the page lets us work out exactly how this image lines up
+with the building — which floor it is, where on the sheet it sits, and at what
+scale. Without them we have to assume the plan fills the frame, and every
+piece of furniture read from a sheet that holds anything else lands in the
+wrong room or nowhere at all.
+
+• Report EVERY room name printed on the plan: `MASTER BEDROOM`, `KITCHEN`,
+  `W.C.`, `LIVING/DINING`, and so on.
+• Transcribe `text` EXACTLY as printed — keep the punctuation and the
+  abbreviation. Do not expand `BR 2` to `BEDROOM 2`; we match abbreviations
+  ourselves, and an expansion we did not make is a guess we cannot check.
+• `bbox` must tightly enclose the printed words themselves, not the room.
+• If the sheet shows SEVERAL plans (two floors side by side, a key plan in a
+  corner), report the labels from ALL of them. Do not try to pick one — say
+  what is printed and where, and we will work out which plan is which.
+• Skip dimensions, area figures, north arrows, title blocks, drawing numbers
+  and scale bars. Room names only.
+• On an interior photograph, leave `labels` empty. Text on a book spine or a
+  cereal packet tells us nothing about where the camera is.
 """
 
 

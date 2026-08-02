@@ -9,6 +9,7 @@ Runs the full 2D DXF → 3D model pipeline:
   Step 3: Blender 3D Gen    (blender_generator.py)
   Step 4: Video Stitching   (video_stitcher.py)
   Step 5: Evaluation        (evaluation/engine.py)     — with --evaluate
+  Step 6: Refinement        (optimizer/pipeline.py)    — with --refine
 
 Usage:
   python main.py <input.dxf> --images ref1.jpg ref2.jpg
@@ -252,6 +253,20 @@ def main():
              "write output/evaluation/ (needs numpy and Pillow)"
     )
     parser.add_argument(
+        "--refine",
+        action="store_true",
+        help="Plan improvements from the evaluation and run the optimisation "
+             "loop, keeping only changes that measurably help. Implies "
+             "--evaluate; each iteration is a Blender rebuild, so budget "
+             "minutes"
+    )
+    parser.add_argument(
+        "--refine-iterations",
+        type=int,
+        default=8,
+        help="Optimisation budget in iterations (default: 8)"
+    )
+    parser.add_argument(
         "--layers",
         type=str,
         default=None,
@@ -302,7 +317,8 @@ def main():
         log.info("  Vision:   SKIP (no reference images)"
                  if not reference_images else "  Vision:   SKIP (--skip-vision)")
     log.info(f"  Render:   {'SKIP' if args.skip_render else 'Enabled'}")
-    log.info(f"  Evaluate: {'Enabled' if args.evaluate else 'SKIP'}")
+    log.info(f"  Evaluate: {'Enabled' if (args.evaluate or args.refine) else 'SKIP'}")
+    log.info(f"  Refine:   {f'{args.refine_iterations} iterations' if args.refine else 'SKIP'}")
     log.info("=" * 60)
 
     # =========================================================================
@@ -435,7 +451,7 @@ def main():
     # Reads what Step 3's preview pass already wrote and measures it against
     # the reference photographs. Non-critical and never destructive: it only
     # measures, and a build is still a build if nobody scored it.
-    if args.evaluate:
+    if args.evaluate or args.refine:
         cmd_evaluate = [
             sys.executable,
             os.path.join(MODULES_DIR, "evaluation", "engine.py"),
@@ -443,6 +459,21 @@ def main():
         if reference_images:
             cmd_evaluate += ["--images", os.path.dirname(reference_images[0])]
         run_step(cmd_evaluate, "Step 5: Reconstruction Evaluation", critical=False)
+
+    # =========================================================================
+    # STEP 6: Planning & Optimisation (optional)
+    # =========================================================================
+    #
+    # Plans changes from the evaluation's findings and executes them, keeping
+    # only what measurably improves the score. Non-critical: a build that was
+    # not improved is still the build.
+    if args.refine:
+        cmd_refine = [
+            sys.executable,
+            os.path.join(MODULES_DIR, "optimizer", "pipeline.py"),
+            "--max-iterations", str(args.refine_iterations),
+        ]
+        run_step(cmd_refine, "Step 6: Planning & Optimisation", critical=False)
 
     # =========================================================================
     # Summary
@@ -460,9 +491,14 @@ def main():
         "walkthrough.mp4": os.path.join(OUTPUT_DIR, "walkthrough.mp4"),
         "preview/manifest.json": os.path.join(OUTPUT_DIR, "preview", "manifest.json"),
     }
-    if args.evaluate:
+    if args.evaluate or args.refine:
         outputs["evaluation/report.html"] = os.path.join(
             OUTPUT_DIR, "evaluation", "report.html")
+    if args.refine:
+        for name in ("planner_report.json", "optimization_history.json",
+                     "metrics.json"):
+            outputs[f"refinement/{name}"] = os.path.join(
+                OUTPUT_DIR, "refinement", name)
     for name, path in outputs.items():
         if os.path.exists(path):
             size = os.path.getsize(path)

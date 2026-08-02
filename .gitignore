@@ -17,6 +17,7 @@ venv/
 # (see docs/RENDER_PIPELINE.md and docs/EVALUATION.md)
 output/preview/
 output/evaluation/
+output/refinement/
 
 # Environment
 .env

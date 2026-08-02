@@ -42,6 +42,7 @@ from . import (
     prompts,
     relations,
     rooms as room_seg,
+    tiling,
     validate,
 )
 from .cache import ResponseCache
@@ -77,6 +78,13 @@ class PipelineConfig:
     gap_closing_m: float = room_seg.DEFAULT_GAP_CLOSING
     #: Treat the whole plan as one room (the pre-segmentation behaviour).
     single_room: bool = False
+    #: Analyse large, dense images in overlapping tiles. Costs one model call
+    #: per tile, and recovers detail a single downscaled pass cannot resolve.
+    tile_large_images: bool = True
+    #: Procedurally furnish rooms that no reference image covered. Rooms with
+    #: observed contents are never touched, so this only ever adds to an
+    #: otherwise-empty room.
+    furnish: bool = True
 
 
 @dataclass
@@ -110,6 +118,14 @@ def analyse(
     regions, seg_stats = _segment(geometry, config, log)
     plan_min, plan_max = _plan_bounds(walls)
 
+    # ---- 1b. Classify rooms from the drawing itself ----------------------
+    # Before any image is looked at. The design philosophy puts CAD metadata,
+    # blocks, layers and text above image understanding, and this is where
+    # that ordering is enforced: rooms the drawing names are already typed by
+    # the time imagery is considered. It also improves image assignment, which
+    # matches an image's declared room type against each region's.
+    cad_document, cad_results = _classify_from_cad(geometry, regions, log)
+
     # ---- 2. Classify images locally --------------------------------------
     profiles: Dict[str, classify.ImageProfile] = {}
     for index, path in enumerate(images):
@@ -126,9 +142,25 @@ def analyse(
         f"{', '.join(f'{k}x{v}' for k, v in sorted(classify.summarise(list(profiles.values()))['by_class'].items()))}")
 
     if not observations:
-        log("[VISION] No usable observations; returning an unfurnished graph.")
-        graph = _empty_graph(regions, walls, config, errors, time.time() - started)
+        # No imagery does not mean no understanding. The drawing's own labels,
+        # blocks and layers still identify the rooms; this path previously
+        # returned every room as "unknown", which was the single largest
+        # source of unidentified rooms in practice.
+        log("[VISION] No usable observations; returning an unfurnished graph "
+            "with CAD-derived room types.")
+        graph = _empty_graph(regions, walls, config, errors,
+                             time.time() - started, cad_results)
         graph.diagnostics["images"] = [p.to_dict() for p in profiles.values()]
+        graph.diagnostics["segmentation"] = seg_stats
+        graph.diagnostics["room_classification"] = _classification_diagnostics(cad_results)
+
+        # No imagery is the case procedural furnishing exists for. The rooms
+        # are typed from the drawing, so they can be furnished from their types
+        # — a DXF on its own should still yield a furnished building, not a
+        # correct but empty shell.
+        graph.diagnostics["furnishing"] = _furnish_empty_rooms(
+            graph, config, "modern", log
+        )
         return PipelineResult(graph=graph, ok=False, errors=errors)
 
     # ---- 4. Assign images to rooms ---------------------------------------
@@ -165,9 +197,11 @@ def analyse(
         fusion_totals["corroborated"] += int(stats.get("multi_image_objects", 0) or 0)
 
     # ---- 6. Plan views span every room -----------------------------------
+    plan_registrations: List[Dict[str, Any]] = []
     if assigned.plan_observations:
-        plan_objects = _solve_plan_views(
-            assigned.plan_observations, regions, walls, plan_min, plan_max, config, log
+        plan_objects, plan_registrations = _solve_plan_views(
+            assigned.plan_observations, regions, walls, plan_min, plan_max,
+            config, log, document=cad_document,
         )
         all_objects.extend(plan_objects)
 
@@ -178,7 +212,17 @@ def analyse(
         )
         all_openings.extend(extra_openings)
 
-    # ---- 8. Assets, room stamping, validation ----------------------------
+    # ---- 8. Final room classification, now with imagery as one more signal -
+    # Re-run over every room with the vision evidence merged in. CAD still
+    # outranks it, so a drawing that names a room keeps that name; but a room
+    # the drawing left anonymous can now be identified from what was seen in
+    # it, and a room with neither stays honestly unknown.
+    final_results = _reclassify_with_vision(
+        geometry, regions, room_records, all_objects, cad_document, log
+    )
+    _stamp_classifications(room_records, final_results or cad_results)
+
+    # ---- 9. Assets, room stamping, validation ----------------------------
     dominant_style = _dominant_style(room_records)
     builder_histogram = assets.assign_assets(all_objects, dominant_style)
 
@@ -186,6 +230,13 @@ def analyse(
                       all_architecture, all_relationships, regions, all_viewpoints)
 
     room_counts = assignment.stamp_room_ids(graph.objects, graph.lights, graph.openings, regions)
+
+    # ---- 10. Procedurally furnish rooms nothing was observed in ----------
+    # Runs *before* validation so generated furniture is collision-checked and
+    # contained exactly like observed furniture — there is no second, weaker
+    # standard for it. Rooms with observed contents are skipped inside
+    # `furnish`, so an observation always wins over a convention.
+    furnish_summary = _furnish_empty_rooms(graph, config, dominant_style, log)
 
     # Validation runs per room, so a collision in one room cannot displace
     # furniture in another.
@@ -212,10 +263,21 @@ def analyse(
     }
     graph.diagnostics = {
         "segmentation": seg_stats,
+        "room_classification": _classification_diagnostics(
+            final_results or cad_results
+        ),
+        "cad": (cad_document.stats if cad_document is not None
+                else {"available": False}),
+        "furnishing": furnish_summary,
         "images": [profiles[o.image_id].to_dict() for o in observations
                    if o.image_id in profiles],
         "image_summary": classify.summarise(list(profiles.values())),
         "assignment": assigned.stats,
+        "registration": {
+            "plan_views": plan_registrations,
+            "registered": sum(1 for r in plan_registrations if r.get("registered")),
+            "total": len(plan_registrations),
+        },
         "fusion": fusion_totals,
         "objects_per_room": room_counts,
         "asset_builders": builder_histogram,
@@ -268,6 +330,168 @@ def _segment(geometry, config: PipelineConfig, log):
     return result.regions, result.stats
 
 
+# ---------------------------------------------------------------------------
+# Semantic room classification
+# ---------------------------------------------------------------------------
+#
+# The `semantic` package is imported lazily and defensively. It is a hard
+# requirement for good results and a soft one for running at all: a checkout
+# without it should still produce a correct architectural shell rather than
+# failing to import.
+
+
+def _semantic():
+    """The semantic package, or ``None`` when it is unavailable."""
+    try:
+        import semantic  # noqa: PLC0415 - deliberately lazy
+
+        return semantic
+    except ImportError:
+        return None
+
+
+def _cad_document(geometry: Dict[str, Any]):
+    """The CAD model embedded in ``geometry.json``, when there is one.
+
+    A geometry file written by the legacy extractor has no ``cad`` key. That
+    is not an error — it just means only tiers 5 and 6 are available.
+    """
+    try:
+        from cad.schema import CadDocument  # noqa: PLC0415
+
+        return CadDocument.from_geometry_json(geometry)
+    except (ImportError, ValueError, TypeError, KeyError):
+        return None
+
+
+def _classify_from_cad(geometry, regions, log):
+    """Classify every region from the drawing alone, before imagery is used.
+
+    Returns ``(cad_document, {room_id: RoomClassification})``. Region records
+    are stamped in place so image-to-room assignment can use them.
+    """
+    semantic = _semantic()
+    if semantic is None:
+        log("[SEMANTIC] semantic package unavailable; room typing will rely on "
+            "imagery alone")
+        return None, {}
+
+    document = _cad_document(geometry)
+
+    inputs = semantic.build_inputs(document, regions)
+    results = {r.room_id: r for r in semantic.classify_plan(inputs)}
+
+    # Stamping the regions is what lets `assignment` match a bedroom photo to
+    # the region the drawing already calls a bedroom, rather than guessing
+    # from floor area alone.
+    for region in regions:
+        result = results.get(region.id)
+        if result and result.room_type != "unknown":
+            region.room_type = result.room_type
+            region.room_type_confidence = result.confidence
+
+    identified = sum(1 for r in results.values() if r.room_type != "unknown")
+    if document is None:
+        log(f"[SEMANTIC] No CAD model in geometry.json (legacy extractor); "
+            f"{identified}/{len(results)} rooms typed from geometry alone")
+    else:
+        log(f"[SEMANTIC] CAD evidence: {identified}/{len(results)} rooms identified "
+            f"from {len(document.room_labels())} labels, {len(document.blocks)} blocks")
+        for result in sorted(results.values(), key=lambda r: -r.confidence)[:8]:
+            if result.room_type != "unknown":
+                head = result.reasons[0] if result.reasons else "no stated reason"
+                log(f"[SEMANTIC]   {result.room_id}: {result.room_type} "
+                    f"{result.confidence:.0%} - {head}")
+
+    return document, results
+
+
+def _reclassify_with_vision(geometry, regions, room_records, objects, document, log):
+    """Re-run classification with the imagery's findings folded in.
+
+    Vision is tier 6, below every CAD tier, so this can only *add* to what the
+    drawing established — it identifies rooms CAD left anonymous and corrobates
+    the ones it named, but cannot overturn an explicit room label.
+    """
+    semantic = _semantic()
+    if semantic is None:
+        return {}
+
+    by_id = {room.id: room for room in room_records}
+    categories: Dict[str, List[str]] = {}
+    for obj in objects:
+        if obj.room_id:
+            categories.setdefault(obj.room_id, []).append(obj.category)
+
+    vision_by_room = {}
+    for region in regions:
+        record = by_id.get(region.id)
+        room_type = record.room_type if record else ""
+        confidence = record.confidence if record else 0.0
+        detected = categories.get(region.id, [])
+        if room_type in ("", "unknown") and not detected:
+            continue
+        vision_by_room[region.id] = (room_type, confidence, detected)
+
+    if not vision_by_room:
+        return {}
+
+    inputs = semantic.build_inputs(document, regions, vision_by_room=vision_by_room)
+    results = {r.room_id: r for r in semantic.classify_plan(inputs)}
+
+    summary = semantic.summarise(list(results.values()))
+    log(f"[SEMANTIC] Final: {summary['identified']}/{summary['rooms']} rooms "
+        f"identified, {summary['confident']} confidently, "
+        f"mean confidence {summary['mean_confidence']:.2f}"
+        + (f", {summary['conflicts']} conflict(s)" if summary["conflicts"] else ""))
+
+    return results
+
+
+def _stamp_classifications(room_records, results) -> None:
+    """Write classification outcomes onto the ``Room`` records."""
+    for room in room_records:
+        result = results.get(room.id)
+        if result is None:
+            continue
+        # A classification that found nothing must not erase a room type the
+        # imagery established on its own.
+        if result.room_type == "unknown" and room.room_type not in ("", "unknown"):
+            continue
+        room.room_type = result.room_type
+        room.confidence = result.confidence
+        room.specific_type = result.specific_type
+        room.type_reasons = list(result.reasons)
+        room.type_decided_by = result.decided_by
+        room.type_conflicts = [c.detail for c in result.conflicts]
+        room.runner_up_type = result.runner_up
+        room.runner_up_confidence = result.runner_up_confidence
+
+
+def _classification_diagnostics(results) -> Dict[str, Any]:
+    """Per-room classification detail for the diagnostics block."""
+    semantic = _semantic()
+    if not results:
+        return {"rooms": 0, "reason": "no classification was run"}
+
+    values = list(results.values())
+    summary = semantic.summarise(values) if semantic else {"rooms": len(values)}
+    summary["rooms_detail"] = [
+        {
+            "room_id": r.room_id,
+            "room_type": r.room_type,
+            "specific_type": r.specific_type,
+            "confidence": round(r.confidence, 3),
+            "decided_by": r.decided_by,
+            "runner_up": r.runner_up,
+            "reasons": r.reasons,
+            "conflicts": [c.to_dict() for c in r.conflicts],
+        }
+        for r in sorted(values, key=lambda x: -x.confidence)
+    ]
+    return summary
+
+
 def _observe_images(images, profiles, regions, config: PipelineConfig, log):
     """Call the model once per image, concurrently, and parse each response."""
     errors: List[str] = []
@@ -304,11 +528,26 @@ def _observe_images(images, profiles, regions, config: PipelineConfig, log):
         ),
     )
 
+    tile_dir = os.path.join(config.cache_dir, "tiles")
+
     def work(item: Tuple[int, str]):
         index, path = item
         image_id = f"img{index}"
         profile = profiles[image_id]
         prompt = prompts.prompt_for_mode(profile.analysis_mode, hint)
+
+        # A large, dense image is analysed in overlapping tiles. The model
+        # sees a fixed internal resolution, so a whole sheet gets downscaled
+        # until its furniture is a few pixels across — one real run returned
+        # 11 objects for an entire house. Tiling restores the detail at the
+        # cost of one call per tile.
+        if config.tile_large_images and tiling.should_tile(path, profile.analysis_mode):
+            tiles = tiling.plan_tiles(path, tile_dir)
+            if len(tiles) > 1:
+                return _analyse_tiled(
+                    client, tiles, prompt, image_id, path, log
+                )
+
         try:
             result = client.analyse_image(path, prompt)
         except VLMError as exc:
@@ -501,9 +740,30 @@ def _renamespace(relationships, room_id: str):
     return out
 
 
-def _solve_plan_views(plan_observations, regions, walls, plan_min, plan_max, config, log):
-    """Place furniture read off a top-down furnished plan."""
-    fused = fusion.fuse(plan_observations)
+def _registration():
+    """The registration package, or ``None`` when it is unavailable.
+
+    Imported lazily and defensively for the same reason as ``semantic``: a
+    checkout without it should still produce a model, falling back to the
+    full-frame assumption rather than failing to import.
+    """
+    try:
+        import registration  # noqa: PLC0415 - deliberately lazy
+
+        return registration
+    except ImportError:
+        return None
+
+
+def _solve_plan_views(plan_observations, regions, walls, plan_min, plan_max,
+                      config, log, document=None):
+    """Place furniture read off a top-down furnished plan.
+
+    Each observation is registered to the drawing first. Registration is
+    per-image rather than per-batch because two uploaded sheets may show the
+    same building at different scales, or different floors, and one transform
+    cannot describe both.
+    """
     whole_plan = grounding.RoomFrame(
         polygon=[
             (plan_min[0], plan_min[1]), (plan_max[0], plan_min[1]),
@@ -515,21 +775,107 @@ def _solve_plan_views(plan_observations, regions, walls, plan_min, plan_max, con
         walls=walls,
     )
 
-    objects = grounding.ground_plan_view(fused.objects, plan_min, plan_max, whole_plan)
+    registrations = _register_plan_views(document, plan_observations, plan_min,
+                                         plan_max, log)
 
-    kept = []
-    for obj in objects:
-        region = assignment.room_for_point((obj.position.x, obj.position.y), regions)
-        if region is None:
-            # A plan-view detection that falls outside every room is most
-            # likely a legend, title block or dimension annotation.
-            continue
-        obj.room_id = region.id
-        obj.id = f"{region.id}__plan_{obj.id}"
-        kept.append(obj)
+    kept: List = []
+    total = 0
+    diagnostics: List[Dict[str, Any]] = []
 
-    log(f"[VISION] Plan views: {len(kept)}/{len(objects)} objects mapped into rooms")
-    return kept
+    # Fused per registration group rather than all at once: objects from a
+    # sheet that registered cleanly must not be merged with objects from one
+    # that did not, because fusion would average their positions and the good
+    # sheet would inherit the bad one's error.
+    for observation in plan_observations:
+        result = registrations.get(observation.image_id)
+        fused = fusion.fuse([observation])
+
+        transform = getattr(result, "transform", None)
+        assumed = not getattr(result, "registered", False)
+
+        objects = grounding.ground_plan_view(
+            fused.objects, plan_min, plan_max, whole_plan,
+            transform=transform, assumed=assumed,
+        )
+        total += len(objects)
+
+        mapped = []
+        for obj in objects:
+            region = assignment.room_for_point((obj.position.x, obj.position.y), regions)
+            if region is None:
+                # A plan-view detection that falls outside every room is
+                # usually a legend, title block or dimension annotation — or,
+                # far more seriously, a sign that the image never registered.
+                continue
+            obj.room_id = region.id
+            obj.id = f"{region.id}__plan_{obj.id}"
+            mapped.append(obj)
+
+        kept.extend(mapped)
+        if result is not None:
+            diagnostics.append(result.to_dict())
+        _report_plan_view(observation, result, len(objects), len(mapped), log)
+
+    log(f"[VISION] Plan views: {len(kept)}/{total} objects mapped into rooms")
+    return kept, diagnostics
+
+
+def _register_plan_views(document, plan_observations, plan_min, plan_max, log):
+    """Fit an image → plan transform for every plan-view image."""
+    registration = _registration()
+    if registration is None:
+        log("[REGISTER] registration package unavailable; plan views fall back "
+            "to the assumption that each image is one plan filling the frame")
+        return {}
+
+    results = registration.register_plan_views(
+        document, plan_observations, plan_min, plan_max
+    )
+
+    fitted = sum(1 for r in results.values() if r.registered)
+    log(f"[REGISTER] {fitted}/{len(results)} plan view(s) registered to the drawing")
+    return results
+
+
+def _report_plan_view(observation, result, produced: int, mapped: int, log) -> None:
+    """Say what registration achieved for one sheet, and what it cost.
+
+    The old code reported a single blanket warning whenever most detections
+    were lost, which named the symptom and not the cause. With a registration
+    result in hand the diagnosis is available: whether the transform was
+    measured or assumed, how well the labels agreed, and — for a composite
+    sheet — which part of the frame the drawing actually occupies.
+    """
+    if result is None:
+        return
+
+    log(f"[REGISTER]   {result.explain()}")
+    for warning in result.warnings:
+        log(f"[REGISTER]   ! {warning}")
+
+    if not produced:
+        return
+
+    lost = produced - mapped
+    if lost <= produced * 0.5:
+        return
+
+    if result.registered:
+        # The transform is trustworthy, so the detections that fell outside
+        # every room genuinely are outside every room: annotations, a legend,
+        # or furniture drawn on a part of the sheet this drawing does not
+        # cover. That is a different problem from a failed registration and
+        # must not be reported as one.
+        log(f"[REGISTER]   ! {lost} of {produced} detections from "
+            f"{observation.image_id} fell outside every room despite a good "
+            f"registration ({result.confidence:.0%}). They are most likely "
+            "annotations, or belong to another plan on the same sheet.")
+    else:
+        log(f"[REGISTER]   ! {lost} of {produced} detections from "
+            f"{observation.image_id} fell outside every room, and this image "
+            "was never registered to the drawing. "
+            f"{result.reason} Label the plan's rooms legibly, crop the image "
+            "to a single plan, or rely on procedural furnishing.")
 
 
 def _solve_geometry_views(geometry_observations, regions, walls, config, log):
@@ -549,6 +895,88 @@ def _solve_geometry_views(geometry_observations, regions, walls, config, log):
     log(f"[VISION] Technical drawings: {len(openings)} openings verified "
         "(no materials, furniture or lighting taken)")
     return openings
+
+
+class _TiledResult:
+    """Stands in for a ``VisionClient`` result assembled from several tiles.
+
+    Duck-typed rather than a real result object: the caller only reads
+    ``payload``, ``cached`` and ``latency_s``, and inventing a parallel class
+    hierarchy for a merged response would be more machinery than the
+    difference deserves.
+    """
+
+    __slots__ = ("payload", "cached", "latency_s", "tiles")
+
+    def __init__(self, payload, cached: bool, latency_s: float, tiles: int) -> None:
+        self.payload = payload
+        self.cached = cached
+        self.latency_s = latency_s
+        self.tiles = tiles
+
+
+def _analyse_tiled(client, tiles, prompt, image_id, path, log):
+    """Analyse one image as several tiles and merge the responses.
+
+    A tile that fails is skipped rather than failing the image: eight good
+    tiles are a better result than none, and the loss is reported.
+    """
+    collected = []
+    failures = 0
+    latency = 0.0
+    all_cached = True
+
+    for tile in tiles:
+        try:
+            result = client.analyse_image(tile.path, prompt)
+        except VLMError:
+            failures += 1
+            continue
+        collected.append((tile, result.payload))
+        latency += getattr(result, "latency_s", 0.0) or 0.0
+        all_cached = all_cached and bool(getattr(result, "cached", False))
+
+    if not collected:
+        return image_id, path, None, (
+            f"{os.path.basename(path)}: all {len(tiles)} tiles failed"
+        )
+
+    merged = tiling.merge_payloads(collected)
+    log(f"[VISION] {os.path.basename(path)}: analysed as {len(collected)}/"
+        f"{len(tiles)} tiles -> {len(merged.get('objects') or [])} objects"
+        + (f" ({failures} tile(s) failed)" if failures else ""))
+
+    return image_id, path, _TiledResult(merged, all_cached, latency, len(collected)), None
+
+
+def _furnish_empty_rooms(graph: SceneGraph, config, style: str, log) -> Dict[str, Any]:
+    """Generate furniture for rooms no image furnished.
+
+    Imported lazily and defensively for the same reason as ``semantic``: a
+    checkout without the package should still produce a correct, if bare,
+    architectural model rather than failing to import.
+    """
+    if not config.furnish:
+        return {"enabled": False, "reason": "disabled by configuration"}
+
+    try:
+        import furnish as furnish_pkg  # noqa: PLC0415
+    except ImportError:
+        log("[FURNISH] furnish package unavailable; empty rooms stay empty")
+        return {"enabled": False, "reason": "furnish package not importable"}
+
+    before = len(graph.objects)
+    report = furnish_pkg.furnish(graph, log=log)
+
+    # Generated objects need assets like any other. Assigning only to the new
+    # ones keeps the observed objects' existing matches untouched.
+    new_objects = graph.objects[before:]
+    if new_objects:
+        assets.assign_assets(new_objects, style)
+
+    summary = report.to_dict()
+    summary["enabled"] = True
+    return summary
 
 
 def _validate_per_room(graph: SceneGraph, regions, walls, config, log):
@@ -660,17 +1088,29 @@ def _assemble(room_records, walls, objects, lights, openings, architecture,
     )
 
 
-def _empty_graph(regions, walls, config, errors, elapsed) -> SceneGraph:
-    """A structurally valid, unfurnished graph for the failure path."""
+def _empty_graph(regions, walls, config, errors, elapsed, cad_results=None) -> SceneGraph:
+    """A structurally valid, unfurnished graph for the no-imagery path.
+
+    Unfurnished, but not unidentified: the CAD classification still applies,
+    so a plan whose rooms the drawing names comes back correctly typed even
+    when no reference image was supplied or every model call failed.
+    """
+    cad_results = cad_results or {}
+
+    rooms = []
+    for region in regions:
+        room = Room(
+            id=region.id, polygon=list(region.polygon), bounds_min=region.bounds_min,
+            bounds_max=region.bounds_max, ceiling_height=config.wall_height,
+            area=region.area, connected_to=list(region.connected_to),
+            wall_ids=list(region.wall_ids),
+        )
+        rooms.append(room)
+
+    _stamp_classifications(rooms, cad_results)
+
     graph = SceneGraph(
-        rooms=[
-            Room(
-                id=r.id, polygon=list(r.polygon), bounds_min=r.bounds_min,
-                bounds_max=r.bounds_max, ceiling_height=config.wall_height,
-                area=r.area, connected_to=list(r.connected_to), wall_ids=list(r.wall_ids),
-            )
-            for r in regions
-        ] or [Room()],
+        rooms=rooms or [Room()],
         walls=walls,
         floor=Finish(material="wood", color_hex=catalog.get_material("wood").color_hex),
         ceiling=Finish(material="paint_matte", color_hex="#F6F5F2"),

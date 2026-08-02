@@ -299,7 +299,14 @@ def test_two_views_of_one_room_share_a_region(two_room_geometry):
     assert set(furnished[0].image_ids) == {"img0", "img1"}
 
 
-def test_rooms_without_imagery_are_left_unfurnished(two_room_geometry):
+def test_rooms_without_imagery_are_reported(two_room_geometry):
+    """A room no image covers is reported, so it can be furnished procedurally.
+
+    The warning no longer says "left unfurnished": since Stage 7 those rooms
+    *are* furnished, from their room type rather than from an image. Claiming
+    otherwise would send a user looking for a missing upload when nothing is
+    missing.
+    """
     regions = _regions(two_room_geometry)
 
     only_living = observe.parse_observation(
@@ -311,7 +318,31 @@ def test_rooms_without_imagery_are_left_unfurnished(two_room_geometry):
 
     assert result.stats["rooms_with_imagery"] == 1
     assert result.stats["rooms_unfurnished"] == 1
-    assert any("unfurnished" in w for w in result.warnings)
+    assert any("no reference imagery" in w for w in result.warnings)
+
+
+def test_plan_views_are_not_reported_as_missing_imagery(two_room_geometry):
+    """A furnished-floorplan upload must not be reported as "no imagery".
+
+    Plan views span the whole plan and are never assigned to a region, so the
+    old message told a user who had supplied a floor plan that they had
+    supplied nothing — pointing them at their upload instead of at the real
+    failure, which is that the plan did not register to the DXF.
+    """
+    regions = _regions(two_room_geometry)
+
+    plan = observe.parse_observation(
+        _payload("unknown", [_obj("s1", "sofa", [0.1, 0.5, 0.5, 0.9])]),
+        "img0", "plan.png", analysis_mode="layout")
+    profile = classify.ImageProfile("img0", "plan.png")
+    profile.analysis_mode = "layout"
+
+    result = assignment.assign([plan], {"img0": profile}, regions)
+
+    assert result.stats["plan_views"] == 1
+    warnings = " ".join(result.warnings)
+    assert "plan view" in warnings
+    assert "interior" in warnings
 
 
 def test_room_for_point_resolves_correctly(two_room_geometry):

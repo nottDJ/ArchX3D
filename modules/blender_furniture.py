@@ -540,11 +540,16 @@ def build_object(scene_object, materials: Sequence[bpy.types.Material], builder_
     obj.location = (scene_object.position.x, scene_object.position.y, scene_object.position.z)
     obj.rotation_euler = (0.0, 0.0, math.radians(scene_object.rotation_z))
 
-    # Keep provenance queryable inside the .blend for debugging.
+    # Keep provenance queryable inside the .blend for debugging, and — once
+    # exported as glTF extras — available to the web viewer, which uses group
+    # and room to drive its visibility modes and room navigation.
     obj["archx3d_id"] = scene_object.id
     obj["archx3d_category"] = scene_object.category
+    obj["archx3d_group"] = scene_object.group
     obj["archx3d_confidence"] = round(scene_object.confidence, 3)
     obj["archx3d_asset"] = scene_object.asset
+    if scene_object.room_id:
+        obj["archx3d_room"] = scene_object.room_id
     if scene_object.uncertain:
         obj["archx3d_uncertain"] = True
 

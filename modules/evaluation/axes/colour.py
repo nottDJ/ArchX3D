@@ -115,6 +115,7 @@ def _global_finding(ctx, cast: float, lab_reference, lab_render,
 
     return [Finding(
         axis=COLOUR,
+        code="cast",
         summary=f"Render reads {direction} than the reference",
         subsystem=subsystem,
         difference=cast,
@@ -194,6 +195,7 @@ def _region_findings(ctx, detail: Dict[str, Any]) -> List[Finding]:
         coverage = imaging.fraction(mask)
         findings.append(Finding(
             axis=COLOUR,
+            code="region_cast",
             summary=f"{_readable(name)} is {difference:.0f} dE from the reference "
                     f"in the region it covers",
             subsystem=Subsystem.SURFACE_FINISH,

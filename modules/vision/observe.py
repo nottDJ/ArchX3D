@@ -115,6 +115,30 @@ class RelationObservation:
 
 
 @dataclass
+class TextObservation:
+    """A piece of text read off the image, with where it was printed.
+
+    The registration engine's raw material. A room name printed on a plan is
+    the only feature that appears in *both* the drawing and the image with a
+    position attached, so these are what tie the two coordinate systems
+    together — see ``modules/registration``.
+
+    Only asked for on plan views. In a perspective photograph the printed text
+    is on a book spine or a cereal packet, which locates nothing.
+    """
+
+    local_id: str
+    text: str
+    #: Uppercased, de-punctuated form, matching ``cad.text.normalise``.
+    normalised: str
+    bbox: Optional[BBox2D]
+    #: Room type the model resolved the string to, when it offered one.
+    room_type: str = "unknown"
+    confidence: float = 0.0
+    image_id: str = ""
+
+
+@dataclass
 class CameraObservation:
     height_bucket: str = "eye_level"
     horizon_y: float = 0.5
@@ -164,6 +188,11 @@ class ImageObservation:
     openings: List[OpeningObservation] = field(default_factory=list)
     architecture: List[ArchObservation] = field(default_factory=list)
     relationships: List[RelationObservation] = field(default_factory=list)
+    #: Text printed in the image, with positions. Populated for plan views
+    #: only, and consumed by ``registration`` to fit the image → plan
+    #: transform. Empty on a cached response predating the prompt change,
+    #: which the engine handles by falling back rather than failing.
+    labels: List[TextObservation] = field(default_factory=list)
     #: Counts of what was thrown away and why.
     rejected: Dict[str, int] = field(default_factory=dict)
     notes: List[str] = field(default_factory=list)
@@ -203,6 +232,7 @@ def parse_observation(
     _parse_openings(payload.get("openings"), obs)
     _parse_architecture(payload.get("architecture"), obs)
     _parse_relationships(payload.get("relationships"), obs)
+    _parse_labels(payload.get("labels"), obs)
 
     enforce_analysis_mode(obs, analysis_mode)
     return obs
@@ -218,9 +248,14 @@ def enforce_analysis_mode(obs: ImageObservation, mode: str) -> None:
     the prompt is an optimisation, this is the guarantee.
     """
     if mode == "full":
+        # Text in a perspective photograph is on a book spine or a poster. It
+        # locates nothing on the plan, and letting it reach the registration
+        # engine would offer correspondences that cannot possibly be real.
+        obs.labels.clear()
         return
 
     if mode == "skip":
+        obs.labels.clear()
         dropped = len(obs.objects) + len(obs.lights) + len(obs.openings) + len(obs.architecture)
         obs.objects.clear()
         obs.lights.clear()
@@ -578,6 +613,57 @@ def _parse_relationships(raw: Any, obs: ImageObservation) -> None:
 # ---------------------------------------------------------------------------
 
 _SLUG_RE = re.compile(r"[^a-z0-9_]+")
+
+
+def _parse_labels(raw: Any, obs: ImageObservation) -> None:
+    """Text printed on a plan, with the box it was printed in.
+
+    A label with no box is discarded rather than kept: the whole value of a
+    label here is positional, and one without a position cannot contribute a
+    correspondence. Keeping it would inflate the count of "labels read" in the
+    diagnostics while contributing nothing to the fit.
+    """
+    if not isinstance(raw, list):
+        return
+
+    for index, item in enumerate(raw):
+        if not isinstance(item, dict):
+            obs._reject("label_not_object")
+            continue
+
+        text = str(item.get("text", "")).strip()
+        if not text:
+            obs._reject("label_without_text")
+            continue
+
+        bbox = _bbox_from(item.get("bbox"))
+        if bbox is None:
+            obs._reject("label_without_bbox")
+            continue
+
+        room_type = str(item.get("room_type", "")).strip().lower().replace(" ", "_")
+
+        obs.labels.append(
+            TextObservation(
+                local_id=_slug(item.get("id"), f"label_{index}"),
+                text=text,
+                normalised=_approximate_normalise(text),
+                bbox=bbox,
+                room_type=room_type if room_type in catalog.ROOM_TYPES else "unknown",
+                confidence=_clamp01(_f(item.get("confidence"), 0.8)),
+                image_id=obs.image_id,
+            )
+        )
+
+
+def _approximate_normalise(text: str) -> str:
+    """A readable normalised form for diagnostics.
+
+    Deliberately *not* the matching rule. ``registration.labels.normalise`` is
+    the canonical one and re-derives its own form from ``text``, so that the
+    two sides of a match can never diverge because this function drifted.
+    """
+    return re.sub(r"\s+", " ", re.sub(r"[^A-Z0-9 ]+", " ", text.upper())).strip()
 
 
 def _slug(value: Any, default: str) -> str:

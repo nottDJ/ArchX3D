@@ -267,6 +267,7 @@ def _displacement_findings(ctx, displacements: List[Dict[str, Any]]) -> List[Fin
         moved_by = _blame(record["flags"])
         findings.append(Finding(
             axis=LAYOUT,
+            code="displacement",
             summary=f"{_label(record)} sits {centimetres:.0f} cm from where the "
                     f"reference places it",
             subsystem=Subsystem.SCENE_GRAPH_TRANSFORM,
@@ -296,6 +297,7 @@ def _camera_finding(ctx, systematic: Dict[str, Any], objects: int) -> List[Findi
     magnitude = systematic["magnitude_m"]
     return [Finding(
         axis=LAYOUT,
+        code="systematic_offset",
         summary=f"Every object in this view is offset by about "
                 f"{magnitude * 100:.0f} cm in the same direction",
         subsystem=Subsystem.CAMERA_FIT,
@@ -357,6 +359,7 @@ def _mass_finding(ctx, agreement: float, detail: Dict[str, Any]) -> List[Finding
     shift = detail.get("mass_shift", "")
     return [Finding(
         axis=LAYOUT,
+        code="mass",
         summary="Visual mass is distributed differently from the reference",
         subsystem=Subsystem.SCENE_GRAPH_TRANSFORM,
         difference=1.0 - agreement,

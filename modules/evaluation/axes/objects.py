@@ -161,6 +161,7 @@ def _missing_findings(ctx, missing: List[Any], total: float) -> List[Finding]:
         label = _label(obj)
         findings.append(Finding(
             axis=OBJECTS,
+            code="missing",
             summary=f"{label.capitalize()} omitted",
             subsystem=subsystem,
             difference=1.0,
@@ -215,6 +216,7 @@ def _replaced_findings(ctx, replaced: List[Any]) -> List[Finding]:
         score = float(getattr(obj, "asset_score", 0.0) or 0.0)
         findings.append(Finding(
             axis=OBJECTS,
+            code="substitute",
             summary=f"{_label(obj).capitalize()} built from a stand-in asset",
             subsystem=Subsystem.ASSET_PLACEMENT,
             difference=1.0 - score,
@@ -238,6 +240,7 @@ def _extra_findings(ctx, extra: List[Any]) -> List[Finding]:
     for obj in extra:
         findings.append(Finding(
             axis=OBJECTS,
+            code="extra",
             summary=f"{_label(obj).capitalize()} built without an observation",
             subsystem=Subsystem.ASSET_PLACEMENT,
             difference=1.0,

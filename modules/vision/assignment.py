@@ -57,8 +57,13 @@ class RoomGroup:
     """A physical room, the images that show it, and what they observed."""
 
     region: RoomRegion
+    #: The authoritative room type: the drawing's, where it states one.
     room_type: str = "unknown"
     room_type_confidence: float = 0.0
+    #: What the imagery alone read the room as. Kept alongside rather than
+    #: discarded, so a disagreement with the drawing stays visible in review
+    #: instead of being resolved into silence.
+    observed_room_type: str = "unknown"
     style: str = "unknown"
     image_ids: List[str] = field(default_factory=list)
     observations: List[ImageObservation] = field(default_factory=list)
@@ -139,16 +144,43 @@ def assign(
         used_regions.add(region_id)
         members = clusters[room_type]
 
-        region.room_type = room_type
-        region.room_type_confidence = max(
+        observed_confidence = max(
             (o.room_type_confidence for o in members), default=0.0
         )
+
+        # A room type the *drawing* states is not overwritten by what a model
+        # thought it saw. This used to be an unconditional assignment, which
+        # silently demoted CAD text (tier 4) below a vision impression (tier
+        # 6) — so a room the architect labelled `STUDY` became a bedroom
+        # because the photograph of it contained a bed. The drawing decides
+        # what a room *is*; the imagery decides what it looks like.
+        cad_type = region.room_type
+        cad_confidence = region.room_type_confidence
+        cad_stated = bool(cad_type) and cad_type != "unknown" and cad_confidence >= 0.45
+
+        if not cad_stated:
+            region.room_type = room_type
+            region.room_type_confidence = observed_confidence
+        elif cad_type == room_type:
+            # Independent corroboration: the drawing said it and the picture
+            # agrees. Worth more than either alone.
+            region.room_type_confidence = min(
+                0.99, cad_confidence + 0.35 * observed_confidence * (1.0 - cad_confidence)
+            )
+        else:
+            warnings.append(
+                f"{region.id}: the imagery reads as a {room_type.replace('_', ' ')} "
+                f"but the drawing names it a {cad_type.replace('_', ' ')} "
+                f"({cad_confidence:.0%}); keeping the drawing's answer and taking "
+                "only appearance from the imagery"
+            )
 
         groups.append(
             RoomGroup(
                 region=region,
-                room_type=room_type,
+                room_type=region.room_type,
                 room_type_confidence=region.room_type_confidence,
+                observed_room_type=room_type,
                 style=_dominant_style(members),
                 image_ids=[o.image_id for o in members],
                 observations=members,
@@ -156,7 +188,7 @@ def assign(
             )
         )
 
-    # --- 3. Regions with no imagery stay empty ----------------------------
+    # --- 3. Regions with no interior imagery ------------------------------
     for region in regions:
         if region.id in used_regions:
             continue
@@ -164,18 +196,31 @@ def assign(
             RoomGroup(
                 region=region,
                 room_type=region.room_type or "unknown",
-                rationale="no reference image covers this room; left unfurnished",
+                rationale="no interior reference image covers this room",
             )
         )
 
     groups.sort(key=lambda gr: -gr.region.area)
 
+    # "No imagery" is a claim about *interior views* only. Plan and technical
+    # views are never assigned to a region — they span the whole plan — so
+    # reporting them as absent was actively misleading: a project whose only
+    # image was a furnished floor plan was told it had supplied nothing, which
+    # points the user at their upload instead of at the real failure.
     unfurnished = [g for g in groups if not g.has_imagery]
     if unfurnished:
-        warnings.append(
-            f"{len(unfurnished)} of {len(regions)} rooms have no reference imagery "
-            "and were left unfurnished"
-        )
+        if plan_views or geometry_views:
+            warnings.append(
+                f"{len(unfurnished)} of {len(regions)} rooms have no *interior* "
+                f"reference image. {len(plan_views)} plan view(s) and "
+                f"{len(geometry_views)} technical drawing(s) were supplied; these "
+                "inform style and openings but do not furnish individual rooms."
+            )
+        else:
+            warnings.append(
+                f"{len(unfurnished)} of {len(regions)} rooms have no reference "
+                "imagery covering them"
+            )
 
     return AssignmentResult(
         groups=groups,
@@ -221,18 +266,69 @@ def _dominant_style(observations: Sequence[ImageObservation]) -> str:
 # ---------------------------------------------------------------------------
 
 
+def _registration():
+    """The registration package, or ``None`` when it is unavailable.
+
+    Lazy and defensive, matching how ``pipeline`` treats ``semantic``: without
+    it, matching falls back to the floor-area heuristic that predated it.
+    """
+    try:
+        import registration  # noqa: PLC0415 - deliberately lazy
+
+        return registration
+    except ImportError:
+        return None
+
+
 def _match_clusters_to_regions(
     cluster_types: Sequence[str], regions: Sequence[RoomRegion]
 ) -> Tuple[Dict[str, Optional[str]], Dict[str, str]]:
-    """Assign each room-type cluster to a distinct region.
+    """Assign each room-type cluster to the region that is that room.
 
-    Solved globally rather than greedily: picking the single best region for
-    the first cluster can strand a later one with nothing plausible left, and
-    the plans here are small enough to enumerate exactly.
+    Delegated to ``registration.interior``, which scores a region primarily on
+    what the *drawing* says it is and uses floor area only as a prior. That
+    ordering is the point: room classification already ran over the CAD text,
+    blocks and layers and stamped each region with its answer, and matching a
+    bedroom photograph by comparing square metres while ignoring the word
+    ``BEDROOM`` printed at that exact spot inverts the trust hierarchy the
+    whole pipeline is built on.
+
+    The area prior is injected rather than imported so ``rooms``' table stays
+    its single definition.
     """
     if not cluster_types:
         return {}, {}
 
+    registration = _registration()
+    if registration is None:
+        return _match_by_area(cluster_types, regions)
+
+    registrations = registration.register_interior_views(
+        cluster_types, regions, area_plausibility=area_plausibility
+    )
+
+    assignment: Dict[str, Optional[str]] = {t: None for t in cluster_types}
+    rationale: Dict[str, str] = {}
+
+    for room_type, record in registrations.items():
+        if not record.room_id:
+            continue
+        assignment[room_type] = record.room_id
+        region = next(r for r in regions if r.id == record.room_id)
+        rationale[room_type] = _explain(room_type, region, record)
+
+    return assignment, rationale
+
+
+def _match_by_area(
+    cluster_types: Sequence[str], regions: Sequence[RoomRegion]
+) -> Tuple[Dict[str, Optional[str]], Dict[str, str]]:
+    """The pre-registration matcher: floor area and size rank only.
+
+    Kept as the fallback for a checkout without the registration package. It
+    is a guess, and it is only correct when the drawing says nothing — which
+    is exactly the case it now handles.
+    """
     scores: Dict[Tuple[str, str], float] = {}
     for room_type in cluster_types:
         for region in regions:
@@ -256,7 +352,11 @@ def _match_clusters_to_regions(
                 region = regions[best_combo[index]]
                 if scores[(room_type, region.id)] >= MIN_ASSIGNMENT_SCORE:
                     assignment[room_type] = region.id
-                    rationale[room_type] = _explain(room_type, region, scores[(room_type, region.id)])
+                    rationale[room_type] = (
+                        f"matched {room_type.replace('_', ' ')} to {region.id} "
+                        f"({region.area:.1f} m2) on floor area alone, "
+                        f"score {scores[(room_type, region.id)]:.2f}"
+                    )
         return assignment, rationale
 
     # Greedy fallback for large plans.
@@ -271,13 +371,16 @@ def _match_clusters_to_regions(
         if score >= MIN_ASSIGNMENT_SCORE:
             assignment[room_type] = region.id
             taken.add(region.id)
-            rationale[room_type] = _explain(room_type, region, score)
+            rationale[room_type] = (
+                f"matched {room_type.replace('_', ' ')} to {region.id} "
+                f"({region.area:.1f} m2) on floor area alone, score {score:.2f}"
+            )
 
     return assignment, rationale
 
 
 def _score(room_type: str, region: RoomRegion, regions: Sequence[RoomRegion]) -> float:
-    """How well does ``region`` suit ``room_type``?"""
+    """How well does ``region`` suit ``room_type``, on geometry alone?"""
     score = area_plausibility(room_type, region.area)
 
     # Living rooms are typically the largest space; bathrooms the smallest.
@@ -297,11 +400,22 @@ def _score(room_type: str, region: RoomRegion, regions: Sequence[RoomRegion]) ->
     return max(0.0, score)
 
 
-def _explain(room_type: str, region: RoomRegion, score: float) -> str:
-    return (
+def _explain(room_type: str, region: RoomRegion, record) -> str:
+    """Why this image group landed on this region, in one line."""
+    head = (
         f"matched {room_type.replace('_', ' ')} to {region.id} "
-        f"({region.area:.1f} m2, {region.width:.1f}x{region.depth:.1f} m), score {score:.2f}"
+        f"({region.area:.1f} m2, {region.width:.1f}x{region.depth:.1f} m), "
+        f"score {record.score:.2f}"
     )
+    if record.reasons:
+        head += f" — {record.reasons[0]}"
+    if record.conflicts_with_cad:
+        head += (
+            f"; NOTE the drawing calls this a "
+            f"{record.cad_room_type.replace('_', ' ')}, and the drawing is "
+            "authoritative — the imagery contributes appearance only"
+        )
+    return head
 
 
 # ---------------------------------------------------------------------------

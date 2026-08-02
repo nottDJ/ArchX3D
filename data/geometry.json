@@ -1,28 +1,29 @@
 {
     "metadata": {
-        "source": "C:\\Users\\ASUS\\Documents\\GitHub\\ArchX3D\\projects\\e4e59fb95925\\test_complex.dxf",
+        "source": "C:\\Users\\ASUS\\Documents\\GitHub\\ArchX3D\\projects\\503fd32c7ddc\\final_plan_19th_may.dxf",
         "layers_used": [
-            "WALLS"
+            "WALL_SV",
+            "AR-WALL"
         ],
-        "scale_factor": 1.0,
+        "scale_factor": 0.0254,
         "arc_segments": 16,
-        "segment_count": 48,
+        "segment_count": 326,
         "bounding_box": {
             "min": [
-                -7.0,
-                -5.25
+                -17.056569,
+                -7.6962
             ],
             "max": [
-                7.0,
-                5.25
+                17.056569,
+                7.6962
             ]
         },
         "entity_counts": {
-            "ARC": 1,
+            "CIRCLE": 0,
+            "ARC": 0,
             "POLYLINE": 0,
-            "CIRCLE": 1,
-            "LWPOLYLINE": 1,
-            "LINE": 14
+            "LWPOLYLINE": 0,
+            "LINE": 331
         },
         "units": "meters",
         "origin_normalized": true
@@ -30,579 +31,3915 @@
     "walls": [
         {
             "start": [
-                -7.0,
-                -3.75
+                -5.093169,
+                -7.6962
             ],
             "end": [
-                1.0,
-                -3.75
+                -5.093169,
+                -6.821705
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                1.0,
-                -3.75
+                -5.093169,
+                -5.065494
             ],
             "end": [
-                1.0,
-                2.25
+                -5.093169,
+                -2.667
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                1.0,
-                2.25
+                -5.207469,
+                -2.4384
             ],
             "end": [
-                -7.0,
-                2.25
+                -5.207469,
+                0.6096
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -7.0,
-                2.25
+                -5.093169,
+                2.3622
             ],
             "end": [
-                -7.0,
-                -3.75
+                -5.093169,
+                4.191
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                1.0,
-                -3.75
+                -5.093169,
+                5.2578
             ],
             "end": [
-                7.0,
-                -3.75
-            ],
-            "source_entity": "LWPOLYLINE",
-            "layer": "WALLS"
-        },
-        {
-            "start": [
-                7.0,
-                -3.75
-            ],
-            "end": [
-                7.0,
-                2.25
-            ],
-            "source_entity": "LWPOLYLINE",
-            "layer": "WALLS"
-        },
-        {
-            "start": [
-                7.0,
-                2.25
-            ],
-            "end": [
-                1.0,
-                2.25
-            ],
-            "source_entity": "LWPOLYLINE",
-            "layer": "WALLS"
-        },
-        {
-            "start": [
-                1.0,
-                -3.75
-            ],
-            "end": [
-                1.0,
-                -1.25
+                -5.093169,
+                7.3914
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                1.0,
-                -0.25
+                -0.216369,
+                -2.4384
             ],
             "end": [
-                1.0,
-                2.25
+                -0.216369,
+                -1.600443
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -7.0,
-                2.25
+                -0.216369,
+                -0.152643
             ],
             "end": [
-                -3.0,
-                2.25
+                -0.216369,
+                0.6096
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -3.0,
-                2.25
+                -0.216369,
+                0.7239
             ],
             "end": [
-                -3.0,
-                5.25
+                -0.216369,
+                1.08585
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -3.0,
-                5.25
+                -0.216369,
+                2.00025
             ],
             "end": [
-                -7.0,
-                5.25
+                -0.216369,
+                2.3622
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -7.0,
-                5.25
+                -3.835869,
+                0.7239
             ],
             "end": [
-                -7.0,
-                2.25
+                -3.835869,
+                2.3622
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -3.0,
-                2.25
+                -3.950169,
+                0.7239
             ],
             "end": [
-                7.0,
-                2.25
+                -3.950169,
+                2.3622
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                7.0,
-                2.25
+                -0.216369,
+                2.5908
             ],
             "end": [
-                7.0,
-                5.25
+                -0.216369,
+                2.7178
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                7.0,
-                5.25
+                -0.216369,
+                3.937
             ],
             "end": [
-                -3.0,
-                5.25
+                -0.216369,
+                7.3914
             ],
             "source_entity": "LINE",
-            "layer": "WALLS"
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -6.5,
-                -3.75
+                0.012231,
+                -2.667
             ],
             "end": [
-                -6.471178,
-                -4.042635
+                0.012231,
+                -1.600443
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -6.471178,
-                -4.042635
+                0.012231,
+                -0.152643
             ],
             "end": [
-                -6.385819,
-                -4.324025
+                0.012231,
+                1.08585
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -6.385819,
-                -4.324025
+                0.012231,
+                2.00025
             ],
             "end": [
-                -6.247204,
-                -4.583355
+                0.012231,
+                2.7178
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -6.247204,
-                -4.583355
+                0.012231,
+                3.937
             ],
             "end": [
-                -6.06066,
-                -4.81066
+                0.012231,
+                7.62
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -6.06066,
-                -4.81066
+                -5.321769,
+                -7.4676
             ],
             "end": [
-                -5.833355,
-                -4.997204
+                -5.321769,
+                -6.821705
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -5.833355,
-                -4.997204
+                -5.321769,
+                -2.4384
             ],
             "end": [
-                -5.574025,
-                -5.135819
+                -5.321769,
+                0.0
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -5.574025,
-                -5.135819
+                -5.321769,
+                0.2286
             ],
             "end": [
-                -5.292635,
-                -5.221178
+                -5.321769,
+                0.7239
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -5.292635,
-                -5.221178
+                -5.321769,
+                2.3622
             ],
             "end": [
-                -5.0,
-                -5.25
+                -5.321769,
+                2.9718
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -5.0,
-                -5.25
+                -5.321769,
+                3.0861
             ],
             "end": [
-                -4.707365,
-                -5.221178
+                -5.321769,
+                4.191
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -4.707365,
-                -5.221178
+                -5.321769,
+                5.4864
             ],
             "end": [
-                -4.425975,
-                -5.135819
+                -5.321769,
+                7.3914
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -4.425975,
-                -5.135819
+                -13.551369,
+                0.0
             ],
             "end": [
-                -4.166645,
-                -4.997204
+                -13.551369,
+                0.453124
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -4.166645,
-                -4.997204
+                -13.551369,
+                1.977124
             ],
             "end": [
-                -3.93934,
-                -4.81066
+                -13.551369,
+                1.843774
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -3.93934,
-                -4.81066
+                -13.779969,
+                0.0
             ],
             "end": [
-                -3.752796,
-                -4.583355
+                -13.779969,
+                0.453124
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -3.752796,
-                -4.583355
+                -13.779969,
+                1.977124
             ],
             "end": [
-                -3.614181,
-                -4.324025
+                -13.779969,
+                1.843774
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -3.614181,
-                -4.324025
+                -7.760169,
+                5.4864
             ],
             "end": [
-                -3.528822,
-                -4.042635
+                -7.760169,
+                7.3914
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                -3.528822,
-                -4.042635
+                -7.988769,
+                5.4864
             ],
             "end": [
-                -3.5,
-                -3.75
+                -7.988769,
+                7.3914
             ],
-            "source_entity": "ARC",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                4.3,
-                -0.75
+                -10.960569,
+                6.3246
             ],
             "end": [
-                4.277164,
-                -0.635195
+                -10.960569,
+                7.3914
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                4.277164,
-                -0.635195
+                -11.189169,
+                5.2578
             ],
             "end": [
-                4.212132,
-                -0.537868
+                -11.189169,
+                5.4864
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                4.212132,
-                -0.537868
+                -11.189169,
+                6.3246
             ],
             "end": [
-                4.114805,
-                -0.472836
+                -11.189169,
+                7.3914
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                4.114805,
-                -0.472836
+                -11.417769,
+                -7.4676
             ],
             "end": [
-                4.0,
-                -0.45
+                -11.417769,
+                -3.8862
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                4.0,
-                -0.45
+                -11.646369,
+                -7.6962
             ],
             "end": [
-                3.885195,
-                -0.472836
+                -11.646369,
+                -5.1054
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                3.885195,
-                -0.472836
+                -11.646369,
+                -4.8768
             ],
             "end": [
-                3.787868,
-                -0.537868
+                -11.646369,
+                -3.8862
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                3.787868,
-                -0.537868
+                -14.541969,
+                -4.8768
             ],
             "end": [
-                3.722836,
-                -0.635195
+                -14.541969,
+                -3.8862
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                3.722836,
-                -0.635195
+                -14.541969,
+                3.5052
             ],
             "end": [
-                3.7,
-                -0.75
+                -14.541969,
+                4.349507
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                3.7,
-                -0.75
+                -14.541969,
+                5.263907
             ],
             "end": [
-                3.722836,
-                -0.864805
+                -14.541969,
+                7.3914
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                3.722836,
-                -0.864805
+                -14.541969,
+                -4.8768
             ],
             "end": [
-                3.787868,
-                -0.962132
+                -14.541969,
+                -2.667
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                3.787868,
-                -0.962132
+                -14.770569,
+                -5.1054
             ],
             "end": [
-                3.885195,
-                -1.027164
+                -14.770569,
+                -2.4384
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                3.885195,
-                -1.027164
+                -14.770569,
+                2.3622
             ],
             "end": [
-                4.0,
-                -1.05
+                -14.770569,
+                2.5908
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                4.0,
-                -1.05
+                -14.770569,
+                3.5052
             ],
             "end": [
-                4.114805,
-                -1.027164
+                -14.770569,
+                4.349507
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                4.114805,
-                -1.027164
+                -14.770569,
+                5.263907
             ],
             "end": [
-                4.212132,
-                -0.962132
+                -14.770569,
+                7.62
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                4.212132,
-                -0.962132
+                -11.646369,
+                -7.6962
             ],
             "end": [
-                4.277164,
-                -0.864805
+                -10.564086,
+                -7.6962
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         },
         {
             "start": [
-                4.277164,
-                -0.864805
+                -8.731675,
+                -7.6962
             ],
             "end": [
-                4.3,
-                -0.75
+                -7.724966,
+                -7.6962
             ],
-            "source_entity": "CIRCLE",
-            "layer": "WALLS"
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.892556,
+                -7.6962
+            ],
+            "end": [
+                -5.093169,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.417769,
+                -7.4676
+            ],
+            "end": [
+                -10.564086,
+                -7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -8.731675,
+                -7.4676
+            ],
+            "end": [
+                -7.724966,
+                -7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.892556,
+                -7.4676
+            ],
+            "end": [
+                -5.321769,
+                -7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.646369,
+                -3.8862
+            ],
+            "end": [
+                -11.417769,
+                -3.8862
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.646369,
+                -2.4384
+            ],
+            "end": [
+                -11.417769,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -9.741369,
+                -2.4384
+            ],
+            "end": [
+                -5.321769,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.207469,
+                -2.4384
+            ],
+            "end": [
+                -0.216369,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -4.178769,
+                2.3622
+            ],
+            "end": [
+                -3.950169,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -3.835869,
+                2.3622
+            ],
+            "end": [
+                -2.311869,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -2.197569,
+                2.3622
+            ],
+            "end": [
+                -0.216369,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.321769,
+                0.7239
+            ],
+            "end": [
+                -5.093169,
+                0.7239
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -4.178769,
+                0.7239
+            ],
+            "end": [
+                -3.950169,
+                0.7239
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -3.835869,
+                0.7239
+            ],
+            "end": [
+                -3.378669,
+                0.7239
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -2.311869,
+                0.7239
+            ],
+            "end": [
+                -2.197569,
+                0.7239
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -2.197569,
+                0.7239
+            ],
+            "end": [
+                -0.216369,
+                0.7239
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.207469,
+                0.6096
+            ],
+            "end": [
+                -5.093169,
+                0.6096
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -4.178769,
+                0.6096
+            ],
+            "end": [
+                -3.378669,
+                0.6096
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -2.311869,
+                0.6096
+            ],
+            "end": [
+                -2.197569,
+                0.6096
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -2.311869,
+                0.6096
+            ],
+            "end": [
+                -0.216369,
+                0.6096
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -4.178769,
+                2.5908
+            ],
+            "end": [
+                -0.216369,
+                2.5908
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -14.541969,
+                7.3914
+            ],
+            "end": [
+                -12.739129,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.522107,
+                7.3914
+            ],
+            "end": [
+                -11.189169,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -10.960569,
+                7.3914
+            ],
+            "end": [
+                -10.160469,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -8.636469,
+                7.3914
+            ],
+            "end": [
+                -7.988769,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -7.760169,
+                7.3914
+            ],
+            "end": [
+                -6.743682,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.829282,
+                7.3914
+            ],
+            "end": [
+                -5.321769,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.093169,
+                7.3914
+            ],
+            "end": [
+                -5.000376,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -3.476376,
+                7.3914
+            ],
+            "end": [
+                -0.216369,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -7.760169,
+                5.4864
+            ],
+            "end": [
+                -6.540969,
+                5.4864
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.778969,
+                5.4864
+            ],
+            "end": [
+                -5.321769,
+                5.4864
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.778969,
+                5.2578
+            ],
+            "end": [
+                -5.093169,
+                5.2578
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.321769,
+                4.191
+            ],
+            "end": [
+                -5.093169,
+                4.191
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -14.770569,
+                7.62
+            ],
+            "end": [
+                -12.739129,
+                7.62
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.522107,
+                7.62
+            ],
+            "end": [
+                -10.160469,
+                7.62
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -8.636469,
+                7.62
+            ],
+            "end": [
+                -6.743682,
+                7.62
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.829282,
+                7.62
+            ],
+            "end": [
+                -5.000376,
+                7.62
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -3.476376,
+                7.62
+            ],
+            "end": [
+                0.012231,
+                7.62
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -14.770569,
+                2.3622
+            ],
+            "end": [
+                -13.779969,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -14.541969,
+                2.5908
+            ],
+            "end": [
+                -13.551369,
+                2.5908
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.189169,
+                5.2578
+            ],
+            "end": [
+                -7.988769,
+                5.2578
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -7.760169,
+                5.2578
+            ],
+            "end": [
+                -6.540969,
+                5.2578
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.189169,
+                5.4864
+            ],
+            "end": [
+                -7.988769,
+                5.4864
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -14.389569,
+                -5.1054
+            ],
+            "end": [
+                -14.770569,
+                -5.1054
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -14.389569,
+                -4.8768
+            ],
+            "end": [
+                -14.541969,
+                -4.8768
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                0.012231,
+                -2.667
+            ],
+            "end": [
+                -5.093169,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.321769,
+                -2.667
+            ],
+            "end": [
+                -9.741369,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.417769,
+                -2.667
+            ],
+            "end": [
+                -14.541969,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.646369,
+                -2.4384
+            ],
+            "end": [
+                -14.770569,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -4.178769,
+                2.3622
+            ],
+            "end": [
+                -4.178769,
+                2.5908
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.321769,
+                2.9718
+            ],
+            "end": [
+                -7.760169,
+                2.9718
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.321769,
+                3.0861
+            ],
+            "end": [
+                -7.760169,
+                3.0861
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.321769,
+                0.2286
+            ],
+            "end": [
+                -6.845769,
+                0.2286
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.321769,
+                0.0
+            ],
+            "end": [
+                -6.845769,
+                0.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -6.540969,
+                5.2578
+            ],
+            "end": [
+                -6.540969,
+                5.4864
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.778969,
+                5.2578
+            ],
+            "end": [
+                -5.778969,
+                5.4864
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.189169,
+                6.3246
+            ],
+            "end": [
+                -10.960569,
+                6.3246
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.951169,
+                -5.1054
+            ],
+            "end": [
+                -11.951169,
+                -4.8768
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.951169,
+                -4.8768
+            ],
+            "end": [
+                -11.646369,
+                -4.8768
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.951169,
+                -5.1054
+            ],
+            "end": [
+                -11.646369,
+                -5.1054
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -11.417769,
+                -2.667
+            ],
+            "end": [
+                -11.417769,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -9.741369,
+                -2.667
+            ],
+            "end": [
+                -9.741369,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -0.216369,
+                2.7178
+            ],
+            "end": [
+                0.012231,
+                2.7178
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                0.012231,
+                3.937
+            ],
+            "end": [
+                -0.216369,
+                3.937
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -0.216369,
+                3.937
+            ],
+            "end": [
+                -0.102069,
+                3.937
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -5.000376,
+                7.3914
+            ],
+            "end": [
+                -5.000376,
+                7.62
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -3.476376,
+                7.62
+            ],
+            "end": [
+                -3.476376,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -6.743682,
+                7.3914
+            ],
+            "end": [
+                -6.743682,
+                7.62
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -5.829282,
+                7.62
+            ],
+            "end": [
+                -5.829282,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -12.739129,
+                7.3914
+            ],
+            "end": [
+                -12.739129,
+                7.62
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -11.522107,
+                7.3914
+            ],
+            "end": [
+                -11.522107,
+                7.62
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -14.541969,
+                2.5908
+            ],
+            "end": [
+                -14.770569,
+                2.5908
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -14.541969,
+                3.5052
+            ],
+            "end": [
+                -14.770569,
+                3.5052
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -14.770569,
+                4.349507
+            ],
+            "end": [
+                -14.541969,
+                4.349507
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -14.541969,
+                5.263907
+            ],
+            "end": [
+                -14.770569,
+                5.263907
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -14.770569,
+                5.263907
+            ],
+            "end": [
+                -14.656269,
+                5.263907
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -13.779969,
+                0.0
+            ],
+            "end": [
+                -13.551369,
+                0.0
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -13.779969,
+                0.453124
+            ],
+            "end": [
+                -13.551369,
+                0.453124
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -13.779969,
+                1.977124
+            ],
+            "end": [
+                -13.551369,
+                1.977124
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -10.160469,
+                7.3914
+            ],
+            "end": [
+                -10.160469,
+                7.62
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -8.636469,
+                7.62
+            ],
+            "end": [
+                -8.636469,
+                7.3914
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -0.216369,
+                -0.152643
+            ],
+            "end": [
+                0.012231,
+                -0.152643
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -16.332669,
+                2.3622
+            ],
+            "end": [
+                -16.827969,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -16.332669,
+                2.4765
+            ],
+            "end": [
+                -16.942269,
+                2.4765
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -15.761169,
+                5.3721
+            ],
+            "end": [
+                -16.942269,
+                5.3721
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -15.761169,
+                5.4864
+            ],
+            "end": [
+                -16.942269,
+                5.4864
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -15.761169,
+                6.2484
+            ],
+            "end": [
+                -15.875469,
+                6.2484
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -16.332669,
+                2.4765
+            ],
+            "end": [
+                -16.332669,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -15.761169,
+                7.1247
+            ],
+            "end": [
+                -17.056569,
+                7.1247
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -15.875469,
+                7.0104
+            ],
+            "end": [
+                -16.942269,
+                7.0104
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -17.056569,
+                2.3622
+            ],
+            "end": [
+                -17.056569,
+                7.1247
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -16.942269,
+                2.4765
+            ],
+            "end": [
+                -16.942269,
+                5.3721
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -16.942269,
+                5.4864
+            ],
+            "end": [
+                -16.942269,
+                6.4008
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -16.942269,
+                5.4864
+            ],
+            "end": [
+                -16.942269,
+                7.0104
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -15.875469,
+                6.2484
+            ],
+            "end": [
+                -15.875469,
+                7.0104
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -15.761169,
+                5.3721
+            ],
+            "end": [
+                -15.761169,
+                5.4864
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -15.761169,
+                6.2484
+            ],
+            "end": [
+                -15.761169,
+                7.1247
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -16.827969,
+                -2.4384
+            ],
+            "end": [
+                -17.056569,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -17.056569,
+                -2.4384
+            ],
+            "end": [
+                -17.056569,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -16.827969,
+                -2.4384
+            ],
+            "end": [
+                -16.827969,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -10.564086,
+                -7.4676
+            ],
+            "end": [
+                -10.564086,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -8.731675,
+                -7.4676
+            ],
+            "end": [
+                -8.731675,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -7.724966,
+                -7.4676
+            ],
+            "end": [
+                -7.724966,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -5.892556,
+                -7.4676
+            ],
+            "end": [
+                -5.892556,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -5.093169,
+                -5.065494
+            ],
+            "end": [
+                -5.321769,
+                -5.065494
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -5.093169,
+                -6.821705
+            ],
+            "end": [
+                -5.321769,
+                -6.821705
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                11.951169,
+                -4.979468
+            ],
+            "end": [
+                11.951169,
+                -4.4196
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                -4.191
+            ],
+            "end": [
+                11.951169,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                -2.4384
+            ],
+            "end": [
+                11.951169,
+                0.9144
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                16.827969,
+                -4.191
+            ],
+            "end": [
+                16.827969,
+                -3.642794
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                14.389569,
+                -4.191
+            ],
+            "end": [
+                14.389569,
+                -3.429
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                13.779969,
+                0.9144
+            ],
+            "end": [
+                13.779969,
+                1.6764
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                14.275269,
+                -4.191
+            ],
+            "end": [
+                14.275269,
+                -3.429
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                13.665669,
+                0.9144
+            ],
+            "end": [
+                13.665669,
+                1.6764
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                14.275269,
+                -2.667
+            ],
+            "end": [
+                14.275269,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                13.208469,
+                -2.667
+            ],
+            "end": [
+                13.208469,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                16.827969,
+                -2.728394
+            ],
+            "end": [
+                16.827969,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                16.827969,
+                -2.4384
+            ],
+            "end": [
+                16.827969,
+                -1.201188
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                16.827969,
+                -0.286788
+            ],
+            "end": [
+                16.827969,
+                0.8001
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                16.827969,
+                0.9144
+            ],
+            "end": [
+                16.827969,
+                1.27581
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                16.827969,
+                2.19021
+            ],
+            "end": [
+                16.827969,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                16.827969,
+                2.667
+            ],
+            "end": [
+                16.827969,
+                2.7178
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                16.827969,
+                3.937
+            ],
+            "end": [
+                16.827969,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                17.056569,
+                -4.4196
+            ],
+            "end": [
+                17.056569,
+                -3.642794
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                17.056569,
+                -2.728394
+            ],
+            "end": [
+                17.056569,
+                -1.201188
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                17.056569,
+                -0.286788
+            ],
+            "end": [
+                17.056569,
+                1.27581
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                17.056569,
+                2.19021
+            ],
+            "end": [
+                17.056569,
+                2.7178
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                17.056569,
+                3.937
+            ],
+            "end": [
+                17.056569,
+                7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                -4.979468
+            ],
+            "end": [
+                11.722569,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                -2.4384
+            ],
+            "end": [
+                11.722569,
+                0.9144
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.721569,
+                -2.4384
+            ],
+            "end": [
+                3.721569,
+                -1.30175
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.721569,
+                -0.51435
+            ],
+            "end": [
+                3.721569,
+                -0.3048
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.721569,
+                1.524
+            ],
+            "end": [
+                3.721569,
+                1.6764
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.492969,
+                -2.667
+            ],
+            "end": [
+                3.492969,
+                -1.30175
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.492969,
+                -0.51435
+            ],
+            "end": [
+                3.492969,
+                -0.3048
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.492969,
+                1.524
+            ],
+            "end": [
+                3.492969,
+                1.6764
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.626569,
+                -7.4676
+            ],
+            "end": [
+                5.626569,
+                -7.20012
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.626569,
+                -4.07592
+            ],
+            "end": [
+                5.626569,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.397969,
+                -7.6962
+            ],
+            "end": [
+                5.397969,
+                -7.20012
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.397969,
+                -4.07592
+            ],
+            "end": [
+                5.397969,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.397969,
+                -7.6962
+            ],
+            "end": [
+                6.480251,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                8.312662,
+                -7.6962
+            ],
+            "end": [
+                9.319371,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.151782,
+                -7.6962
+            ],
+            "end": [
+                11.951169,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.626569,
+                -7.4676
+            ],
+            "end": [
+                6.480251,
+                -7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                8.312662,
+                -7.4676
+            ],
+            "end": [
+                9.319371,
+                -7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.151782,
+                -7.4676
+            ],
+            "end": [
+                11.722569,
+                -7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.397969,
+                -2.4384
+            ],
+            "end": [
+                5.626569,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                6.845769,
+                -2.4384
+            ],
+            "end": [
+                11.722569,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                12.865569,
+                2.4384
+            ],
+            "end": [
+                16.827969,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                0.9144
+            ],
+            "end": [
+                11.951169,
+                0.9144
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                12.865569,
+                0.9144
+            ],
+            "end": [
+                13.665669,
+                0.9144
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                13.779969,
+                0.9144
+            ],
+            "end": [
+                16.827969,
+                0.9144
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                12.865569,
+                0.8001
+            ],
+            "end": [
+                16.827969,
+                0.8001
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                -2.4384
+            ],
+            "end": [
+                13.208469,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                14.275269,
+                -2.4384
+            ],
+            "end": [
+                16.827969,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                -2.667
+            ],
+            "end": [
+                13.208469,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                14.275269,
+                -2.667
+            ],
+            "end": [
+                16.827969,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                -4.191
+            ],
+            "end": [
+                14.275269,
+                -4.191
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                14.389569,
+                -4.191
+            ],
+            "end": [
+                16.827969,
+                -4.191
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                -4.4196
+            ],
+            "end": [
+                17.056569,
+                -4.4196
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                12.865569,
+                2.667
+            ],
+            "end": [
+                16.827969,
+                2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                13.567961,
+                7.4676
+            ],
+            "end": [
+                16.827969,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                13.567961,
+                7.6962
+            ],
+            "end": [
+                17.056569,
+                7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                -2.667
+            ],
+            "end": [
+                6.845769,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.397969,
+                -2.667
+            ],
+            "end": [
+                3.492969,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.397969,
+                -2.4384
+            ],
+            "end": [
+                3.721569,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.626569,
+                -2.667
+            ],
+            "end": [
+                5.626569,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                6.845769,
+                -2.667
+            ],
+            "end": [
+                6.845769,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                16.827969,
+                2.7178
+            ],
+            "end": [
+                17.056569,
+                2.7178
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                17.056569,
+                3.937
+            ],
+            "end": [
+                16.827969,
+                3.937
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                16.827969,
+                3.937
+            ],
+            "end": [
+                16.942269,
+                3.937
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                13.567961,
+                7.6962
+            ],
+            "end": [
+                13.567961,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                3.721569,
+                -0.51435
+            ],
+            "end": [
+                3.721569,
+                1.6764
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.492969,
+                -0.51435
+            ],
+            "end": [
+                3.492969,
+                1.6764
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.721569,
+                1.6764
+            ],
+            "end": [
+                3.492969,
+                1.6764
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.721569,
+                -0.51435
+            ],
+            "end": [
+                3.492969,
+                -0.51435
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.721569,
+                -1.30175
+            ],
+            "end": [
+                3.492969,
+                -1.30175
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                16.827969,
+                2.19021
+            ],
+            "end": [
+                17.056569,
+                2.19021
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                17.056569,
+                1.27581
+            ],
+            "end": [
+                16.827969,
+                1.27581
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                6.480251,
+                -7.4676
+            ],
+            "end": [
+                6.480251,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                8.312662,
+                -7.4676
+            ],
+            "end": [
+                8.312662,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                9.319371,
+                -7.4676
+            ],
+            "end": [
+                9.319371,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                11.151782,
+                -7.4676
+            ],
+            "end": [
+                11.151782,
+                -7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                16.827969,
+                -0.286788
+            ],
+            "end": [
+                17.056569,
+                -0.286788
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                17.056569,
+                -1.201188
+            ],
+            "end": [
+                16.827969,
+                -1.201188
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                16.827969,
+                -2.728394
+            ],
+            "end": [
+                17.056569,
+                -2.728394
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                17.056569,
+                -3.642794
+            ],
+            "end": [
+                16.827969,
+                -3.642794
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                5.397969,
+                -7.20012
+            ],
+            "end": [
+                5.626569,
+                -7.20012
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.397969,
+                -4.07592
+            ],
+            "end": [
+                5.626569,
+                -4.07592
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                -7.4676
+            ],
+            "end": [
+                11.722569,
+                -7.20012
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                -7.6962
+            ],
+            "end": [
+                11.951169,
+                -7.20012
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                -7.20012
+            ],
+            "end": [
+                11.722569,
+                -7.20012
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                -4.979468
+            ],
+            "end": [
+                11.722569,
+                -4.979468
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -13.551369,
+                1.977124
+            ],
+            "end": [
+                -13.551369,
+                2.5908
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -13.779969,
+                1.977124
+            ],
+            "end": [
+                -13.779969,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -9.512769,
+                3.81
+            ],
+            "end": [
+                -7.988769,
+                3.81
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -9.512769,
+                2.5908
+            ],
+            "end": [
+                -9.207969,
+                2.5908
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -8.293569,
+                2.5908
+            ],
+            "end": [
+                -7.988769,
+                2.5908
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -9.741369,
+                2.3622
+            ],
+            "end": [
+                -9.207969,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -8.293569,
+                2.3622
+            ],
+            "end": [
+                -7.760169,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -6.845769,
+                0.0
+            ],
+            "end": [
+                -6.845769,
+                0.2286
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -7.988769,
+                5.2578
+            ],
+            "end": [
+                -7.988769,
+                4.0386
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -7.988769,
+                3.81
+            ],
+            "end": [
+                -7.988769,
+                2.5908
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -7.760169,
+                5.2578
+            ],
+            "end": [
+                -7.760169,
+                3.0861
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -7.760169,
+                2.9718
+            ],
+            "end": [
+                -7.760169,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -9.512769,
+                3.81
+            ],
+            "end": [
+                -9.512769,
+                2.5908
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -9.741369,
+                4.0386
+            ],
+            "end": [
+                -9.741369,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -8.293569,
+                2.5908
+            ],
+            "end": [
+                -8.293569,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -9.207969,
+                2.5908
+            ],
+            "end": [
+                -9.207969,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -7.988769,
+                4.0386
+            ],
+            "end": [
+                -9.741369,
+                4.0386
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.321769,
+                2.3622
+            ],
+            "end": [
+                -5.093169,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.321769,
+                -2.667
+            ],
+            "end": [
+                -5.321769,
+                -5.065494
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -0.216369,
+                -1.676643
+            ],
+            "end": [
+                0.012231,
+                -1.676643
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                2.4384
+            ],
+            "end": [
+                11.951169,
+                6.0579
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                7.0104
+            ],
+            "end": [
+                11.951169,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                2.4384
+            ],
+            "end": [
+                11.722569,
+                5.334
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                5.4483
+            ],
+            "end": [
+                11.722569,
+                6.0579
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                7.0104
+            ],
+            "end": [
+                11.722569,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                6.083769,
+                5.4483
+            ],
+            "end": [
+                6.083769,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.131769,
+                5.4483
+            ],
+            "end": [
+                9.131769,
+                6.0579
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.131769,
+                7.0104
+            ],
+            "end": [
+                9.131769,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.246069,
+                5.4483
+            ],
+            "end": [
+                9.246069,
+                6.0579
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.246069,
+                7.0104
+            ],
+            "end": [
+                9.246069,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.855169,
+                5.334
+            ],
+            "end": [
+                5.855169,
+                5.4483
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.855169,
+                5.4483
+            ],
+            "end": [
+                5.855169,
+                7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                6.083769,
+                7.4676
+            ],
+            "end": [
+                6.883869,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                8.407869,
+                7.4676
+            ],
+            "end": [
+                9.131769,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.246069,
+                7.4676
+            ],
+            "end": [
+                10.300655,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.215055,
+                7.4676
+            ],
+            "end": [
+                11.722569,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                7.0104
+            ],
+            "end": [
+                11.951169,
+                7.0104
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.951169,
+                7.4676
+            ],
+            "end": [
+                12.043961,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                8.407869,
+                7.6962
+            ],
+            "end": [
+                10.300655,
+                7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.215055,
+                7.6962
+            ],
+            "end": [
+                12.043961,
+                7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                6.083769,
+                5.334
+            ],
+            "end": [
+                11.722569,
+                5.334
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                6.083769,
+                5.4483
+            ],
+            "end": [
+                9.131769,
+                5.4483
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.246069,
+                5.4483
+            ],
+            "end": [
+                11.722569,
+                5.4483
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                12.865569,
+                2.4384
+            ],
+            "end": [
+                12.865569,
+                2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                12.043961,
+                7.4676
+            ],
+            "end": [
+                12.043961,
+                7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                10.300655,
+                7.4676
+            ],
+            "end": [
+                10.300655,
+                7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                11.215055,
+                7.6962
+            ],
+            "end": [
+                11.215055,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                6.883869,
+                7.4676
+            ],
+            "end": [
+                6.883869,
+                7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                8.407869,
+                7.6962
+            ],
+            "end": [
+                8.407869,
+                7.4676
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                6.083769,
+                5.334
+            ],
+            "end": [
+                6.083769,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.855169,
+                5.334
+            ],
+            "end": [
+                5.855169,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                7.531569,
+                3.8862
+            ],
+            "end": [
+                9.055569,
+                3.8862
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                7.531569,
+                2.667
+            ],
+            "end": [
+                7.836369,
+                2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                8.750769,
+                2.667
+            ],
+            "end": [
+                9.055569,
+                2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                7.302969,
+                2.4384
+            ],
+            "end": [
+                7.836369,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                8.750769,
+                2.4384
+            ],
+            "end": [
+                9.284169,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.055569,
+                3.8862
+            ],
+            "end": [
+                9.055569,
+                2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.284169,
+                4.1148
+            ],
+            "end": [
+                9.284169,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                7.531569,
+                3.8862
+            ],
+            "end": [
+                7.531569,
+                2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                7.302969,
+                4.1148
+            ],
+            "end": [
+                7.302969,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                8.750769,
+                2.667
+            ],
+            "end": [
+                8.750769,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                7.836369,
+                2.667
+            ],
+            "end": [
+                7.836369,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.284169,
+                4.1148
+            ],
+            "end": [
+                7.302969,
+                4.1148
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                5.855169,
+                2.4384
+            ],
+            "end": [
+                6.083769,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                2.4384
+            ],
+            "end": [
+                11.951169,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                4.940769,
+                2.667
+            ],
+            "end": [
+                3.492969,
+                2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                4.940769,
+                2.4384
+            ],
+            "end": [
+                3.492969,
+                2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                3.492969,
+                2.4384
+            ],
+            "end": [
+                3.492969,
+                2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                11.722569,
+                6.0579
+            ],
+            "end": [
+                11.951169,
+                6.0579
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                14.275269,
+                -3.429
+            ],
+            "end": [
+                14.389569,
+                -3.429
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                13.665669,
+                1.6764
+            ],
+            "end": [
+                13.779969,
+                1.6764
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                12.865569,
+                0.9144
+            ],
+            "end": [
+                12.865569,
+                0.8001
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                4.940769,
+                2.4384
+            ],
+            "end": [
+                4.940769,
+                2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                6.883869,
+                7.6962
+            ],
+            "end": [
+                5.855169,
+                7.6962
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -4.178769,
+                0.7239
+            ],
+            "end": [
+                -4.178769,
+                0.6096
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -5.093169,
+                0.7239
+            ],
+            "end": [
+                -5.093169,
+                0.6096
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -2.197569,
+                1.6383
+            ],
+            "end": [
+                -2.197569,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -2.311869,
+                0.6096
+            ],
+            "end": [
+                -2.311869,
+                0.7239
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -3.378669,
+                0.6096
+            ],
+            "end": [
+                -3.378669,
+                0.7239
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -2.311869,
+                1.6383
+            ],
+            "end": [
+                -2.311869,
+                2.3622
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -0.216369,
+                1.08585
+            ],
+            "end": [
+                0.012231,
+                1.08585
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                0.012231,
+                2.00025
+            ],
+            "end": [
+                -0.216369,
+                2.00025
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -0.216369,
+                2.00025
+            ],
+            "end": [
+                -0.102069,
+                2.00025
+            ],
+            "source_entity": "LINE",
+            "layer": "AR-WALL"
+        },
+        {
+            "start": [
+                -2.311869,
+                1.6383
+            ],
+            "end": [
+                -2.197569,
+                1.6383
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                -6.845769,
+                0.0
+            ],
+            "end": [
+                -6.845769,
+                -2.4384
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                8.750769,
+                -2.3622
+            ],
+            "end": [
+                8.750769,
+                -2.667
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.131769,
+                7.0104
+            ],
+            "end": [
+                9.246069,
+                7.0104
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
+        },
+        {
+            "start": [
+                9.131769,
+                6.0579
+            ],
+            "end": [
+                9.246069,
+                6.0579
+            ],
+            "source_entity": "LINE",
+            "layer": "WALL_SV"
         }
     ]
 }

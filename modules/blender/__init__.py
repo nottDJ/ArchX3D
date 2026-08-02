@@ -22,6 +22,11 @@ Two tiers, split on whether ``bpy`` is required:
     Blender construction. Node graphs, light datablocks, camera objects. These
     import ``bpy`` and consume the decisions made above.
 
+``metadata`` sits apart from both tiers: it creates nothing and shades nothing,
+it only records what each object *is* so the web viewer can hide the roof and
+isolate a room. Its classification rules are bpy-free and tested outside
+Blender; only the tagging pass needs ``bpy``.
+
 That split is what makes the appearance rules testable at all: the interesting
 judgements are in the first tier, and none of them need a running Blender.
 
@@ -31,4 +36,6 @@ truth for shape; this package only decides how that shape is shaded and lit.
 
 from . import colour, palette, styles  # noqa: F401  (bpy-free, always safe)
 
-__all__ = ["colour", "palette", "styles", "materials", "lighting", "camera"]
+__all__ = [
+    "colour", "palette", "styles", "materials", "lighting", "camera", "metadata",
+]

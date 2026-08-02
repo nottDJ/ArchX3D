@@ -174,6 +174,7 @@ def _exposure_finding(ctx, gap: float, reference: float, render: float,
 
     return [Finding(
         axis=LIGHTING,
+        code="exposure",
         summary=f"Render is {word} than the reference",
         subsystem=subsystem,
         difference=abs(gap),
@@ -234,6 +235,7 @@ def _contrast_finding(ctx, gap: float, reference: float, render: float) -> List[
     character = "softer, more uniform" if flatter else "harder, more directional"
     return [Finding(
         axis=LIGHTING,
+        code="contrast",
         summary=f"Render's lighting is {'flatter' if flatter else 'harsher'} "
                 f"than the reference",
         subsystem=Subsystem.LIGHTING_ENVIRONMENT,
@@ -261,6 +263,7 @@ def _warmth_finding(ctx, gap: float) -> List[Finding]:
     recorded = getattr(environment, "color_temperature_k", None)
     return [Finding(
         axis=LIGHTING,
+        code="warmth",
         summary=f"Render's light is {'warmer' if warmer else 'cooler'} than "
                 f"the reference",
         subsystem=Subsystem.LIGHTING_ENVIRONMENT,

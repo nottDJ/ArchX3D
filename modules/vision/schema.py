@@ -675,6 +675,25 @@ class Room:
     #: Room-scale lighting conditions, distinct from the fixture list.
     lighting: Optional["LightingEnvironment"] = None
 
+    #: Why this room was classified as it was, most load-bearing reason first.
+    #: A confidence with no reasons attached is not reviewable — a user cannot
+    #: tell a well-evidenced 0.9 from a lucky one — so the evidence travels
+    #: with the answer.
+    type_reasons: List[str] = field(default_factory=list)
+    #: The signal that settled the room type, e.g. ``"room_label"``. Empty
+    #: when no single source was authoritative and fusion decided.
+    type_decided_by: str = ""
+    #: Evidence that contradicts the chosen type, in human-readable form.
+    #: Never silently resolved: a room labelled STORE containing a toilet is
+    #: a drafting error a person should see, not one to average away.
+    type_conflicts: List[str] = field(default_factory=list)
+    #: A more specific label than ``room_type`` where the drawing gave one,
+    #: e.g. ``"master_bedroom"`` for a room scored as ``"bedroom"``.
+    specific_type: str = ""
+    #: Second-most-likely reading and its share, so a near-miss stays visible.
+    runner_up_type: str = ""
+    runner_up_confidence: float = 0.0
+
     def to_dict(self) -> Dict[str, Any]:
         out: Dict[str, Any] = {
             "id": self.id,
@@ -691,6 +710,12 @@ class Room:
             "source_images": list(self.source_images),
             "ceiling_type": self.ceiling_type,
             "style_confidence": round(self.style_confidence, 3),
+            "type_reasons": list(self.type_reasons),
+            "type_decided_by": self.type_decided_by,
+            "type_conflicts": list(self.type_conflicts),
+            "specific_type": self.specific_type,
+            "runner_up_type": self.runner_up_type,
+            "runner_up_confidence": round(self.runner_up_confidence, 3),
         }
         for key, value in (
             ("wall_finish", self.wall_finish),
@@ -729,6 +754,12 @@ class Room:
             style_confidence=_f(d.get("style_confidence")),
             palette=ColourPalette.from_dict(d.get("palette")),
             lighting=LightingEnvironment.from_dict(d.get("lighting")),
+            type_reasons=[str(x) for x in (d.get("type_reasons") or [])],
+            type_decided_by=str(d.get("type_decided_by", "")),
+            type_conflicts=[str(x) for x in (d.get("type_conflicts") or [])],
+            specific_type=str(d.get("specific_type", "")),
+            runner_up_type=str(d.get("runner_up_type", "")),
+            runner_up_confidence=_f(d.get("runner_up_confidence")),
         )
 
     @property

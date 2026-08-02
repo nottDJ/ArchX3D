@@ -33,7 +33,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from . import catalog, geometry2d as g2
 from .fusion import FusedLight, FusedObject
@@ -153,18 +153,42 @@ def ground_plan_view(
     plan_bounds_min: Tuple[float, float],
     plan_bounds_max: Tuple[float, float],
     room: RoomFrame,
+    transform: Optional[Any] = None,
+    assumed: bool = True,
 ) -> List[SceneObject]:
     """Place objects observed in a top-down furnished plan.
 
     A plan view needs no camera model at all: the image *is* the floor plane,
-    so a normalised box maps linearly onto plan coordinates. That makes plan
-    views the most positionally accurate input the pipeline accepts — more so
-    than a perspective photograph, where depth has to be inferred.
+    so a box maps onto plan coordinates through a single 2D transform. That
+    makes plan views the most positionally accurate input the pipeline accepts
+    — more so than a perspective photograph, where depth has to be inferred —
+    *provided the transform is right*.
 
-    Image y runs downward while plan y runs upward, hence the flip.
+    ``transform`` is a ``registration.PlanTransform`` fitted from the room
+    labels printed in the image. Passing one is what makes a composite sheet
+    readable: the drawing may occupy any sub-rectangle of the frame, at any
+    scale and rotation, and the fit says which.
+
+    With ``transform=None`` the legacy assumption applies — the image is one
+    plan filling the frame — and ``assumed`` stays True so every placement is
+    flagged as resting on it. That assumption is wrong for any sheet carrying
+    more than one drawing, and it fails by putting every detection outside
+    every room, so the flag is what lets the caller report it as a
+    registration failure rather than as absent furniture.
     """
     width = plan_bounds_max[0] - plan_bounds_min[0]
     depth = plan_bounds_max[1] - plan_bounds_min[1]
+
+    # Image y runs downward while plan y runs upward, hence the flip.
+    def to_plan(u: float, v: float) -> Tuple[float, float]:
+        if transform is not None:
+            return transform.apply(u, v)
+        return (plan_bounds_min[0] + u * width, plan_bounds_max[1] - v * depth)
+
+    # A drawing printed at an angle on the sheet rotates everything read off
+    # it. Without this the orientation cue below would be measured against the
+    # page rather than against the building.
+    sheet_rotation = float(getattr(transform, "rotation_deg", 0.0) or 0.0)
 
     placed: List[SceneObject] = []
 
@@ -178,8 +202,7 @@ def ground_plan_view(
         )
 
         u, v = entity.primary_bbox.center
-        x = plan_bounds_min[0] + u * width
-        y = plan_bounds_max[1] - v * depth
+        x, y = to_plan(u, v)
 
         obj = SceneObject(
             id=entity.entity_id,
@@ -197,13 +220,15 @@ def ground_plan_view(
             bbox_2d=entity.primary_bbox,
             source_images=list(entity.source_images),
             observation_count=entity.observation_count,
-            flags=list(notes) + ["placed_from_plan_view"],
+            flags=list(notes) + ["placed_from_plan_view"]
+            + (["plan_registration_assumed"] if assumed else []),
         )
 
         # In a plan view the box's own aspect indicates which way the item
         # runs, which is a better orientation cue than any facing hint.
         if entity.primary_bbox.width < entity.primary_bbox.height:
             obj.rotation_z = 90.0
+        obj.rotation_z = (obj.rotation_z + sheet_rotation) % 360.0
 
         placed.append(obj)
 

@@ -15,6 +15,7 @@ The system is orchestrated by `main.py`, which sequences the following stages:
 3. **Step 3: Blender 3D Generation** (`modules/blender_generator.py`) — also renders evaluation previews (`modules/render/`)
 4. **Step 4: Video Stitching** (`modules/video_stitcher.py`)
 5. **Step 5: Reconstruction Evaluation** (`modules/evaluation/`) [Optional, `--evaluate`]
+6. **Step 6: Planning & Optimisation** (`modules/planner/`, `modules/optimizer/`) [Optional, `--refine`]
 
 ## Prerequisites
 - Python 3.9+
@@ -42,6 +43,7 @@ python main.py path/to/your_file.dxf
 - `--skip-render`: Skip rendering animation frames and stitching a video, exporting only the GLB model and Blend file.
 - `--layers`: Define specific layer names to extract (e.g., `--layers "WALLS,DOORS"`).
 - `--evaluate`: Score the reconstruction against the reference photographs and write `output/evaluation/`.
+- `--refine`: Plan improvements from the evaluation and run the optimisation loop (implies `--evaluate`; budget minutes).
 
 ### 2. Running the API Server
 Start the FastAPI bridge server to connect with your web frontend:
@@ -99,14 +101,56 @@ an HTML report with reference, render and difference overlay side by side. The
 engine never modifies the scene graph. See
 [`docs/EVALUATION.md`](docs/EVALUATION.md).
 
+### 6. Refining the reconstruction
+Plans changes from the evaluation's findings and executes them, keeping only
+what measurably improves the score:
+```bash
+python modules/optimizer/pipeline.py --dry-run     # see the plan, change nothing
+python modules/optimizer/pipeline.py               # run it
+python main.py plan.dxf --images reference_images/ --refine
+```
+Three lighting complaints about one room become **one** `LightingAdjustment`
+rather than three edits. Each action is applied, re-rendered, re-evaluated, and
+rolled back unless the score actually rose. DXF geometry, doors, windows and
+locked objects are never touched, and no model of any kind is called. Writes
+`output/refinement/` — the plan, every attempt including the rejected ones, and
+the metrics. See [`docs/REFINEMENT.md`](docs/REFINEMENT.md).
+
 ## Documentation
+
+### Platform specifications
+The definitive technical specification for where ArchX3D is going. Written for
+contributors; normative where they disagree with the current code.
+
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — The target architecture: layering, package hierarchy, dependency rules, the 22 ports, lifecycle, threading, storage, caching, distributed execution, rendering backends, AI providers, frontend, testing, versioning, and the decision log.
+- [`docs/SCENE_GRAPH_SPEC.md`](docs/SCENE_GRAPH_SPEC.md) — Scene Graph v2: entity–component model, identity, the Level abstraction, the operation algebra, journal, snapshots, collaboration, spatial indexing, queries, streaming, IFC alignment, and migration.
+- [`docs/PLUGIN_SPEC.md`](docs/PLUGIN_SPEC.md) — The plugin contract: extension points, manifest, lifecycle, discovery, versioning, dependency resolution, capabilities, sandboxing, security, and marketplace readiness.
+- [`docs/API_SPEC.md`](docs/API_SPEC.md) — REST, GraphQL, WebSocket, SDK and CLI: resource model, auth, operation-based mutation, errors, rate limits, versioning and deprecation.
+- [`docs/PERFORMANCE_GUIDE.md`](docs/PERFORMANCE_GUIDE.md) — Where the time goes, the ranked bottleneck list with expected speedups, budgets, and what must never be optimised.
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) — v2 through v5, plus the research programme, datasets, evaluation protocol, publications, and the open-source and commercial strategy.
+- [`docs/ENGINEERING_PRINCIPLES.md`](docs/ENGINEERING_PRINCIPLES.md) — The twelve rules that do not change when the roadmap does.
+- [`docs/DESIGN_GUIDELINES.md`](docs/DESIGN_GUIDELINES.md) — House style, module shape, naming, types, tests, review checklist, and the anti-patterns this system invites.
+
+### Subsystems
+How the code works today.
+
+- [`docs/VIEWER.md`](docs/VIEWER.md) — The interactive architectural viewer: camera modes, roof detection, BVH collision, view modes, room navigation, GLB metadata and performance.
+
+### Frontend and design
+- [`docs/UI_GUIDELINES.md`](docs/UI_GUIDELINES.md) — The UX audit that motivated the redesign, ranked by severity, plus the rules for hierarchy, layout, colour, copy, states and motion.
+- [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) — Every token: OKLCH colour ramps, typography, spacing, radius, elevation, motion, and how light and dark are derived.
+- [`docs/COMPONENT_LIBRARY.md`](docs/COMPONENT_LIBRARY.md) — All 25 components, their variants, and when *not* to use them.
+- [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md) — WCAG 2.2 AA conformance, measured contrast in both themes, how to test, and the known gaps.
+- [`docs/FRONTEND_ARCHITECTURE.md`](docs/FRONTEND_ARCHITECTURE.md) — Structure, state, data flow, bundle budgets, and an honest code-quality review.
 - [`docs/VISION_PIPELINE.md`](docs/VISION_PIPELINE.md) — How reference images become a scene graph.
 - [`docs/MULTI_IMAGE.md`](docs/MULTI_IMAGE.md) — Room segmentation, image routing, and multi-image fusion.
+- [`docs/REGISTRATION.md`](docs/REGISTRATION.md) — Fitting reference sheets to the drawing from their room labels: robust transform fitting, composite-sheet detection, and why the CAD outranks the imagery.
 - [`docs/EDITOR.md`](docs/EDITOR.md) — The object editor, the edit API, and incremental validation.
 - [`docs/FIDELITY.md`](docs/FIDELITY.md) — Style, materials, palette, lighting, and reference-vs-generated similarity scoring.
 - [`docs/APPEARANCE.md`](docs/APPEARANCE.md) — How Blender consumes that appearance data: procedural materials, palette bounds, lighting rig, viewpoint cameras.
 - [`docs/RENDER_PIPELINE.md`](docs/RENDER_PIPELINE.md) — Deterministic preview renders: scene hashing, caching, incremental and parallel scheduling, auxiliary render passes, the manifest the evaluation engine consumes.
 - [`docs/EVALUATION.md`](docs/EVALUATION.md) — The reconstruction evaluation engine: five axes, findings that name the subsystem to change, scoring that excludes what it could not measure.
+- [`docs/REFINEMENT.md`](docs/REFINEMENT.md) — Planning and optimisation: findings into ranked actions, a dependency graph, and a loop that keeps only what it can measure an improvement from.
 
 ## Testing
 ```bash
@@ -121,3 +165,4 @@ All generated content is saved to the following directories:
 - `output/` — Contains the final deliverables: `model.glb`, `scene.blend`, and `walkthrough.mp4`.
 - `output/preview/` — Evaluation renders (`<room>/viewpoint_NN.png`, auxiliary passes, `manifest.json`). Diagnostics, not deliverables.
 - `output/evaluation/` — Scores, findings and the HTML report (`evaluation.json`, `per_viewpoint.json`, `per_room.json`, `building_summary.json`, `report.html`).
+- `output/refinement/` — The action plan and what came of it (`planner_report.json`, `optimization_history.json`, `metrics.json`).

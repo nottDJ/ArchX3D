@@ -199,6 +199,11 @@ def build_review(graph: SceneGraph) -> Dict[str, Any]:
         # systematically uncovered category reads as a known gap rather than
         # as unexplained wrongness in the render.
         "asset_quality": assets.match_quality(graph.objects),
+        # How each plan-view sheet lines up with the drawing. Surfaced because
+        # a placement's trustworthiness is a property of the registration
+        # behind it, not of the detection: an object read off an unregistered
+        # sheet may be perfectly detected and still be in the wrong room.
+        "registration": diagnostics.get("registration", {}),
         "confidence": diagnostics.get("confidence", {}),
         "warnings": _warnings(graph, diagnostics),
         "ignored": _ignored(diagnostics),
@@ -313,9 +318,61 @@ def _warnings(graph: SceneGraph, diagnostics: Dict[str, Any]) -> List[str]:
         )
 
     warnings.extend(_user_placement_conflicts(graph))
+    warnings.extend(_registration_warnings(diagnostics))
 
     for error in diagnostics.get("errors", [])[:5]:
         warnings.append(f"error: {error}")
+
+    return warnings
+
+
+def _registration_warnings(diagnostics: Dict[str, Any]) -> List[str]:
+    """Plan views whose alignment to the drawing was assumed, not measured.
+
+    This belongs in the review panel rather than only in the log, because it
+    changes what the reviewer is looking at. Furniture read off an
+    unregistered sheet can be detected perfectly and still be in the wrong
+    room, and nothing about the object itself shows that — only the
+    registration behind it does. A reviewer who does not know which sheets
+    registered cannot tell a placement worth correcting from one worth
+    discarding wholesale.
+    """
+    registration = diagnostics.get("registration") or {}
+    plan_views = registration.get("plan_views") or []
+    if not plan_views:
+        return []
+
+    warnings: List[str] = []
+
+    unregistered = [r for r in plan_views if not r.get("registered")]
+    if unregistered:
+        names = ", ".join(str(r.get("image_id", "?")) for r in unregistered[:4])
+        warnings.append(
+            f"{len(unregistered)} of {len(plan_views)} plan view(s) could not be "
+            f"aligned to the drawing ({names}). Their furniture was placed by "
+            "assuming each image is one floor plan filling the frame; if it is "
+            "not, those placements are wrong. Labelling the plan's rooms "
+            "legibly, or cropping to a single plan, would fix it."
+        )
+
+    for record in plan_views:
+        region = record.get("sheet_region") or {}
+        if record.get("registered") and region.get("looks_composite"):
+            warnings.append(
+                f"{record.get('image_id', '?')}: the drawing occupies only "
+                f"{region.get('coverage', 0):.0%} of this sheet. It registered "
+                "correctly, but anything read from the rest of the frame is not "
+                "part of this floor."
+            )
+
+        others = record.get("unmatched_image_labels") or []
+        if record.get("registered") and len(others) >= 2:
+            warnings.append(
+                f"{record.get('image_id', '?')}: {len(others)} label(s) on this "
+                f"sheet name rooms the drawing does not contain "
+                f"({', '.join(str(x) for x in others[:4])}). This sheet most "
+                "likely shows more than one floor."
+            )
 
     return warnings
 

@@ -137,6 +137,17 @@ class Finding:
     summary: str
     subsystem: str
 
+    #: What *kind* of finding this is, within its axis: ``exposure``,
+    #: ``warmth``, ``displacement``, ``missing``. A short stable slug, and the
+    #: only thing that distinguishes two findings about the same subsystem in
+    #: the same room.
+    #:
+    #: Without it, "the render is darker" and "the light is warmer" share an
+    #: identity and the more severe silently swallows the other — which loses
+    #: a real, separately actionable fact and makes the room look like it has
+    #: one problem instead of two.
+    code: str = ""
+
     #: The measured quantity this finding is about.
     difference: float = 0.0
     unit: str = ""
@@ -161,6 +172,7 @@ class Finding:
     def to_dict(self) -> Dict[str, Any]:
         return {
             "axis": self.axis,
+            "code": self.code,
             "summary": self.summary,
             "subsystem": self.subsystem,
             "difference": _round(self.difference, 4),
@@ -180,6 +192,7 @@ class Finding:
     def from_dict(d: Dict[str, Any]) -> "Finding":
         return Finding(
             axis=str(d.get("axis", "")),
+            code=str(d.get("code", "")),
             summary=str(d.get("summary", "")),
             subsystem=str(d.get("subsystem", "")),
             difference=float(d.get("difference", 0.0) or 0.0),
@@ -200,12 +213,20 @@ class Finding:
         """Identity for de-duplication across viewpoints of the same room.
 
         Two viewpoints of one room both seeing a too-dark render are one
-        finding about the room, not two — but the same axis and subsystem
-        applied to *different* objects are genuinely different findings, so
-        the affected entities are part of the key.
+        finding about the room, not two. But two *different* complaints about
+        the same room's lighting are two findings, and the affected entities
+        alone cannot tell them apart — which is what ``code`` is for.
+
+        The room is part of it for the same reason: two rooms that are both
+        too dark are two problems with two separate lighting environments, and
+        merging them would hide one of them behind the other.
+
+        Deliberately excludes the summary: summaries embed measured numbers
+        ("sits 62 cm from"), so keying on them would stop the same finding
+        merging across viewpoints, which is the behaviour this exists for.
         """
         scope = ",".join(sorted(self.objects) + sorted(self.materials))
-        return f"{self.axis}|{self.subsystem}|{scope}"
+        return f"{self.axis}|{self.subsystem}|{self.code}|{self.room}|{scope}"
 
 
 def rank(findings: Iterable[Finding], limit: Optional[int] = None) -> List[Finding]:

@@ -31,14 +31,24 @@ import math
 # Path Configuration
 # ---------------------------------------------------------------------------
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODULES_DIR = os.path.join(BASE_DIR, 'modules')
+# Where the code lives, which is always this file's own directory.
+MODULES_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(MODULES_DIR)
+
+# Where the data lives, which is usually the project but not always. The
+# optimiser rebuilds a mutated scene graph many times over and must not
+# overwrite the project's own data/ and output/ while doing it, so it points
+# the generator at a working copy through ARCHX3D_BASE_DIR. Code and data are
+# separated for exactly that reason and no other.
+BASE_DIR = os.environ.get('ARCHX3D_BASE_DIR') or PROJECT_DIR
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
 GEOMETRY_PATH = os.path.join(DATA_DIR, 'geometry.json')
 STYLING_PATH = os.path.join(DATA_DIR, 'styling.json')
 SCENE_GRAPH_PATH = os.path.join(DATA_DIR, 'scene_graph.json')
-CONFIG_PATH = os.path.join(BASE_DIR, 'config.json')
+# Configuration follows the project, not the working copy: a run's settings
+# are the project's settings.
+CONFIG_PATH = os.path.join(PROJECT_DIR, 'config.json')
 OUTPUT_GLB_PATH = os.path.join(OUTPUT_DIR, 'model.glb')
 OUTPUT_BLEND_PATH = os.path.join(OUTPUT_DIR, 'scene.blend')
 
@@ -60,6 +70,7 @@ try:
     from blender import camera as bl_camera
     from blender import lighting as bl_lighting
     from blender import materials as bl_materials
+    from blender import metadata as bl_metadata
     from blender import styles as bl_styles
     VISION_AVAILABLE = True
 except ImportError as _exc:  # pragma: no cover - depends on install layout
@@ -549,15 +560,33 @@ def render_frames():
 # Export
 # ---------------------------------------------------------------------------
 
-def export_scene(config):
-    """Export the scene in configured formats."""
+def export_scene(config, graph=None):
+    """Export the scene in configured formats.
+
+    Before the GLB is written every object is tagged with what it *is* — roof,
+    wall, furniture, the room it belongs to — and the scene carries a small
+    manifest of its rooms. The web viewer needs that to hide the roof and fly
+    to a room; without it, it has to infer both from mesh names and bounding
+    boxes. Tagging creates no geometry and changes no material, so a build with
+    it and a build without it render identically.
+    """
     export_cfg = config.get("export", {})
+
+    if VISION_AVAILABLE:
+        try:
+            counts = bl_metadata.tag_scene(graph, config)
+            print(f"[METADATA] Tagged {bl_metadata.summarise(counts)}")
+        except Exception as e:  # noqa: BLE001 - never fail a build over metadata
+            print(f"[WARN] Metadata tagging skipped: {e}")
 
     if export_cfg.get("glb", True):
         try:
             bpy.ops.export_scene.gltf(
                 filepath=OUTPUT_GLB_PATH,
-                export_format='GLB'
+                export_format='GLB',
+                # Carries the archx3d_* custom properties into glTF `extras`.
+                # Without this the tagging above would be written and dropped.
+                export_extras=True,
             )
             glb_size = os.path.getsize(OUTPUT_GLB_PATH)
             print(f"[EXPORT] GLB saved: {OUTPUT_GLB_PATH} ({glb_size:,} bytes)")
@@ -918,7 +947,7 @@ def main():
     setup_camera_and_animation(cx, cy, max_dim, config, graph)
 
     # Export
-    export_scene(config)
+    export_scene(config, graph)
 
     # Evaluation previews — one deterministic low-resolution image per stored
     # viewpoint, for `vision.similarity` to score. Rendered here, in the

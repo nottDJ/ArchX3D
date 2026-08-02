@@ -118,6 +118,7 @@ def _global_texture_finding(ctx, texture: Dict[str, Any]) -> List[Finding]:
     flatter = ratio < 1.0
     return [Finding(
         axis=MATERIAL,
+        code="texture",
         summary=f"Surfaces carry {'less' if flatter else 'more'} fine texture "
                 f"than the reference",
         subsystem=Subsystem.MATERIAL_SPECIES,
@@ -171,6 +172,7 @@ def _region_findings(ctx, reference, surface, detail: Dict[str, Any]) -> List[Fi
         species = _species(name)
         findings.append(Finding(
             axis=MATERIAL,
+            code="saturation",
             summary=f"{_readable(name)} appears too "
                     f"{'desaturated' if washed else 'saturated'}",
             subsystem=Subsystem.MATERIAL_SPECIES,

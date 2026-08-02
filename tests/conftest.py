@@ -350,6 +350,111 @@ def write_depth_pass(path, metres, size=(64, 36), depth_range=20.0):
     return str(path)
 
 
+# ---------------------------------------------------------------------------
+# Planning and optimisation
+# ---------------------------------------------------------------------------
+
+
+def make_finding(**overrides):
+    """One evaluation finding, with plausible defaults.
+
+    Findings are the planner's only input, so tests build them directly rather
+    than by running an evaluation: the question under test is what the planner
+    does with a *given* finding, and generating one through the pixel axes
+    would make the input a variable rather than a fixture.
+    """
+    from evaluation.schema import Finding, Subsystem
+
+    settings = dict(
+        axis="lighting",
+        code="exposure",
+        summary="Render is darker than the reference",
+        subsystem=Subsystem.LIGHTING_ENVIRONMENT,
+        difference=0.2, severity=0.5, confidence=0.8,
+        why="because the measurement says so",
+        room="room_a", viewpoint="img_a1",
+        evidence={"reference_luminance": 0.42, "render_luminance": 0.19},
+    )
+    settings.update(overrides)
+    return Finding(**settings)
+
+
+def make_evaluation(findings=(), score=0.62, axis_scores=None, room_scores=None,
+                    unmeasured=()):
+    """A complete EvaluationResult carrying the given findings.
+
+    Assembled the way the engine assembles one — findings hang off a
+    ViewpointEvaluation, and ``result.findings`` collects and merges them — so
+    the planner's adapter is exercised against the real shape rather than a
+    convenient stand-in.
+    """
+    from evaluation.schema import (
+        AXES, AxisScore, BuildingSummary, EvaluationResult, RoomEvaluation,
+        ScoreSet, ViewpointEvaluation,
+    )
+
+    axis_scores = axis_scores or {
+        "colour": 0.55, "material": 0.40, "lighting": 0.50,
+        "layout": 0.60, "objects": 0.90,
+    }
+    axes = {}
+    for axis in AXES:
+        if axis in unmeasured:
+            axes[axis] = AxisScore.unmeasured(axis, "not measured in this fixture")
+        else:
+            axes[axis] = AxisScore(axis=axis, score=axis_scores.get(axis, 0.5),
+                                   measured=True, confidence=0.8)
+
+    findings = list(findings)
+    viewpoint = ViewpointEvaluation(
+        viewpoint_id="img_a1", room="room_a", axes=dict(axes),
+        findings=[f for f in findings if f.viewpoint],
+        totals=ScoreSet(score=score, confidence=0.8, weight_used=1.0),
+    )
+    room = RoomEvaluation(
+        room_id="room_a", room_type="living_room", axes=dict(axes),
+        findings=[f for f in findings if not f.viewpoint],
+        totals=ScoreSet(score=score, confidence=0.8, weight_used=1.0),
+    )
+    building = BuildingSummary(
+        totals=ScoreSet(score=score, confidence=0.8,
+                        measured_axes=[a for a in AXES if a not in unmeasured],
+                        unmeasured_axes=list(unmeasured), weight_used=1.0),
+        axes=axes,
+        room_scores=room_scores or {"room_a": 0.60, "room_b": 0.65},
+        findings=findings,
+    )
+    return EvaluationResult(building=building, rooms=[room], viewpoints=[viewpoint])
+
+
+@pytest.fixture
+def finding():
+    return make_finding
+
+
+@pytest.fixture
+def evaluation():
+    return make_evaluation
+
+
+@pytest.fixture
+def lighting_findings():
+    """The spec's example: three complaints about one room's light."""
+    from evaluation.schema import Subsystem
+
+    return [
+        make_finding(summary="Render is darker than the reference", severity=0.7,
+                     evidence={"reference_luminance": 0.42, "render_luminance": 0.19}),
+        make_finding(code="warmth",
+                     summary="Render's light is warmer than the reference",
+                     severity=0.5, evidence={"warmth_difference": 0.12}),
+        make_finding(code="contrast",
+                     summary="Render's lighting is flatter than the reference",
+                     severity=0.4,
+                     evidence={"reference_contrast": 0.21, "render_contrast": 0.13}),
+    ]
+
+
 @pytest.fixture
 def evaluation_project(tmp_path, preview_graph):
     """A complete, self-contained build for the evaluation engine to read.

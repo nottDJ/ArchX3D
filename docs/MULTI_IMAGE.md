@@ -148,12 +148,25 @@ would mean inventing objects nobody observed.
 ### Plan views are different
 
 A top-down furnished plan shows every room at once and needs no camera model:
-the image *is* the floor plane, so a normalised box maps linearly onto plan
-coordinates. That makes plan views the most positionally accurate input the
-pipeline accepts — more so than a perspective photograph, where depth must be
-inferred. Their objects are assigned to whichever region contains them;
-anything landing outside every room (legends, title blocks, dimension strings)
-is dropped.
+the image *is* the floor plane, so a box maps onto plan coordinates through a
+single 2D transform. That makes plan views the most positionally accurate
+input the pipeline accepts — more so than a perspective photograph, where
+depth must be inferred — *provided the transform is right*.
+
+Getting it right is [`REGISTRATION.md`](REGISTRATION.md)'s job. The image is
+first registered to the drawing by matching the room labels printed on the
+sheet against the labels the DXF carries with plan coordinates, and fitting a
+similarity transform from the correspondences. This used to be an assumption
+— the image was stretched onto the plan's bounding box, which is correct only
+when the image is one plan filling the frame, and which failed silently for
+any sheet carrying anything else.
+
+Objects are then assigned to whichever region contains them. Anything landing
+outside every room (legends, title blocks, dimension strings) is dropped — but
+that is now interpreted against the registration: with a measured transform,
+those really are annotations, whereas losing most detections from an image
+that never registered is a failure and is reported as one. Placements made
+through the fallback carry a `plan_registration_assumed` flag.
 
 ---
 

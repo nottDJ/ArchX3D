@@ -66,5 +66,15 @@
         },
         "html": true,
         "overlays": true
+    },
+    "refinement": {
+        "max_actions": 12,
+        "max_iterations": 8,
+        "target_score": 1.0,
+        "epsilon": 0.002,
+        "max_consecutive_rejections": 3,
+        "work_dir": ".cache/optimize",
+        "directory": "output/refinement",
+        "write_graph": false
     }
 }
