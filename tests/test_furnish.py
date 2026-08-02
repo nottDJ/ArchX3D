@@ -142,6 +142,67 @@ class TestPlacement:
         assert result is not None
         assert result.against_wall
 
+    # -- footprint sanity --------------------------------------------------
+
+    def test_an_item_that_swamps_the_room_is_refused(self):
+        """A king bed proposed for a toilet is a wrong-room error."""
+        toilet = self._space(1.6, 1.7)          # 2.7 m2
+        solver = placement.Solver(toilet)
+
+        assert solver.place("bed", (2.0, 2.1, 0.6), wall_affinity=0.9) is None
+        assert len(solver.rejections) == 1
+
+    def test_the_refusal_says_it_is_the_wrong_room(self):
+        """The reason has to distinguish this from a tight packing failure.
+
+        "No candidate pose" invites nudging the furniture; the useful
+        correction here is to re-examine which room the item was assigned to.
+        """
+        solver = placement.Solver(self._space(1.6, 1.7))
+        solver.place("bed", (2.0, 2.1, 0.6), wall_affinity=0.9)
+
+        reason = solver.rejections[0].reason
+        assert "larger room" in reason
+        assert "%" in reason, "the reason should quantify the overrun"
+
+    def test_a_snug_fit_is_still_allowed(self):
+        """The limit catches absurdity, not tightness.
+
+        A double bed in a small single bedroom legitimately takes over half
+        the floor, and refusing that would empty rooms that are simply small.
+        """
+        bedroom = self._space(2.6, 3.2)         # 8.3 m2
+        solver = placement.Solver(bedroom)
+
+        result = solver.place("bed", (1.4, 1.9, 0.6), wall_affinity=0.9)
+        assert result is not None, "a 32% footprint must still place"
+
+    def test_a_rug_may_cover_most_of_the_floor(self):
+        """Floor coverings are exempt — covering the floor is the point.
+
+        2.5 m in a 3 m room is 69% of it, comfortably past the limit that
+        would refuse a solid object of the same footprint.
+        """
+        solver = placement.Solver(self._space(3.0, 3.0))
+        result = solver.place("rug", (2.5, 2.5, 0.02), wall_affinity=0.0)
+
+        assert result is not None
+        assert not any("larger room" in r.reason for r in solver.rejections)
+
+    def test_a_solid_object_of_the_same_footprint_is_refused(self):
+        """The exemption is about being a covering, not about being large."""
+        solver = placement.Solver(self._space(3.0, 3.0))
+        assert solver.place("cabinet", (2.5, 2.5, 1.2), wall_affinity=1.0) is None
+        assert any("larger room" in r.reason for r in solver.rejections)
+
+    def test_room_area_comes_from_the_outline_not_the_bounds(self):
+        """An L-shaped room is smaller than its bounding box."""
+        el = placement.RoomSpace(
+            polygon=[(0, 0), (4, 0), (4, 2), (2, 2), (2, 4), (0, 4)],
+            bounds_min=(0.0, 0.0), bounds_max=(4.0, 4.0),
+        )
+        assert el.area == pytest.approx(12.0)   # not 16
+
     def test_free_standing_items_stay_off_the_walls(self):
         solver = placement.Solver(self._space(6.0, 5.0))
         result = solver.place("dining_table", (1.4, 0.9, 0.75), wall_affinity=0.0)

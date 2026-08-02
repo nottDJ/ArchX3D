@@ -47,7 +47,33 @@ Point = Tuple[float, float]
 DEFAULT_RESOLUTION = 0.05
 
 #: Openings up to this width are sealed so adjacent rooms separate cleanly.
-DEFAULT_GAP_CLOSING = 1.10
+#:
+#: Raising this is *safer* than lowering it, which is the opposite of the
+#: intuition. An unsealed doorway does not merely merge two rooms: the merged
+#: region usually reaches an external door or a gap in the wall run, touches
+#: the grid border, and is discarded wholesale as exterior. Under-sealing
+#: therefore deletes floor area rather than mislabelling it.
+#:
+#: Measured on the reference plan (``final_plan_19th_may.dxf``), total
+#: recovered area against this value:
+#:
+#:     0.60 m ->   2.9 m2 in  1 region   (the building is gone)
+#:     0.90 m ->  41.5 m2 in  9 regions
+#:     1.10 m ->  92.1 m2 in 11 regions  (previous default; two bedrooms
+#:                                        merged into one 47.7 m2 region)
+#:     1.40 m -> 153.6 m2 in 13 regions  (bedrooms separate at 22.8 / 22.6 m2)
+#:     2.00 m -> 233.6 m2 in 13 regions  (over-sealed: a 70 m2 region appears
+#:                                        where two rooms joined)
+#:
+#: 1.40 m is chosen because it is where the recovered areas agree with the
+#: dimensions the drawing itself states — ``BED ROOM 16'0" X 15'9"`` is 23.4 m2
+#: and segments at 22.8, ``16'0" X 10'0"`` is 14.9 m2 and segments at 14.2.
+#: That agreement is the check worth trusting, not the region count.
+#:
+#: The constraint from both sides is unchanged: this must exceed the widest
+#: door on the plan (the reference set has a 1.25 m double door) and stay below
+#: the narrowest opening that is genuinely meant to read as one space.
+DEFAULT_GAP_CLOSING = 1.40
 
 #: Regions smaller than this are cupboards, wall cavities or raster noise.
 MIN_ROOM_AREA = 2.0

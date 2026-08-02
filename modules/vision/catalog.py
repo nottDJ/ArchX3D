@@ -129,6 +129,24 @@ OBJECT_CATALOG: Dict[str, ObjectPrior] = {
     "kitchen_counter": _p("kitchen_counter", "furniture", (2.40, 0.60, 0.90), ((0.8, 5.0), (0.5, 0.8), (0.85, 1.0)),
                           wall_affinity=1.0, orientation="face_room", asset_family="cabinet", surface_height=0.90),
 
+    # ---- Sanitary --------------------------------------------------------
+    # A bathroom is a room type the drawing names, gives a layer to
+    # (``SANITARY_SNV``) and blocks for — and ``cad.blocks`` has recognised
+    # these fixtures all along. Their absence here meant every fixture read off
+    # a plan was dropped as an unknown category, so bathrooms furnished as
+    # empty boxes while the drawing was explicitly describing their contents.
+    #
+    # All of them stand against a wall and face into the room; none of them is
+    # ever placed centrally, which is what ``wall_affinity=1.0`` states.
+    "toilet": _p("toilet", "fixture", (0.38, 0.70, 0.78), ((0.3, 0.5), (0.5, 0.9), (0.6, 0.95)),
+                 wall_affinity=1.0, orientation="face_room", asset_family="box"),
+    "sink": _p("sink", "fixture", (0.60, 0.48, 0.85), ((0.35, 1.2), (0.3, 0.65), (0.7, 1.0)),
+               wall_affinity=1.0, orientation="face_room", asset_family="box", surface_height=0.85),
+    "bathtub": _p("bathtub", "fixture", (1.70, 0.75, 0.55), ((1.2, 2.0), (0.65, 1.0), (0.4, 0.7)),
+                  wall_affinity=1.0, orientation="face_room", asset_family="box"),
+    "shower": _p("shower", "fixture", (0.90, 0.90, 2.00), ((0.7, 1.5), (0.7, 1.5), (1.8, 2.3)),
+                 wall_affinity=1.0, orientation="face_room", asset_family="box"),
+
     # ---- Appliances ------------------------------------------------------
     "refrigerator": _p("refrigerator", "appliance", (0.70, 0.70, 1.80), ((0.5, 1.2), (0.5, 0.9), (1.2, 2.2)),
                        wall_affinity=1.0, orientation="face_room", asset_family="cabinet"),
@@ -194,6 +212,17 @@ OBJECT_CATALOG: Dict[str, ObjectPrior] = {
 #: Free-text labels the model produces, mapped onto catalog categories.
 #: Longest match wins, so multi-word keys are checked before single words.
 SYNONYMS: Dict[str, str] = {
+    # Sanitary fixtures. Plans and schedules name these a dozen ways, and the
+    # British/American split ("basin"/"sink", "WC"/"toilet") is not optional to
+    # handle — both appear on the same drawing set.
+    "wc": "toilet", "water closet": "toilet", "commode": "toilet",
+    "toilet seat": "toilet", "lavatory": "toilet", "closet seat": "toilet",
+    "washbasin": "sink", "wash basin": "sink", "basin": "sink",
+    "hand basin": "sink", "vanity": "sink", "vanity unit": "sink",
+    "wash hand basin": "sink", "kitchen sink": "sink",
+    "bath": "bathtub", "bath tub": "bathtub", "tub": "bathtub",
+    "shower cubicle": "shower", "shower tray": "shower", "shower enclosure": "shower",
+
     "l-shaped sofa": "sectional", "l shaped sofa": "sectional", "corner sofa": "sectional",
     "couch": "sofa", "settee": "sofa", "loveseat": "sofa", "davenport": "sofa",
     "accent chair": "armchair", "lounge chair": "armchair", "recliner": "armchair",

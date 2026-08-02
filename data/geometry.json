@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "source": "C:\\Users\\ASUS\\Documents\\GitHub\\ArchX3D\\projects\\f262ed7e787f\\final_plan_19th_may.dxf",
+    "source": "C:\\Users\\ASUS\\Documents\\GitHub\\ArchX3D\\projects\\fb8ab9fc922f\\final_plan_19th_may.dxf",
     "layers_used": [
       "AR-WALL",
       "WALL_SV"
@@ -3999,7 +3999,7 @@
   ],
   "cad": {
     "schema_version": "1.0",
-    "source_path": "C:\\Users\\ASUS\\Documents\\GitHub\\ArchX3D\\projects\\f262ed7e787f\\final_plan_19th_may.dxf",
+    "source_path": "C:\\Users\\ASUS\\Documents\\GitHub\\ArchX3D\\projects\\fb8ab9fc922f\\final_plan_19th_may.dxf",
     "dxf_version": "AC1018",
     "units": {
       "scale_to_m": 0.0254,
@@ -39845,7 +39845,7 @@
       9.935374
     ],
     "stats": {
-      "elapsed_s": 0.276,
+      "elapsed_s": 0.239,
       "layers": 19,
       "layer_roles": {
         "unknown": 7,

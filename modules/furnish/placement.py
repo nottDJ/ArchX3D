@@ -56,6 +56,12 @@ DEFAULT_USE_CLEARANCE_M = 0.60
 #: avoided both prevents the intended layout and wastes the floor it covers.
 FLOOR_COVERING_HEIGHT_M = 0.10
 
+#: Largest share of a room's floor one item may cover before the placement is
+#: read as a wrong-room error rather than a tight fit. Deliberately generous:
+#: a double bed in a small single bedroom legitimately reaches ~55%, and the
+#: check exists to catch the 200% case, not to enforce good taste.
+MAX_FOOTPRINT_SHARE = 0.60
+
 #: How finely wall runs and open floor are sampled for candidate poses.
 WALL_SAMPLE_M = 0.25
 FLOOR_SAMPLE_M = 0.40
@@ -97,6 +103,18 @@ class RoomSpace:
             sum(p[0] for p in self.polygon) / len(self.polygon),
             sum(p[1] for p in self.polygon) / len(self.polygon),
         )
+
+    @property
+    def area(self) -> float:
+        """Floor area in m², by the shoelace formula over the outline."""
+        if len(self.polygon) >= 3:
+            total = 0.0
+            for i, (x0, y0) in enumerate(self.polygon):
+                x1, y1 = self.polygon[(i + 1) % len(self.polygon)]
+                total += x0 * y1 - x1 * y0
+            return abs(total) / 2.0
+        return max(0.0, (self.bounds_max[0] - self.bounds_min[0])) * \
+            max(0.0, (self.bounds_max[1] - self.bounds_min[1]))
 
 
 @dataclass
@@ -156,6 +174,42 @@ class Solver:
                 label="door swing",
             ))
 
+    # -- checks ------------------------------------------------------------
+
+    def _too_large(self, category: str, width: float, depth: float,
+                   height: float) -> Optional["Rejection"]:
+        """Reject an item that cannot credibly belong to this room.
+
+        The search below would reject most of these anyway, by failing to find
+        a pose — but it would say *"no candidate pose inside the room outline"*,
+        which reads as a packing problem the solver nearly solved. A king bed
+        proposed for a 2.7 m² toilet is not a packing problem; it is a wrong
+        room, and the review UI should say so, because the useful correction is
+        to re-examine the assignment rather than to nudge the furniture.
+
+        Floor coverings are exempt: a rug is *supposed* to cover most of a
+        room, and the whole point of a fitted carpet is that it covers all of
+        it.
+        """
+        if height <= FLOOR_COVERING_HEIGHT_M:
+            return None
+
+        room_area = self.space.area
+        if room_area <= 0:
+            return None
+
+        footprint = width * depth
+        share = footprint / room_area
+        if share <= MAX_FOOTPRINT_SHARE:
+            return None
+
+        return Rejection(
+            category,
+            f"footprint {footprint:.1f} m2 is {share:.0%} of this "
+            f"{room_area:.1f} m2 room (limit {MAX_FOOTPRINT_SHARE:.0%}); "
+            f"it belongs to a larger room",
+        )
+
     # -- public ------------------------------------------------------------
 
     def place(
@@ -171,6 +225,11 @@ class Solver:
         width, depth, height = dimensions
         if width <= 0 or depth <= 0:
             self.rejections.append(Rejection(category, "degenerate dimensions"))
+            return None
+
+        oversized = self._too_large(category, width, depth, height)
+        if oversized is not None:
+            self.rejections.append(oversized)
             return None
 
         candidates = self._candidates(dimensions, wall_affinity, wall_clearance)
