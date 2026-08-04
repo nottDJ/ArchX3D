@@ -2,30 +2,91 @@
     "rooms": [
         {
             "room_type": "Living Room",
-            "description": "Spacious main living area, well-suited for relaxation and social gatherings given its generous 6x6m dimensions.",
-            "wall_color_hex": "#F8F8F8",
-            "floor_material": "Light Oak Wood",
+            "description": "A spacious central living area designed for comfort and modern aesthetics, with clean lines and functional furniture.",
+            "wall_color_hex": "#F5F5DC",
+            "floor_material": "Polished Concrete",
             "furniture_assets": [
-                "Scandinavian Sofa 3-Seater",
-                "Round Coffee Table Birch",
-                "Armchair Grey Fabric",
-                "Minimalist Floor Lamp",
-                "Low Bookshelf White"
+                "low_poly_sectional_sofa",
+                "low_poly_coffee_table_glass",
+                "low_poly_media_console",
+                "low_poly_armchair_fabric",
+                "low_poly_rug_geometric"
             ]
         },
         {
-            "room_type": "Bedroom",
-            "description": "A comfortable 4x6m bedroom, providing ample space for a sleeping area and personal storage.",
-            "wall_color_hex": "#E8E8E8",
-            "floor_material": "Light Oak Wood",
+            "room_type": "Dining Room",
+            "description": "An elegant dining space adjacent to the kitchen, ideal for entertaining and family meals.",
+            "wall_color_hex": "#E0E0E0",
+            "floor_material": "Hardwood Oak",
             "furniture_assets": [
-                "Platform Bed Queen Size",
-                "Bedside Table Simple",
-                "Two-Door Wardrobe White",
-                "Small Desk Light Wood",
-                "Dining Chair Minimalist"
+                "low_poly_dining_table_rectangular",
+                "low_poly_dining_chair_set_6",
+                "low_poly_sideboard_minimal",
+                "low_poly_pendant_light_fixture"
+            ]
+        },
+        {
+            "room_type": "Master Bedroom",
+            "description": "A large, serene private retreat with ample space, focusing on comfort and calm for relaxation.",
+            "wall_color_hex": "#B0C4DE",
+            "floor_material": "Soft Carpet Grey",
+            "furniture_assets": [
+                "low_poly_king_bed_frame",
+                "low_poly_nightstand_pair",
+                "low_poly_dresser_wood",
+                "low_poly_wardrobe_sliding",
+                "low_poly_table_lamp"
+            ]
+        },
+        {
+            "room_type": "Kitchen",
+            "description": "A functional and stylish kitchen designed for efficiency, with ample counter space and storage solutions.",
+            "wall_color_hex": "#FFFFFF",
+            "floor_material": "Ceramic Tiles Grey",
+            "furniture_assets": [
+                "low_poly_kitchen_cabinets_set",
+                "low_poly_kitchen_island_bar",
+                "low_poly_bar_stools_set_3",
+                "low_poly_refrigerator_modern",
+                "low_poly_oven_range"
+            ]
+        },
+        {
+            "room_type": "Bathroom",
+            "description": "A compact yet efficient bathroom with contemporary fixtures and a refreshing, clean aesthetic.",
+            "wall_color_hex": "#ADD8E6",
+            "floor_material": "Porcelain Tiles White",
+            "furniture_assets": [
+                "low_poly_vanity_sink_cabinet",
+                "low_poly_toilet_unit",
+                "low_poly_shower_enclosure",
+                "low_poly_wall_mirror_round"
+            ]
+        },
+        {
+            "room_type": "Multipurpose Hall",
+            "description": "A versatile open hall space, adaptable for various activities from casual lounging to informal gatherings.",
+            "wall_color_hex": "#F0F0F0",
+            "floor_material": "Polished Large Tiles",
+            "furniture_assets": [
+                "low_poly_modular_seating_cubes",
+                "low_poly_console_table_minimal",
+                "low_poly_bookcase_tall",
+                "low_poly_accent_rug_abstract"
+            ]
+        },
+        {
+            "room_type": "Outdoor Terrace",
+            "description": "An inviting outdoor space for relaxation and enjoying the views, featuring durable, weather-resistant furnishings.",
+            "wall_color_hex": "#B0C4DE",
+            "floor_material": "Outdoor Decking Wood",
+            "furniture_assets": [
+                "low_poly_outdoor_lounge_chair",
+                "low_poly_small_outdoor_table",
+                "low_poly_planter_large_plant",
+                "low_poly_umbrella_patio"
             ]
         }
     ],
-    "overall_style": "Scandinavian Modern"
+    "overall_style": "Contemporary"
 }

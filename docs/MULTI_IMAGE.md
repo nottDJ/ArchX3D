@@ -282,7 +282,7 @@ sofa was deleted would otherwise float.
 | 2 Reference images | **Multi-select and drag-and-drop**, thumbnails, per-file removal, rejected files listed with reasons |
 | 3 AI analysis | The validation page — see below |
 | 4 Generate | Live job log |
-| 5 Walkthrough | Download; **the in-browser first-person viewer is not built** |
+| 5 Walkthrough | GLB download, or the in-browser viewer — see [`VIEWER.md`](VIEWER.md) |
 
 The validation page shows a **plan map**: room polygons with every object drawn
 at its true oriented footprint, colour-coded by confidence, with a tick marking
@@ -344,8 +344,10 @@ tool, and `JobRegistry` is the only seam a Celery/Redis backend would replace.
   would produce overlapping rooms on one plane.
 * **Multi-image fusion resolves identity, not pose.** A second view raises
   confidence and sharpens attributes; it does not triangulate position.
-* **The first-person walkthrough (step 5) is not built.** The wizard ends at a
-  GLB download and says so.
+* **Rooms can be furnished but unlit.** Procedural furnishing skips rooms that
+  already hold observed objects, and a plan view contributes no lighting, so a
+  plan-only project leaves most rooms without a luminaire — 10 of 13 on the
+  reference project.
 * Dense rooms still produce unresolved overlaps (14 in the live run, mostly
   cushions) — reported rather than hidden.
 

@@ -303,24 +303,33 @@ is not built (below). The numbers above are mechanism, not results.
 
 ## 10. Limitations
 
-**No preview render pass.** The similarity module takes
-`(viewpoint, reference, rendered)` triples; nothing yet produces the rendered
-half. Blender must be asked to render a still at each stored `ViewPoint`. This
-is the single missing piece that would close the loop, and everything it needs
-is now in the graph.
+**Superseded.** The four limitations this section used to list — no preview
+render pass, no refinement loop, no comparison view, and Blender not consuming
+the appearance fields — have all been built since. They are now
+[`RENDER_PIPELINE.md`](RENDER_PIPELINE.md), [`REFINEMENT.md`](REFINEMENT.md),
+`output/evaluation/report.html` and [`APPEARANCE.md`](APPEARANCE.md)
+respectively. What follows is what is actually still open.
 
-**No automatic refinement loop.** `report.remedies()` names which levers to
-pull, and the bounded-3-iteration workflow is specified, but the loop that
-re-runs generation is not implemented — it depends on the preview render.
+**Viewpoints require interior imagery.** Camera poses are recovered from
+photographs, so a project given only a plan view produces none — and with no
+viewpoints there are no comparison renders, which leaves four of the five
+evaluation axes unmeasurable. Verified on the reference project: colour,
+material, lighting and layout all returned *"not measured in any viewpoint"*,
+and only `objects` scored. The engine reports this rather than inventing a
+number, but the effect is that the axes carrying the photorealism claim have
+not yet run against real data.
 
-**No comparison UI.** The split-screen reference-versus-generated view is not
-built. The data it needs (`ViewPoint`, similarity report) now exists.
+**Plan-view accuracy is bounded by the sheet, not the solver.** Measured on
+the reference project, the fitted transform's residual is isotropic noise of
+about a metre with a mean vector of (0.00, -0.00) m — no systematic component
+left to correct. Where a reference sheet is not a metric projection of the
+drawing, that disagreement cannot be fitted away.
 
-**Blender does not yet consume the new fields.** `texture`/`grain`,
-`LightingEnvironment` and `ColourPalette` are populated and persisted, but
-`blender_generator.py` still builds materials and lighting the old way. Until
-that is wired, the understanding improvements are recorded rather than
-rendered. This is the highest-value next step after the preview pass.
+**Rooms are lit only where a fixture was observed.** Measured on the reference
+project, 10 of 13 rooms received no luminaire at all, because the only imagery
+was a plan view and `layout` mode contributes no lighting by design. Procedural
+furnishing adds fixtures to rooms it furnishes, but skips rooms that already
+hold observed objects, so a room can end up furnished and unlit.
 
 **Style priors are not used as fallbacks yet.** `palette_from_style()` exists
 and is tested but is not called for unphotographed rooms.

@@ -365,9 +365,13 @@ on `PATH` in CI, which the project does not currently assume.
 are correct, but nothing checks that the walnut recipe *looks* like walnut. The
 similarity engine could close this loop once preview rendering exists.
 
-**No preview render pass.** `camera.build_viewpoint_cameras` creates the
-cameras; nothing yet renders from them. This remains the missing piece between
-this phase and an automatic refinement loop.
+**Viewpoint cameras need interior imagery to exist at all.** The preview render
+pass this section once listed as missing is built — see
+[`RENDER_PIPELINE.md`](RENDER_PIPELINE.md) — and it feeds the evaluation engine
+and the refinement loop. What remains is upstream of it:
+`camera.build_viewpoint_cameras` has nothing to build from unless photographs
+supplied camera poses, so a plan-only project renders no previews and leaves
+four of the five evaluation axes unmeasurable.
 
 **`decor_density` is computed but unused.** The generator does not yet thin
 low-confidence clutter in minimal interiors.

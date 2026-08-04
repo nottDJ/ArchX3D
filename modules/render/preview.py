@@ -48,6 +48,20 @@ import json
 import os
 import sys
 import time
+
+if __name__ == "__main__" and __package__ in (None, ""):
+    # Run as a loose script (``python modules/render/preview.py``) there is no
+    # package for the relative imports below to resolve against. Putting
+    # ``modules/`` on the path and adopting the package name makes the
+    # documented command work without a launcher script or a PYTHONPATH.
+    #
+    # The same bootstrap as ``evaluation/engine.py`` and
+    # ``optimizer/pipeline.py``; without it the three commands README gives for
+    # this module all fail on import before parsing an argument.
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    import render as _package  # noqa: F401  (registers the package)
+
+    __package__ = "render"
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Sequence
 
