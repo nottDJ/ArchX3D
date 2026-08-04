@@ -902,7 +902,7 @@
         7.593
       ],
       "ceiling_height": 3.0,
-      "confidence": 0.717,
+      "confidence": 0.71,
       "area": 6.208,
       "connected_to": [],
       "wall_ids": [
@@ -929,20 +929,20 @@
       "style_confidence": 0.0,
       "type_reasons": [
         "text label \"KITCHEN 11'0\" X 15'9\"\" inside the room",
-        "sink detected in the imagery",
         "6.2 m2 floor area",
         "against: 3 door(s)",
         "against: coffee_table detected in the imagery",
-        "1.7:1 proportions are room-like"
+        "1.7:1 proportions are room-like",
+        "1 window(s)"
       ],
       "type_decided_by": "room_label",
       "type_conflicts": [
-        "room_label states 'kitchen', but the independent evidence favours 'staircase' (68%)",
+        "room_label states 'kitchen', but the independent evidence favours 'staircase' (70%)",
         "the drawing states 16.1 m2 but segmentation recovered 6.2 m2 (2.6x smaller); the room boundary is probably not closed, so part of it was lost"
       ],
       "specific_type": "",
       "runner_up_type": "staircase",
-      "runner_up_confidence": 0.201
+      "runner_up_confidence": 0.205
     },
     {
       "id": "room_6",
@@ -10337,7 +10337,7 @@
       "group": "furniture",
       "room_id": "room_5",
       "position": {
-        "x": -15.6488,
+        "x": -15.6413,
         "y": 5.5682,
         "z": 0.0
       },
@@ -10895,8 +10895,8 @@
       "group": "furniture",
       "room_id": "room_3",
       "position": {
-        "x": -4.1019,
-        "y": 0.1076,
+        "x": -4.3817,
+        "y": 0.2822,
         "z": 0.0
       },
       "rotation_z": 90.0,
@@ -10942,8 +10942,8 @@
       "group": "furniture",
       "room_id": "room_3",
       "position": {
-        "x": -4.4999,
-        "y": 0.9602,
+        "x": -4.5077,
+        "y": 0.8192,
         "z": 0.0
       },
       "rotation_z": 0.0,
@@ -10980,53 +10980,6 @@
         "y0": 0.741,
         "x1": 0.372,
         "y1": 0.761
-      }
-    },
-    {
-      "id": "room_3__plan_dining_chair_6",
-      "category": "dining_chair",
-      "label": "dark wood and grey fabric dining chair",
-      "group": "furniture",
-      "room_id": "room_3",
-      "position": {
-        "x": -4.4284,
-        "y": 0.5384,
-        "z": 0.0
-      },
-      "rotation_z": 0.0,
-      "dimensions": {
-        "width": 0.5314,
-        "depth": 0.4264,
-        "height": 0.7544
-      },
-      "scale": 1.0,
-      "support": "floor",
-      "support_id": "",
-      "wall_id": "",
-      "color_hex": "#402010",
-      "material": "wood_dark",
-      "asset": "chair_dining_wood",
-      "asset_score": 0.647,
-      "confidence": 0.95,
-      "uncertain": false,
-      "flags": [
-        "width adjusted x1.35 from box aspect",
-        "placed_from_plan_view",
-        "asset: proportions match (0.86)",
-        "clamped_into_room"
-      ],
-      "locked": false,
-      "source_images": [
-        "img0"
-      ],
-      "observation_count": 1,
-      "distance_to_nearest_wall": 0.0,
-      "distance_to_room_center": 0.0,
-      "bbox_2d": {
-        "x0": 0.342,
-        "y0": 0.771,
-        "x1": 0.372,
-        "y1": 0.791
       }
     },
     {
@@ -11440,53 +11393,6 @@
         "y0": 0.461,
         "x1": 0.722,
         "y1": 0.481
-      }
-    },
-    {
-      "id": "room_5__plan_sink_1",
-      "category": "sink",
-      "label": "metal kitchen sink",
-      "group": "fixture",
-      "room_id": "room_5",
-      "position": {
-        "x": -14.6099,
-        "y": 5.2847,
-        "z": 0.0
-      },
-      "rotation_z": 0.0,
-      "dimensions": {
-        "width": 0.5945,
-        "depth": 0.3936,
-        "height": 0.7
-      },
-      "scale": 1.0,
-      "support": "floor",
-      "support_id": "",
-      "wall_id": "",
-      "color_hex": "#A0A0A0",
-      "material": "metal",
-      "asset": "generic_box",
-      "asset_score": 0.0,
-      "confidence": 0.95,
-      "uncertain": false,
-      "flags": [
-        "width adjusted x1.21 from box aspect",
-        "placed_from_plan_view",
-        "asset: generic fallback \u2014 no variant for this category",
-        "clamped_into_room"
-      ],
-      "locked": false,
-      "source_images": [
-        "img0"
-      ],
-      "observation_count": 1,
-      "distance_to_nearest_wall": 0.0,
-      "distance_to_room_center": 0.0,
-      "bbox_2d": {
-        "x0": 0.182,
-        "y0": 0.651,
-        "x1": 0.202,
-        "y1": 0.671
       }
     },
     {
@@ -12340,8 +12246,8 @@
       "group": "decor",
       "room_id": "room_5",
       "position": {
-        "x": -16.1772,
-        "y": 5.8869,
+        "x": -16.1771,
+        "y": 5.8788,
         "z": 0.0
       },
       "rotation_z": 90.0,
@@ -12387,7 +12293,7 @@
       "group": "decor",
       "room_id": "room_5",
       "position": {
-        "x": -15.1193,
+        "x": -15.1049,
         "y": 5.0706,
         "z": 0.0
       },
@@ -12433,8 +12339,8 @@
       "group": "decor",
       "room_id": "room_5",
       "position": {
-        "x": -14.7547,
-        "y": 5.7774,
+        "x": -14.6362,
+        "y": 5.0594,
         "z": 0.0
       },
       "rotation_z": 90.0,
@@ -12599,7 +12505,7 @@
   "relationships": [],
   "viewpoints": [],
   "provenance": {
-    "generated_at": "2026-08-02T20:07:49",
+    "generated_at": "2026-08-04T14:38:06",
     "schema_version": "2.0",
     "images": [
       "ChatGPT_Image_Jul_30,_2026,_10_30_11_PM.png"
@@ -12608,19 +12514,18 @@
     "images_with_observations": 1,
     "vision": {
       "model": "gemini:gemini-2.5-pro",
-      "live_calls": 1,
-      "total_latency_s": 117.24,
+      "live_calls": 0,
+      "total_latency_s": 0.0,
       "cache": {
         "enabled": true,
-        "hits": 0,
-        "misses": 1,
-        "hit_rate": 0.0
+        "hits": 1,
+        "misses": 0,
+        "hit_rate": 1.0
       },
-      "wall_clock_s": 117.32,
-      "workers": 1,
-      "parallel_speedup": 1.0
+      "wall_clock_s": 0.06,
+      "workers": 1
     },
-    "elapsed_s": 124.85,
+    "elapsed_s": 13.01,
     "include_uncertain": false
   },
   "diagnostics": {
@@ -12638,7 +12543,7 @@
       "identified": 10,
       "unidentified": 3,
       "confident": 9,
-      "mean_confidence": 0.597,
+      "mean_confidence": 0.596,
       "by_type": {
         "bedroom": 4,
         "unknown": 3,
@@ -12794,38 +12699,6 @@
           ]
         },
         {
-          "room_id": "room_5",
-          "room_type": "kitchen",
-          "specific_type": "",
-          "confidence": 0.717,
-          "decided_by": "room_label",
-          "runner_up": "staircase",
-          "reasons": [
-            "text label \"KITCHEN 11'0\" X 15'9\"\" inside the room",
-            "sink detected in the imagery",
-            "6.2 m2 floor area",
-            "against: 3 door(s)",
-            "against: coffee_table detected in the imagery",
-            "1.7:1 proportions are room-like"
-          ],
-          "conflicts": [
-            {
-              "claimed": "kitchen",
-              "contradicted_by": "staircase",
-              "signal": "fused_evidence",
-              "detail": "room_label states 'kitchen', but the independent evidence favours 'staircase' (68%)",
-              "severity": 0.681
-            },
-            {
-              "claimed": "16.1 m2 (stated in the drawing)",
-              "contradicted_by": "6.2 m2 (measured by segmentation)",
-              "signal": "area_mismatch",
-              "detail": "the drawing states 16.1 m2 but segmentation recovered 6.2 m2 (2.6x smaller); the room boundary is probably not closed, so part of it was lost",
-              "severity": 0.559
-            }
-          ]
-        },
-        {
           "room_id": "room_3",
           "room_type": "bedroom",
           "specific_type": "",
@@ -12847,6 +12720,38 @@
               "signal": "fused_evidence",
               "detail": "room_label states 'bedroom', but the independent evidence favours 'hallway' (56%)",
               "severity": 0.562
+            }
+          ]
+        },
+        {
+          "room_id": "room_5",
+          "room_type": "kitchen",
+          "specific_type": "",
+          "confidence": 0.71,
+          "decided_by": "room_label",
+          "runner_up": "staircase",
+          "reasons": [
+            "text label \"KITCHEN 11'0\" X 15'9\"\" inside the room",
+            "6.2 m2 floor area",
+            "against: 3 door(s)",
+            "against: coffee_table detected in the imagery",
+            "1.7:1 proportions are room-like",
+            "1 window(s)"
+          ],
+          "conflicts": [
+            {
+              "claimed": "kitchen",
+              "contradicted_by": "staircase",
+              "signal": "fused_evidence",
+              "detail": "room_label states 'kitchen', but the independent evidence favours 'staircase' (70%)",
+              "severity": 0.702
+            },
+            {
+              "claimed": "16.1 m2 (stated in the drawing)",
+              "contradicted_by": "6.2 m2 (measured by segmentation)",
+              "signal": "area_mismatch",
+              "detail": "the drawing states 16.1 m2 but segmentation recovered 6.2 m2 (2.6x smaller); the room boundary is probably not closed, so part of it was lost",
+              "severity": 0.559
             }
           ]
         },
@@ -12900,7 +12805,7 @@
       ]
     },
     "cad": {
-      "elapsed_s": 0.239,
+      "elapsed_s": 0.231,
       "layers": 19,
       "layer_roles": {
         "unknown": 7,
@@ -14624,9 +14529,9 @@
     },
     "objects_per_room": {
       "room_1": 9,
-      "room_3": 10,
+      "room_3": 9,
       "room_0": 10,
-      "room_5": 7,
+      "room_5": 6,
       "room_2": 3,
       "room_4": 7,
       "room_6": 4
@@ -14636,17 +14541,17 @@
       "build_bed": 3,
       "build_cabinet": 11,
       "build_table": 1,
-      "build_chair": 3,
-      "build_box_furniture": 15,
+      "build_chair": 2,
+      "build_box_furniture": 14,
       "build_plant": 12
     },
     "validation": {
-      "total_issues": 95,
-      "corrected": 76,
+      "total_issues": 89,
+      "corrected": 70,
       "uncorrected": 19,
       "by_kind": {
-        "outside_room": 31,
-        "overlap": 37,
+        "outside_room": 29,
+        "overlap": 33,
         "no_lighting": 7,
         "wall_intersection": 8,
         "unresolved_overlap": 12
@@ -14920,14 +14825,6 @@
         {
           "kind": "outside_room",
           "severity": "warning",
-          "subject": "room_3__plan_dining_chair_6",
-          "target": "",
-          "detail": "centre moved 2.17 m to re-enter the room",
-          "corrected": true
-        },
-        {
-          "kind": "outside_room",
-          "severity": "warning",
           "subject": "room_3__plan_wardrobe_2",
           "target": "",
           "detail": "centre moved 2.51 m to re-enter the room",
@@ -14963,22 +14860,6 @@
           "subject": "room_3__plan_dining_chair_4",
           "target": "room_3__plan_dining_chair_5",
           "detail": "overlapped room_3__plan_dining_chair_5 by 0.097 m; separated",
-          "corrected": true
-        },
-        {
-          "kind": "overlap",
-          "severity": "warning",
-          "subject": "room_3__plan_dining_chair_4",
-          "target": "room_3__plan_dining_chair_6",
-          "detail": "overlapped room_3__plan_dining_chair_6 by 0.340 m; separated",
-          "corrected": true
-        },
-        {
-          "kind": "overlap",
-          "severity": "warning",
-          "subject": "room_3__plan_dining_chair_5",
-          "target": "room_3__plan_dining_chair_6",
-          "detail": "overlapped room_3__plan_dining_chair_6 by 0.162 m; separated",
           "corrected": true
         },
         {
@@ -15224,14 +15105,6 @@
         {
           "kind": "outside_room",
           "severity": "warning",
-          "subject": "room_5__plan_sink_1",
-          "target": "",
-          "detail": "centre moved 2.18 m to re-enter the room",
-          "corrected": true
-        },
-        {
-          "kind": "outside_room",
-          "severity": "warning",
           "subject": "room_5__plan_plant_12",
           "target": "",
           "detail": "centre moved 1.72 m to re-enter the room",
@@ -15296,25 +15169,9 @@
         {
           "kind": "overlap",
           "severity": "warning",
-          "subject": "room_5__plan_sink_1",
-          "target": "room_5__plan_plant_14",
-          "detail": "overlapped room_5__plan_plant_14 by 0.099 m; separated",
-          "corrected": true
-        },
-        {
-          "kind": "overlap",
-          "severity": "warning",
-          "subject": "room_5__plan_sink_1",
-          "target": "room_5__plan_plant_17",
-          "detail": "overlapped room_5__plan_plant_17 by 0.367 m; separated",
-          "corrected": true
-        },
-        {
-          "kind": "overlap",
-          "severity": "warning",
           "subject": "room_5__plan_armchair_5",
           "target": "room_5__plan_plant_14",
-          "detail": "overlapped room_5__plan_plant_14 by 0.034 m; separated",
+          "detail": "overlapped room_5__plan_plant_14 by 0.026 m; separated",
           "corrected": true
         },
         {
@@ -15423,12 +15280,12 @@
     ],
     "errors": [],
     "confidence": {
-      "objects": 52,
-      "mean": 0.929,
+      "objects": 50,
+      "mean": 0.928,
       "median": 0.95,
       "min": 0.7,
       "max": 0.95,
-      "accepted": 52,
+      "accepted": 50,
       "uncertain": 0
     }
   }

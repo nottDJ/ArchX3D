@@ -423,10 +423,28 @@ def _explain(room_type: str, region: RoomRegion, record) -> str:
 # ---------------------------------------------------------------------------
 
 
+#: Fallback slack when nothing better is known about the placement's accuracy.
+DEFAULT_ROOM_TOLERANCE_M = 2.0
+
+
 def room_for_point(
-    point: Tuple[float, float], regions: Sequence[RoomRegion]
+    point: Tuple[float, float], regions: Sequence[RoomRegion],
+    tolerance_m: float = DEFAULT_ROOM_TOLERANCE_M,
 ) -> Optional[RoomRegion]:
-    """Region containing ``point``, or the nearest one if it is in a wall."""
+    """Region containing ``point``, or the nearest one if it is in a wall.
+
+    ``tolerance_m`` is how far outside every room a point may fall and still be
+    attributed to the nearest one. It exists because a point derived through a
+    fitted transform carries that transform's error, and a detection half a
+    metre into a wall is a measurement artefact rather than a statement that
+    the object is inside the masonry.
+
+    Callers that know their own accuracy should pass it. A transform that
+    reports 0.1 m of residual has no business claiming a detection two metres
+    away — at that distance the nearest room is frequently not the right room,
+    and a confidently wrong attribution is worse than an admitted miss. The
+    default is only for callers with nothing measured to offer.
+    """
     for region in regions:
         if region.contains(point):
             return region
@@ -437,8 +455,7 @@ def room_for_point(
         if distance < best_distance:
             best, best_distance = region, distance
 
-    # Beyond a couple of metres it is not "just outside" any room.
-    return best if best_distance < 2.0 else None
+    return best if best_distance < max(0.0, tolerance_m) else None
 
 
 def stamp_room_ids(objects, lights, openings, regions: Sequence[RoomRegion]) -> Dict[str, int]:

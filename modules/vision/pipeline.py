@@ -892,9 +892,12 @@ def _solve_plan_views(plan_observations, regions, walls, plan_min, plan_max,
         )
         total += len(objects)
 
+        tolerance = _plan_tolerance(result)
         mapped = []
         for obj in objects:
-            region = assignment.room_for_point((obj.position.x, obj.position.y), regions)
+            region = assignment.room_for_point(
+                (obj.position.x, obj.position.y), regions, tolerance_m=tolerance,
+            )
             if region is None:
                 # A plan-view detection that falls outside every room is
                 # usually a legend, title block or dimension annotation — or,
@@ -911,6 +914,45 @@ def _solve_plan_views(plan_observations, regions, walls, plan_min, plan_max,
 
     log(f"[VISION] Plan views: {len(kept)}/{total} objects mapped into rooms")
     return kept, diagnostics
+
+
+#: How much of a fit's own scatter to allow when attributing a detection to a
+#: room. Residuals are a spread, not a bound, so a little over one standard
+#: deviation keeps the typical near-miss without reaching a room away.
+PLAN_TOLERANCE_RESIDUAL_FACTOR = 1.5
+
+#: Never claim a detection further out than this, however loose the fit. Past
+#: it the nearest room stops being evidence of anything.
+PLAN_TOLERANCE_CEILING_M = 2.0
+
+#: Registration is never perfect, so some slack is always warranted.
+PLAN_TOLERANCE_FLOOR_M = 0.35
+
+
+def _plan_tolerance(result) -> float:
+    """How far outside a room a plan detection may fall and still be placed.
+
+    Derived from the transform's own residual rather than fixed, because the
+    two failure modes pull in opposite directions and a single constant cannot
+    serve both. Too tight and every detection is lost to sub-metre fitting
+    noise; too loose and detections are dragged into neighbouring rooms with
+    full confidence, which is the more damaging error because nothing
+    downstream can tell it happened.
+
+    A fit that measured itself to 0.1 m gets 0.35 m of slack; one that admits
+    1.3 m gets close to the 2 m ceiling. An assumed transform — the legacy
+    full-frame stretch — gets the ceiling too, since it has no measured error
+    to reason from and its placements are already flagged as assumed.
+    """
+    if result is None or not getattr(result, "registered", False):
+        return PLAN_TOLERANCE_CEILING_M
+
+    residual = getattr(result, "residual_mean_m", 0.0) or 0.0
+    if residual <= 0.0:
+        return PLAN_TOLERANCE_CEILING_M
+
+    scaled = residual * PLAN_TOLERANCE_RESIDUAL_FACTOR
+    return max(PLAN_TOLERANCE_FLOOR_M, min(PLAN_TOLERANCE_CEILING_M, scaled))
 
 
 def _register_plan_views(document, plan_observations, plan_min, plan_max, log):

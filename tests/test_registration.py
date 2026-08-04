@@ -1402,3 +1402,80 @@ class TestTheDrawingOutranksTheImagery:
         result = self._assign(regions, "bedroom")
 
         assert any(g.room_type == "bedroom" for g in result.groups)
+
+
+class TestPlanAttributionTolerance:
+    """How far outside a room a plan detection may fall and still be placed.
+
+    Derived from the fit's own residual rather than fixed. The two failure
+    modes pull opposite ways: too tight loses every detection to sub-metre
+    fitting noise, too loose drags detections into neighbouring rooms with
+    full confidence — and the second is worse, because nothing downstream can
+    tell it happened.
+    """
+
+    def _result(self, residual, registered=True):
+        from vision import pipeline
+
+        class R:
+            pass
+
+        r = R()
+        r.registered = registered
+        r.residual_mean_m = residual
+        return pipeline._plan_tolerance(r)
+
+    def test_a_tight_fit_does_not_reach_a_room_away(self):
+        from vision import pipeline
+
+        assert self._result(0.10) < 1.0
+        assert self._result(0.10) >= pipeline.PLAN_TOLERANCE_FLOOR_M
+
+    def test_a_loose_fit_is_allowed_more_slack(self):
+        assert self._result(1.30) > self._result(0.30)
+
+    def test_slack_is_capped_however_bad_the_fit(self):
+        from vision import pipeline
+
+        assert self._result(50.0) == pipeline.PLAN_TOLERANCE_CEILING_M
+
+    def test_an_unregistered_image_falls_back_to_the_legacy_slack(self):
+        """An assumed transform has no measured error to reason from."""
+        from vision import pipeline
+
+        assert self._result(0.0, registered=False) == pipeline.PLAN_TOLERANCE_CEILING_M
+        assert pipeline._plan_tolerance(None) == pipeline.PLAN_TOLERANCE_CEILING_M
+
+    def test_a_registered_fit_reporting_no_residual_is_not_treated_as_perfect(self):
+        """Zero residual here means unmeasured, not flawless."""
+        from vision import pipeline
+
+        assert self._result(0.0) == pipeline.PLAN_TOLERANCE_CEILING_M
+
+
+class TestRoomAttributionRespectsTolerance:
+    def _regions(self):
+        from vision.rooms import RoomRegion
+
+        return [RoomRegion(
+            id="room_0",
+            polygon=[(0.0, 0.0), (4.0, 0.0), (4.0, 4.0), (0.0, 4.0)],
+            bounds_min=(0.0, 0.0), bounds_max=(4.0, 4.0), area=16.0,
+            centroid=(2.0, 2.0),
+        )]
+
+    def test_a_point_inside_is_attributed_regardless(self):
+        from vision import assignment
+
+        assert assignment.room_for_point((2.0, 2.0), self._regions(), 0.0) is not None
+
+    def test_a_near_miss_is_recovered_when_slack_allows(self):
+        from vision import assignment
+
+        got = assignment.room_for_point((4.5, 2.0), self._regions(), 1.0)
+        assert got is not None and got.id == "room_0"
+
+    def test_the_same_point_is_refused_when_the_fit_was_tight(self):
+        from vision import assignment
+
+        assert assignment.room_for_point((4.5, 2.0), self._regions(), 0.35) is None
