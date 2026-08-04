@@ -116,31 +116,40 @@ def furnish(graph, *, overwrite: bool = False, log=print) -> FurnishReport:
         record = RoomFurnishing(room_id=room.id, room_type=room.room_type)
         report.rooms.append(record)
 
-        if room.id in observed_rooms and not overwrite:
-            record.skipped_reason = (
-                "room already has observed objects; observation beats convention"
-            )
-            continue
-
         space = _space_for(room, graph)
         if space is None:
             record.skipped_reason = "room outline too small or malformed to furnish"
             continue
 
-        area = room.area or _polygon_area(space.polygon)
-        planned = prog.plan_room(room.room_type, area)
-        if not planned:
-            # Two very different situations, and conflating them hides a real
-            # defect: an unfurnishable *type* is by design, whereas a
-            # furnishable type with too little floor almost always means
-            # segmentation lost part of the room. Saying which is which points
-            # at the actual problem.
-            record.skipped_reason = _why_nothing_planned(room.room_type, area)
-        else:
-            _furnish_room(
-                graph, room, space, planned, record, report,
-                catalog, SceneObject, Dimensions, Vec3,
+        # Furniture is skipped where the room was observed; light is not.
+        #
+        # These two used to share one exit, so a room that arrived with its own
+        # furniture was abandoned before the lighting pass and finished with no
+        # luminaire at all. The reasoning behind the skip does not extend that
+        # far: an observation of a *sofa* is not evidence about the ceiling. It
+        # is also the common case rather than a corner one — a plan view
+        # furnishes every room it covers and contributes no lighting whatever,
+        # which left 10 of 13 rooms dark on the reference project while the
+        # report cheerfully described them as furnished.
+        if room.id in observed_rooms and not overwrite:
+            record.skipped_reason = (
+                "room already has observed objects; observation beats convention"
             )
+        else:
+            area = room.area or _polygon_area(space.polygon)
+            planned = prog.plan_room(room.room_type, area)
+            if not planned:
+                # Two very different situations, and conflating them hides a
+                # real defect: an unfurnishable *type* is by design, whereas a
+                # furnishable type with too little floor almost always means
+                # segmentation lost part of the room. Saying which is which
+                # points at the actual problem.
+                record.skipped_reason = _why_nothing_planned(room.room_type, area)
+            else:
+                _furnish_room(
+                    graph, room, space, planned, record, report,
+                    catalog, SceneObject, Dimensions, Vec3,
+                )
 
         if room.id not in lit_rooms:
             _light_room(

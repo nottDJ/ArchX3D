@@ -10134,12 +10134,316 @@
   "architecture": [],
   "lights": [
     {
+      "id": "room_0__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "room_0",
+      "position": {
+        "x": 5.8321,
+        "y": 3.6016,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_0__proc_ceiling_light_1",
+      "kind": "ceiling_light",
+      "room_id": "room_0",
+      "position": {
+        "x": 7.5268,
+        "y": 3.6016,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_0__proc_ceiling_light_2",
+      "kind": "ceiling_light",
+      "room_id": "room_0",
+      "position": {
+        "x": 9.2214,
+        "y": 3.6016,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_0__proc_floor_lamp_0",
+      "kind": "floor_lamp",
+      "room_id": "room_0",
+      "position": {
+        "x": 8.5824,
+        "y": 3.6016,
+        "z": 1.55
+      },
+      "mounting": "floor",
+      "color_temperature_k": 2700.0,
+      "power_w": 35.0,
+      "size": 0.28,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_1__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "room_1",
+      "position": {
+        "x": -2.6484,
+        "y": 6.7038,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_1__proc_ceiling_light_1",
+      "kind": "ceiling_light",
+      "room_id": "room_1",
+      "position": {
+        "x": -2.6484,
+        "y": 8.431,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_2__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "room_2",
+      "position": {
+        "x": 14.6518,
+        "y": 6.8036,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_2__proc_ceiling_light_1",
+      "kind": "ceiling_light",
+      "room_id": "room_2",
+      "position": {
+        "x": 14.6518,
+        "y": 8.5336,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_3__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "room_3",
+      "position": {
+        "x": -2.0654,
+        "y": 1.5506,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_4__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "room_4",
+      "position": {
+        "x": 14.7692,
+        "y": 1.2586,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_5__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "room_5",
+      "position": {
+        "x": -15.3721,
+        "y": 5.7377,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_6__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "room_6",
+      "position": {
+        "x": 7.5948,
+        "y": 9.0954,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_6__proc_wall_light_0",
+      "kind": "wall_light",
+      "room_id": "room_6",
+      "position": {
+        "x": 8.0959,
+        "y": 7.9927,
+        "z": 1.95
+      },
+      "mounting": "wall",
+      "color_temperature_k": 2700.0,
+      "power_w": 20.0,
+      "size": 0.14,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
       "id": "room_7__proc_ceiling_light_0",
       "kind": "ceiling_light",
       "room_id": "room_7",
       "position": {
         "x": -9.1342,
         "y": 9.0678,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_8__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "room_8",
+      "position": {
+        "x": 10.8289,
+        "y": 8.7794,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_9__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "room_9",
+      "position": {
+        "x": -6.2122,
+        "y": 6.5623,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "room_10__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "room_10",
+      "position": {
+        "x": -6.1503,
+        "y": 8.6887,
         "z": 2.9
       },
       "mounting": "ceiling",
@@ -12505,7 +12809,7 @@
   "relationships": [],
   "viewpoints": [],
   "provenance": {
-    "generated_at": "2026-08-04T14:38:06",
+    "generated_at": "2026-08-04T18:31:00",
     "schema_version": "2.0",
     "images": [
       "ChatGPT_Image_Jul_30,_2026,_10_30_11_PM.png"
@@ -12525,7 +12829,7 @@
       "wall_clock_s": 0.06,
       "workers": 1
     },
-    "elapsed_s": 13.01,
+    "elapsed_s": 6.14,
     "include_uncertain": false
   },
   "diagnostics": {
@@ -12853,7 +13157,7 @@
     },
     "furnishing": {
       "objects_created": 2,
-      "lights_created": 3,
+      "lights_created": 19,
       "rooms_furnished": 1,
       "rooms_skipped": 12,
       "total_rejections": 0,
@@ -12863,7 +13167,12 @@
           "room_type": "studio",
           "placed": [],
           "rejected": [],
-          "lights": [],
+          "lights": [
+            "ceiling_light",
+            "ceiling_light",
+            "ceiling_light",
+            "floor_lamp"
+          ],
           "skipped_reason": "room already has observed objects; observation beats convention"
         },
         {
@@ -12871,7 +13180,10 @@
           "room_type": "bedroom",
           "placed": [],
           "rejected": [],
-          "lights": [],
+          "lights": [
+            "ceiling_light",
+            "ceiling_light"
+          ],
           "skipped_reason": "room already has observed objects; observation beats convention"
         },
         {
@@ -12879,7 +13191,10 @@
           "room_type": "bedroom",
           "placed": [],
           "rejected": [],
-          "lights": [],
+          "lights": [
+            "ceiling_light",
+            "ceiling_light"
+          ],
           "skipped_reason": "room already has observed objects; observation beats convention"
         },
         {
@@ -12887,7 +13202,9 @@
           "room_type": "bedroom",
           "placed": [],
           "rejected": [],
-          "lights": [],
+          "lights": [
+            "ceiling_light"
+          ],
           "skipped_reason": "room already has observed objects; observation beats convention"
         },
         {
@@ -12895,7 +13212,9 @@
           "room_type": "bedroom",
           "placed": [],
           "rejected": [],
-          "lights": [],
+          "lights": [
+            "ceiling_light"
+          ],
           "skipped_reason": "room already has observed objects; observation beats convention"
         },
         {
@@ -12903,7 +13222,9 @@
           "room_type": "kitchen",
           "placed": [],
           "rejected": [],
-          "lights": [],
+          "lights": [
+            "ceiling_light"
+          ],
           "skipped_reason": "room already has observed objects; observation beats convention"
         },
         {
@@ -12911,7 +13232,10 @@
           "room_type": "bathroom",
           "placed": [],
           "rejected": [],
-          "lights": [],
+          "lights": [
+            "ceiling_light",
+            "wall_light"
+          ],
           "skipped_reason": "room already has observed objects; observation beats convention"
         },
         {
@@ -12932,7 +13256,9 @@
           "room_type": "unknown",
           "placed": [],
           "rejected": [],
-          "lights": [],
+          "lights": [
+            "ceiling_light"
+          ],
           "skipped_reason": "room type 'unknown' is deliberately left unfurnished"
         },
         {
@@ -12940,7 +13266,9 @@
           "room_type": "unknown",
           "placed": [],
           "rejected": [],
-          "lights": [],
+          "lights": [
+            "ceiling_light"
+          ],
           "skipped_reason": "room type 'unknown' is deliberately left unfurnished"
         },
         {
@@ -12948,7 +13276,9 @@
           "room_type": "unknown",
           "placed": [],
           "rejected": [],
-          "lights": [],
+          "lights": [
+            "ceiling_light"
+          ],
           "skipped_reason": "room type 'unknown' is deliberately left unfurnished"
         },
         {
@@ -14546,13 +14876,12 @@
       "build_plant": 12
     },
     "validation": {
-      "total_issues": 89,
+      "total_issues": 82,
       "corrected": 70,
-      "uncorrected": 19,
+      "uncorrected": 12,
       "by_kind": {
         "outside_room": 29,
         "overlap": 33,
-        "no_lighting": 7,
         "wall_intersection": 8,
         "unresolved_overlap": 12
       },
@@ -14671,14 +15000,6 @@
           "corrected": true
         },
         {
-          "kind": "no_lighting",
-          "severity": "warning",
-          "subject": "scene",
-          "target": "",
-          "detail": "no confident light sources were detected; the generator will fall back to default lighting",
-          "corrected": false
-        },
-        {
           "kind": "outside_room",
           "severity": "warning",
           "subject": "room_1__plan_armchair_1",
@@ -14743,14 +15064,6 @@
           "corrected": true
         },
         {
-          "kind": "no_lighting",
-          "severity": "warning",
-          "subject": "scene",
-          "target": "",
-          "detail": "no confident light sources were detected; the generator will fall back to default lighting",
-          "corrected": false
-        },
-        {
           "kind": "wall_intersection",
           "severity": "warning",
           "subject": "room_2__plan_bed_3",
@@ -14788,14 +15101,6 @@
           "subject": "room_2__plan_bed_3",
           "target": "room_2__plan_wardrobe_3",
           "detail": "still overlaps room_2__plan_wardrobe_3 by 0.673 m after 6 passes",
-          "corrected": false
-        },
-        {
-          "kind": "no_lighting",
-          "severity": "warning",
-          "subject": "scene",
-          "target": "",
-          "detail": "no confident light sources were detected; the generator will fall back to default lighting",
           "corrected": false
         },
         {
@@ -14877,14 +15182,6 @@
           "target": "room_3__plan_toilet_2",
           "detail": "overlapped room_3__plan_toilet_2 by 0.421 m; separated",
           "corrected": true
-        },
-        {
-          "kind": "no_lighting",
-          "severity": "warning",
-          "subject": "scene",
-          "target": "",
-          "detail": "no confident light sources were detected; the generator will fall back to default lighting",
-          "corrected": false
         },
         {
           "kind": "outside_room",
@@ -15079,14 +15376,6 @@
           "corrected": false
         },
         {
-          "kind": "no_lighting",
-          "severity": "warning",
-          "subject": "scene",
-          "target": "",
-          "detail": "no confident light sources were detected; the generator will fall back to default lighting",
-          "corrected": false
-        },
-        {
           "kind": "outside_room",
           "severity": "warning",
           "subject": "room_5__plan_armchair_6",
@@ -15191,14 +15480,6 @@
           "corrected": false
         },
         {
-          "kind": "no_lighting",
-          "severity": "warning",
-          "subject": "scene",
-          "target": "",
-          "detail": "no confident light sources were detected; the generator will fall back to default lighting",
-          "corrected": false
-        },
-        {
           "kind": "outside_room",
           "severity": "warning",
           "subject": "room_6__plan_wardrobe_5",
@@ -15260,14 +15541,6 @@
           "subject": "room_6__plan_sink_2",
           "target": "room_6__plan_toilet_3",
           "detail": "still overlaps room_6__plan_toilet_3 by 0.146 m after 6 passes",
-          "corrected": false
-        },
-        {
-          "kind": "no_lighting",
-          "severity": "warning",
-          "subject": "scene",
-          "target": "",
-          "detail": "no confident light sources were detected; the generator will fall back to default lighting",
           "corrected": false
         }
       ]

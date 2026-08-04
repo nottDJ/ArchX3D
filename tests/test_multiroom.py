@@ -565,7 +565,14 @@ def test_cad_image_does_not_furnish_anything(
     result = pipeline.analyse([str(path)], two_room_geometry, config, log=lambda *a: None)
 
     assert result.graph.objects == [], "a CAD drawing must not furnish the model"
-    assert result.graph.lights == []
+
+    # Lighting is a property of a room existing, not of this image: an
+    # unfurnished room still gets a general light, and would with no imagery at
+    # all. The guarantee under test is that nothing here is *attributed* to the
+    # blueprint — a luminaire the model claimed to see would carry its image id.
+    assert all(not light.source_images for light in result.graph.lights), (
+        "no luminaire may be sourced from a CAD drawing"
+    )
     profiles = result.graph.diagnostics.get("images", [])
     assert profiles and profiles[0]["image_class"] == "cad_drawing"
     assert profiles[0]["contributes_appearance"] is False

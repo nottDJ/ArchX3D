@@ -296,9 +296,23 @@ def plan_lighting(room_type: str, area: float) -> List[PlannedLight]:
     Circulation cores still get a light even though they get no furniture —
     an unlit stairwell is a safety problem in the model as much as in life.
     """
-    programme = LIGHTING_PROGRAMMES.get(room_type)
-    if not programme or area <= 0:
+    if area <= 0:
         return []
+
+    programme = LIGHTING_PROGRAMMES.get(room_type)
+    if not programme:
+        # An unrecognised room is still an enclosed space someone walks into,
+        # and the honest reading of "we do not know what this room is" is not
+        # "therefore it has no ceiling". Every interior room in a dwelling has
+        # a general light; withholding one leaves a black void that is
+        # certainly wrong, in preference to a plain pendant that is almost
+        # certainly right.
+        #
+        # This is convention, not invention — the distinction the project draws
+        # elsewhere. Nothing about the room's *contents* is guessed here, and a
+        # room whose type is later identified gets that type's programme
+        # instead.
+        return [PlannedLight(kind="ceiling_light", index=0, requires="")]
 
     planned: List[PlannedLight] = []
     for item in programme:

@@ -520,3 +520,84 @@ class TestFurnisher:
         report = furnish(graph, log=quiet)
         assert graph.objects == []
         assert report.rooms[0].skipped_reason
+
+
+class TestEveryRoomIsLit:
+    """Lighting is a property of the room, not of who furnished it.
+
+    Furniture and light used to share one exit: a room that arrived with its
+    own observed furniture was abandoned before the lighting pass and finished
+    with no luminaire. A plan view furnishes every room it covers and
+    contributes no lighting at all, so the common case was a fully furnished,
+    completely dark building.
+    """
+
+    def _graph(self, observed_room=None):
+        from vision.schema import Dimensions, Room, SceneGraph, SceneObject, Vec3
+
+        rooms = [
+            Room(id="room_0", room_type="bedroom", area=14.0,
+                 polygon=[(0.0, 0.0), (4.0, 0.0), (4.0, 3.5), (0.0, 3.5)],
+                 bounds_min=(0.0, 0.0), bounds_max=(4.0, 3.5)),
+            Room(id="room_1", room_type="unknown", area=6.0,
+                 polygon=[(5.0, 0.0), (8.0, 0.0), (8.0, 2.0), (5.0, 2.0)],
+                 bounds_min=(5.0, 0.0), bounds_max=(8.0, 2.0)),
+        ]
+        graph = SceneGraph(rooms=rooms)
+        if observed_room:
+            graph.objects.append(SceneObject(
+                id="obs_bed", category="bed", room_id=observed_room,
+                position=Vec3(2.0, 1.75, 0.0),
+                dimensions=Dimensions(1.4, 1.9, 0.6), confidence=0.9,
+            ))
+        return graph
+
+    def test_an_already_furnished_room_still_gets_a_light(self):
+        from furnish import furnish
+
+        graph = self._graph(observed_room="room_0")
+        furnish(graph, log=lambda *a, **k: None)
+
+        assert any(light.room_id == "room_0" for light in graph.lights), (
+            "an observed sofa is not evidence about the ceiling"
+        )
+
+    def test_a_room_of_unknown_type_is_not_left_dark(self):
+        """Not knowing what a room is does not mean it has no ceiling."""
+        from furnish import furnish
+
+        graph = self._graph()
+        furnish(graph, log=lambda *a, **k: None)
+
+        assert any(light.room_id == "room_1" for light in graph.lights)
+
+    def test_every_room_ends_up_lit(self):
+        from furnish import furnish
+
+        graph = self._graph(observed_room="room_0")
+        furnish(graph, log=lambda *a, **k: None)
+
+        lit = {light.room_id for light in graph.lights}
+        assert {r.id for r in graph.rooms} <= lit
+
+    def test_procedural_light_is_not_attributed_to_any_image(self):
+        """A convention must never masquerade as an observation."""
+        from furnish import furnish
+
+        graph = self._graph()
+        furnish(graph, log=lambda *a, **k: None)
+
+        assert all(not light.source_images for light in graph.lights)
+
+    def test_an_existing_light_is_not_duplicated(self):
+        from furnish import furnish
+        from vision.schema import LightSource, Vec3
+
+        graph = self._graph()
+        graph.lights.append(LightSource(
+            id="observed", kind="ceiling_light", room_id="room_0",
+            position=Vec3(2.0, 1.75, 2.7), source_images=["img0"],
+        ))
+        furnish(graph, log=lambda *a, **k: None)
+
+        assert sum(1 for l in graph.lights if l.room_id == "room_0") == 1
