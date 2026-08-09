@@ -9,6 +9,32 @@
 - **FastAPI Bridge Server**: Provides a RESTful API to accept DXF uploads, trigger the background generation pipeline, and serve resulting 3D assets to a frontend (e.g., Next.js).
 
 ## Pipeline Architecture
+
+```mermaid
+flowchart TD
+    DXF[2D DXF floor plan] --> EX[DXF Extraction<br/>modules/dxf_extractor.py]
+    EX --> GEO[(geometry.json)]
+    GEO --> ST[AI Style Generation<br/>modules/style_generator.py]
+    IMG[Reference images] -.-> ST
+    ST --> STY[(styling.json)]
+    GEO --> BL[Blender 3D Generation<br/>modules/blender_generator.py]
+    STY --> BL
+    BL --> GLB[model.glb + scene.blend]
+    BL --> PRV[Preview renders<br/>modules/render/]
+    PRV --> VID[Video Stitching<br/>modules/video_stitcher.py]
+    VID --> MP4[walkthrough.mp4]
+    PRV --> EV[Evaluation<br/>modules/evaluation/]
+    IMG -.-> EV
+    EV --> FIND[Findings + scores]
+    FIND --> OPT[Planning &amp; Optimisation<br/>modules/planner · modules/optimizer]
+    OPT -->|keep only measured improvements| BL
+
+    classDef opt stroke-dasharray: 4 3
+    class ST,EV,OPT opt
+```
+
+<sub>Dashed borders mark optional stages: styling (`--skip-styling`), evaluation (`--evaluate`), and refinement (`--refine`).</sub>
+
 The system is orchestrated by `main.py`, which sequences the following stages:
 1. **Step 1: DXF Extraction** (`modules/dxf_extractor.py`)
 2. **Step 2: AI Style Generation** (`modules/style_generator.py`) [Optional]
