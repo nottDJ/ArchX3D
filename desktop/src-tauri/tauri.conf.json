@@ -1,0 +1,34 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "ArchX3D",
+  "version": "2.0.0",
+  "identifier": "com.archx3d.desktop",
+  "build": {
+    "frontendDist": "../../web/out",
+    "beforeBuildCommand": "npm --prefix ../web run build",
+    "beforeDevCommand": ""
+  },
+  "app": {
+    "windows": [],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "../dist/archx3d-backend/": "backend/"
+    },
+    "windows": {
+      "nsis": {
+        "installMode": "perMachine"
+      }
+    }
+  }
+}

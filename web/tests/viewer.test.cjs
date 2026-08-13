@@ -27,6 +27,7 @@ const {
   boxCenter,
   boxSize,
   fitCameraToBox,
+  floorProbeHeight,
   interiorSpawn,
   isDegenerateBox,
   lookAngles,
@@ -371,6 +372,29 @@ describe("walk entry", () => {
     assert.deepEqual(spawn, [2, 1.6, -6]);
   });
 
+  it("probes for the floor from the feet, not from above the head", () => {
+    // The regression: probing from `eyeY + 3` starts the ray above a 3 m
+    // ceiling, so it hits the roof and the camera ends up standing on it.
+    const eyeHeight = 1.65;
+    const spawn = interiorSpawn(BUILDING, { eyeHeight });
+    const probe = floorProbeHeight(spawn[1], eyeHeight);
+
+    assert.ok(probe > 0, "probe must start above the floor to find it");
+    assert.ok(
+      probe < 2.4,
+      `probe must start well below a storey ceiling, got ${probe}`,
+    );
+  });
+
+  it("keeps the probe below the ceiling on an upper storey", () => {
+    // Standing on the second floor of a 3 m-storey building: the probe must
+    // find that storey's slab, not the roof above it.
+    const eyeHeight = 1.65;
+    const probe = floorProbeHeight(3 + eyeHeight, eyeHeight);
+    assert.ok(probe > 3, "probe must start above the storey's own floor");
+    assert.ok(probe < 6, "probe must stay under the ceiling above it");
+  });
+
   it("stands back from a room rather than in the middle of it", () => {
     const view = roomViewpoint([0, 0], [6, 4], 1.65, 0);
     // Long axis is X, so the camera backs off along X and looks down the room.
@@ -686,5 +710,63 @@ describe("settings", () => {
     assert.deepEqual(saved.orbit.position, [1, 2, 3]);
     assert.equal(saved.walk.yaw, 0.5);
     assert.equal(saved.mode, "walk");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Adaptive render quality
+// ---------------------------------------------------------------------------
+
+const {
+  planQuality,
+  HEAVY_MESH_COUNT,
+  VERY_HEAVY_MESH_COUNT,
+} = require("../.test-build/viewer/lib/viewer/quality.js");
+
+describe("adaptive quality", () => {
+  const on = { shadows: true, autoQuality: true };
+
+  it("leaves a small model at full quality and says nothing", () => {
+    const plan = planQuality({ meshes: 40, ...on });
+    assert.equal(plan.shadows, true);
+    assert.deepEqual(plan.dpr, [1, 2]);
+    assert.equal(plan.reducedReason, null);
+  });
+
+  it("does not decide anything before the model is measured", () => {
+    const plan = planQuality({ meshes: null, ...on });
+    assert.equal(plan.shadows, true);
+    assert.equal(plan.reducedReason, null);
+  });
+
+  it("drops shadows on a heavy model — the pass that doubles draw calls", () => {
+    const plan = planQuality({ meshes: HEAVY_MESH_COUNT, ...on });
+    assert.equal(plan.shadows, false);
+    assert.ok(plan.dpr[1] < 2, "should also lower the pixel count");
+  });
+
+  it("renders a very heavy model at 1x", () => {
+    const plan = planQuality({ meshes: VERY_HEAVY_MESH_COUNT, ...on });
+    assert.deepEqual(plan.dpr, [1, 1]);
+    assert.equal(plan.shadows, false);
+  });
+
+  it("explains every reduction it makes", () => {
+    const plan = planQuality({ meshes: 448, ...on });
+    assert.ok(plan.reducedReason, "a silent downgrade is a bug report waiting to happen");
+    assert.match(plan.reducedReason, /448/);
+  });
+
+  it("says nothing when it changed nothing the user would notice", () => {
+    // Shadows already off, so turning them off is not a reduction to report.
+    const plan = planQuality({ meshes: 300, shadows: false, autoQuality: true });
+    assert.equal(plan.reducedReason, null);
+  });
+
+  it("obeys the user when automatic reduction is off", () => {
+    const plan = planQuality({ meshes: 5000, shadows: true, autoQuality: false });
+    assert.equal(plan.shadows, true);
+    assert.deepEqual(plan.dpr, [1, 2]);
+    assert.equal(plan.reducedReason, null);
   });
 });

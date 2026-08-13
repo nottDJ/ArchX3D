@@ -56,6 +56,10 @@ export const DEFAULT_SETTINGS: ViewerSettings = {
   jumpEnabled: false,
   collisionEnabled: true,
   shadows: true,
+  // Reduce quality on a model too large to render at full settings. On by
+  // default: an unusable frame rate is a worse first impression than a softer
+  // image, and the viewer says when it has stepped down. See lib/viewer/quality.ts.
+  autoQuality: true,
   environment: "studio",
   exposure: 1,
   ambientIntensity: 0.35,
@@ -126,6 +130,7 @@ export function parseSettings(raw: unknown): ViewerSettings {
     jumpEnabled: bool(input.jumpEnabled, DEFAULT_SETTINGS.jumpEnabled),
     collisionEnabled: bool(input.collisionEnabled, DEFAULT_SETTINGS.collisionEnabled),
     shadows: bool(input.shadows, DEFAULT_SETTINGS.shadows),
+    autoQuality: bool(input.autoQuality, DEFAULT_SETTINGS.autoQuality),
     environment:
       typeof input.environment === "string" && ENVIRONMENT_IDS.has(input.environment)
         ? (input.environment as EnvironmentPreset)

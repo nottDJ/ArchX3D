@@ -36,11 +36,19 @@ import { VisibilityManager, roofVisibleInMode } from "./VisibilityManager";
 import { useModelIndex, type ModelIndex } from "@/hooks/useRoofDetection";
 import type { Box } from "@/lib/viewer/bounds";
 import { boxCenter, boxRadius } from "@/lib/viewer/bounds";
+import type { QualityPlan } from "@/lib/viewer/quality";
 import type { RoomInfo, ViewerSettings } from "@/types/viewer";
 
 export interface SceneProps {
   readonly scene: THREE.Group | null;
   readonly settings: ViewerSettings;
+  /**
+   * Effective render quality for this model, from `lib/viewer/quality.ts`.
+   * Distinct from `settings`: a heavy model is drawn with shadows off even
+   * when the user's preference is on, so the lighting rig must follow this
+   * rather than the raw setting or it renders a shadow map nothing uses.
+   */
+  readonly quality: QualityPlan;
   readonly rooms: readonly RoomInfo[];
   readonly modelUrl: string;
   readonly commandsRef: React.MutableRefObject<ViewerCommands | null>;
@@ -56,6 +64,7 @@ export interface SceneProps {
 export function Scene({
   scene,
   settings,
+  quality,
   rooms,
   modelUrl,
   commandsRef,
@@ -96,12 +105,13 @@ export function Scene({
         preset={settings.environment}
         exposure={settings.exposure}
         ambientIntensity={settings.ambientIntensity}
-        shadows={settings.shadows}
+        shadows={quality.shadows}
+        shadowMapSize={quality.shadowMapSize}
       />
 
       {settings.showGrid && <GroundGrid bounds={bounds} />}
 
-      {scene && <Model scene={scene} shadows={settings.shadows} />}
+      {scene && <Model scene={scene} shadows={quality.shadows} />}
 
       <VisibilityManager
         index={index}

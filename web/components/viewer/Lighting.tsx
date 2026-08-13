@@ -49,6 +49,11 @@ export interface LightingProps {
   readonly exposure: number;
   readonly ambientIntensity: number;
   readonly shadows: boolean;
+  /**
+   * Square shadow map resolution. Lower on a heavy scene: the depth pass costs
+   * one full draw of every object, and 2048 squared is four megapixels of it.
+   */
+  readonly shadowMapSize?: number;
 }
 
 export function Lighting({
@@ -57,6 +62,7 @@ export function Lighting({
   exposure,
   ambientIntensity,
   shadows,
+  shadowMapSize = 2048,
 }: LightingProps) {
   const gl = useThree((state) => state.gl);
 
@@ -133,8 +139,8 @@ export function Lighting({
         target={target}
         intensity={1.15}
         castShadow={shadows}
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={shadowMapSize}
+        shadow-mapSize-height={shadowMapSize}
         shadow-camera-near={0.5}
         shadow-camera-far={sun.far}
         shadow-camera-left={-sun.extent}

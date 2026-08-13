@@ -30,9 +30,17 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODULES_DIR = os.path.join(BASE_DIR, "modules")
-PROJECTS_DIR = os.path.join(BASE_DIR, "projects")
+from app_paths import CODE_ROOT, DATA_ROOT, code_path, data_path
+from child_process import child_command
+
+#: Where main.py and the pipeline scripts live (read-only inside a bundle).
+BASE_DIR = CODE_ROOT
+MODULES_DIR = code_path("modules")
+#: Where projects are written, which must outlive the process.
+PROJECTS_DIR = data_path("projects")
+#: The repo-level data/ and output/ that main.py reads and writes.
+DATA_DIR = data_path("data")
+OUTPUT_DIR = data_path("output")
 
 ALLOWED_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
 
@@ -106,6 +114,14 @@ class JobRegistry:
 
 
 JOBS = JobRegistry()
+
+#: main.py reads/writes the repo-level data/ and output/ folders (see
+#: _run_generation below), which are shared by every project. Without this,
+#: two projects generating at once stage files into and copy results out of
+#: the same directories mid-Blender-subprocess and corrupt each other. A
+#: process-wide lock serialises generations so each one's copy-out completes
+#: before the next one starts staging in.
+_GENERATION_LOCK = threading.Lock()
 
 
 # ---------------------------------------------------------------------------
@@ -280,9 +296,11 @@ def _run_analysis(job: Job, project_id: str, options: Dict[str, Any]) -> None:
         # --- 1. DXF extraction --------------------------------------------
         job.emit("EXTRACTING_DXF", "Parsing DXF layers and geometry...")
         extract = subprocess.run(
-            [sys.executable, os.path.join(MODULES_DIR, "dxf_extractor.py"),
-             dxf_path, geometry_path,
-             options.get("layers", "WALLS"), str(options.get("scale", 1.0)), "16"],
+            child_command(
+                os.path.join(MODULES_DIR, "dxf_extractor.py"),
+                [dxf_path, geometry_path,
+                 options.get("layers", "WALLS"), str(options.get("scale", 1.0)), "16"],
+            ),
             capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=300,
         )
         if extract.returncode != 0 or not os.path.exists(geometry_path):
@@ -302,13 +320,15 @@ def _run_analysis(job: Job, project_id: str, options: Dict[str, Any]) -> None:
         else:
             job.emit("ANALYSING",
                      f"Analysing {len(manifest['images'])} reference image(s)...")
-            command = [
-                sys.executable, os.path.join(MODULES_DIR, "scene_analyzer.py"),
-                geometry_path, graph_path,
-                "--images", images_dir,
-                "--review-out", review_path,
-                "--wall-height", str(options.get("wall_height", 3.0)),
-            ]
+            command = child_command(
+                os.path.join(MODULES_DIR, "scene_analyzer.py"),
+                [
+                    geometry_path, graph_path,
+                    "--images", images_dir,
+                    "--review-out", review_path,
+                    "--wall-height", str(options.get("wall_height", 3.0)),
+                ],
+            )
             if options.get("model"):
                 command += ["--model", options["model"]]
             if options.get("single_room"):
@@ -504,41 +524,60 @@ def _run_generation(job: Job, project_id: str, options: Dict[str, Any]) -> None:
         # main.py reads and writes the repo-level data/ and output/ folders, so
         # the project's files are staged in and the results copied back out.
         # Crude, but it avoids reworking the CLI's path handling for the API.
-        repo_data = os.path.join(BASE_DIR, "data")
-        repo_output = os.path.join(BASE_DIR, "output")
-        os.makedirs(repo_data, exist_ok=True)
+        # Held for the whole stage-in/build/copy-out sequence: two projects
+        # generating at once would otherwise stage into and read back from
+        # the same repo-level files mid-build. See _GENERATION_LOCK.
+        with _GENERATION_LOCK:
+            repo_data = DATA_DIR
+            repo_output = OUTPUT_DIR
+            os.makedirs(repo_data, exist_ok=True)
+            os.makedirs(repo_output, exist_ok=True)
 
-        for name in ("geometry.json", "scene_graph.json"):
-            source = os.path.join(root, "data", name)
-            if os.path.exists(source):
-                shutil.copy2(source, os.path.join(repo_data, name))
+            # model.glb and scene.blend are unconditionally rewritten by the
+            # critical Blender step, so they can never be stale. walkthrough.mp4
+            # is only written when rendering is not skipped — without this, a
+            # leftover video from an earlier build (this project's or another's)
+            # would be copied out and misreported as this generation's output.
+            for name in ("model.glb", "scene.blend", "walkthrough.mp4"):
+                stale = os.path.join(repo_output, name)
+                if os.path.exists(stale):
+                    os.remove(stale)
 
-        job.emit("BUILDING_SCENE", "Building geometry, materials and lighting in Blender...")
-        command = [
-            sys.executable, os.path.join(BASE_DIR, "main.py"),
-            os.path.join(root, manifest["dxf"]["filename"]),
-            # Build from the graph the user just reviewed. --skip-vision would
-            # be wrong here: it treats an existing graph as stale and deletes
-            # it, discarding every edit made during review.
-            "--use-scene-graph",
-        ]
-        if options.get("skip_render", True):
-            command.append("--skip-render")
+            for name in ("geometry.json", "scene_graph.json"):
+                source = os.path.join(root, "data", name)
+                if os.path.exists(source):
+                    shutil.copy2(source, os.path.join(repo_data, name))
 
-        result = subprocess.run(
-            command, cwd=BASE_DIR, capture_output=True, text=True,
-            encoding="utf-8", errors="replace", timeout=3600,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(f"Blender generation failed: {_tail(result.stderr)}")
+            job.emit("BUILDING_SCENE", "Building geometry, materials and lighting in Blender...")
+            command = child_command(
+                os.path.join(BASE_DIR, "main.py"),
+                [
+                    os.path.join(root, manifest["dxf"]["filename"]),
+                    # Build from the graph the user just reviewed. --skip-vision
+                    # would be wrong here: it treats an existing graph as stale
+                    # and deletes it, discarding every edit made during review.
+                    "--use-scene-graph",
+                ],
+            )
+            if options.get("skip_render", True):
+                command.append("--skip-render")
 
-        job.emit("EXPORTING_GLB", "Exporting the web model...")
-        produced = []
-        for name in ("model.glb", "scene.blend", "walkthrough.mp4"):
-            source = os.path.join(repo_output, name)
-            if os.path.exists(source):
-                shutil.copy2(source, os.path.join(root, "output", name))
-                produced.append(name)
+            result = subprocess.run(
+                # Writable root, so anything the pipeline resolves relatively
+                # lands beside the outputs rather than in a read-only bundle.
+                command, cwd=DATA_ROOT, capture_output=True, text=True,
+                encoding="utf-8", errors="replace", timeout=3600,
+            )
+            if result.returncode != 0:
+                raise RuntimeError(f"Blender generation failed: {_tail(result.stderr)}")
+
+            job.emit("EXPORTING_GLB", "Exporting the web model...")
+            produced = []
+            for name in ("model.glb", "scene.blend", "walkthrough.mp4"):
+                source = os.path.join(repo_output, name)
+                if os.path.exists(source):
+                    shutil.copy2(source, os.path.join(root, "output", name))
+                    produced.append(name)
 
         if "model.glb" not in produced:
             raise RuntimeError("Blender finished but produced no model.glb")
