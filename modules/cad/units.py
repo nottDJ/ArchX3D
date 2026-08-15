@@ -209,18 +209,36 @@ def resolve(
     if header is not None:
         # A header claim that yields an absurd building is more likely to be a
         # stale template value than the truth, so it is checked, not trusted
-        # blindly. The heuristic takes over only when the header is impossible.
+        # blindly. The heuristic takes over only when it is *itself* plausible —
+        # overriding a declared, high-confidence unit with a guess that lands
+        # on an equally or more absurd size (e.g. a 0.6 m building) throws away
+        # real evidence for no gain, and silently zeroes every wall downstream.
         converted = max(extent) * header.scale_to_m
         if converted and not (PLAUSIBLE_PLAN_M[0] <= converted <= PLAUSIBLE_PLAN_M[1]):
             fallback = from_extent(*extent)
-            fallback.insunits = header.insunits
-            fallback.confidence = min(fallback.confidence, 0.5)
-            fallback.reason = (
-                f"$INSUNITS={insunits} ({header.unit_name}) would make the plan "
-                f"{converted:.0f} m across, which is not a building; "
-                f"overridden — {fallback.reason}"
+            fallback_converted = max(extent) * fallback.scale_to_m
+            if PLAUSIBLE_PLAN_M[0] <= fallback_converted <= PLAUSIBLE_PLAN_M[1]:
+                fallback.insunits = header.insunits
+                fallback.confidence = min(fallback.confidence, 0.5)
+                fallback.reason = (
+                    f"$INSUNITS={insunits} ({header.unit_name}) would make the plan "
+                    f"{converted:.0f} m across, which is not a building; "
+                    f"overridden — {fallback.reason}"
+                )
+                return fallback
+            # Neither the header nor the heuristic lands in a plausible range
+            # (large multi-floor or multi-building sheets legitimately do
+            # this). The header is still the file's own declaration and the
+            # heuristic is no better, so keep it — flagged with reduced
+            # confidence so the uncertainty is visible downstream.
+            header.confidence = min(header.confidence, 0.6)
+            header.reason = (
+                f"{header.reason}; plan is {converted:.0f} m across, unusually "
+                f"large for a single floor, but the heuristic fallback "
+                f"({fallback.unit_name}, {fallback_converted:.0f} m) was no "
+                f"more plausible, so the header is kept"
             )
-            return fallback
+            return header
         return header
 
     corroborated = from_dimensions(dimension_measurements, dimension_texts)

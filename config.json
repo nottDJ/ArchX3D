@@ -44,8 +44,8 @@
     },
     "vision": {
         "enabled": true,
-        "model": "gemini-2.5-pro",
-        "fallback_model": "gemini-2.5-flash",
+        "model": "gemini-flash-latest",
+        "fallback_model": "gemini-flash-lite-latest",
         "cache": true,
         "cache_dir": ".cache/vision",
         "max_images": 6,

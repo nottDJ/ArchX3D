@@ -60,7 +60,7 @@ def generate_styling(geometry_path, output_path):
     Ensure there are 3-5 low-poly furniture assets per room.
     """
 
-    model = genai.GenerativeModel("gemini-2.5-flash")
+    model = genai.GenerativeModel("gemini-flash-latest")
     
     print("Querying Gemini API for styling...")
     try:

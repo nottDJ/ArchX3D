@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "pretest": "tsc lib/editor.ts lib/snapping.ts --outDir .test-build --module commonjs --target es2022 --moduleResolution node --skipLibCheck --esModuleInterop && tsc lib/viewer/classify.ts lib/viewer/bounds.ts lib/viewer/movement.ts lib/viewer/manifest.ts lib/viewer/settings.ts types/viewer.ts --outDir .test-build/viewer --module commonjs --target es2022 --moduleResolution node --skipLibCheck --esModuleInterop",
+    "pretest": "tsc lib/editor.ts lib/snapping.ts --outDir .test-build --module commonjs --target es2022 --moduleResolution node --skipLibCheck --esModuleInterop && tsc lib/viewer/classify.ts lib/viewer/bounds.ts lib/viewer/movement.ts lib/viewer/manifest.ts lib/viewer/settings.ts lib/viewer/quality.ts types/viewer.ts --outDir .test-build/viewer --module commonjs --target es2022 --moduleResolution node --skipLibCheck --esModuleInterop",
     "test": "node --test tests/editor.test.cjs tests/viewer.test.cjs",
     "mock:sse": "node scripts/mock-sse-server.mjs",
     "mock:sse:fail": "node scripts/mock-sse-server.mjs --fail"

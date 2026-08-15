@@ -200,6 +200,24 @@ export function interiorSpawn(box: Box, options: SpawnOptions = {}): Vec3 {
 }
 
 /**
+ * Height to start a downward floor probe from, given where the eyes are.
+ *
+ * The probe must begin just above the **feet**, not above the head. Starting a
+ * whole storey up — as this did with `eyeY + 3` — puts the ray's origin above
+ * the ceiling of a standard 3 m room, so the first surface it meets on the way
+ * down is the roof, and the camera is then placed an eye height above *that*:
+ * standing on the roof rather than in the building.
+ *
+ * The margin only has to clear being slightly sunk into the floor, so it is
+ * deliberately far smaller than any storey height.
+ */
+export const FLOOR_PROBE_MARGIN = 0.3;
+
+export function floorProbeHeight(eyeY: number, eyeHeight: number): number {
+  return eyeY - eyeHeight + FLOOR_PROBE_MARGIN;
+}
+
+/**
  * Where to stand to view a room, and what to look at.
  *
  * Stands back from the room centre along its shorter axis so the whole room is

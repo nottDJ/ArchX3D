@@ -56,6 +56,21 @@ The system is orchestrated by `main.py`, which sequences the following stages:
    pip install -r requirements.txt
    ```
 
+## Desktop application (Windows)
+
+An installable app that bundles the frontend and the whole Python pipeline —
+**no Python, Node or terminal required** to run it. Blender is detected rather
+than bundled, and must be installed separately.
+
+```powershell
+.\desktop\build.ps1
+# -> desktop/src-tauri/target/release/bundle/nsis/ArchX3D_2.0.0_x64-setup.exe
+```
+
+Projects are written to `%LOCALAPPDATA%\ArchX3D\` and survive uninstalling.
+See [`docs/DESKTOP.md`](docs/DESKTOP.md) for the architecture, build
+prerequisites and troubleshooting.
+
 ## Usage
 
 ### 1. Running the CLI Pipeline
@@ -161,6 +176,7 @@ contributors; normative where they disagree with the current code.
 How the code works today.
 
 - [`docs/VIEWER.md`](docs/VIEWER.md) — The interactive architectural viewer: camera modes, roof detection, BVH collision, view modes, room navigation, GLB metadata and performance.
+- [`docs/DESKTOP.md`](docs/DESKTOP.md) — The installable Windows app: how the frontend, the frozen Python backend and the Tauri shell fit together, how to build it, and where user data lives.
 
 ### Frontend and design
 - [`docs/UI_GUIDELINES.md`](docs/UI_GUIDELINES.md) — The UX audit that motivated the redesign, ranked by severity, plus the rules for hierarchy, layout, colour, copy, states and motion.

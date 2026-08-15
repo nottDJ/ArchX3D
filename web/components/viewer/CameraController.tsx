@@ -42,6 +42,7 @@ import { WalkController } from "./WalkController";
 import type { Box } from "@/lib/viewer/bounds";
 import {
   fitCameraToBox,
+  floorProbeHeight,
   interiorSpawn,
   lookAngles,
   planToViewer,
@@ -236,7 +237,11 @@ export function CameraController({
   const groundedSpawn = useCallback(
     (position: readonly [number, number, number]): readonly [number, number, number] => {
       if (!collider) return position;
-      const floor = collider.groundBelow(position[0], position[2], position[1] + 3);
+      // Probe from just above the feet. See `floorProbeHeight`: probing from
+      // above the head starts the ray above the ceiling, which lands the
+      // camera on the roof instead of on the floor.
+      const probe = floorProbeHeight(position[1], eyeHeight);
+      const floor = collider.groundBelow(position[0], position[2], probe);
       if (floor === null) return position;
       return [position[0], floor + eyeHeight, position[2]];
     },

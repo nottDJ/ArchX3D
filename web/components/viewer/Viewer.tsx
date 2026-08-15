@@ -45,6 +45,7 @@ import { cn } from "@/components/ui";
 import { useGLTFModel } from "@/hooks/useGLTFModel";
 import { detectionQuality, type ModelIndex } from "@/hooks/useRoofDetection";
 import { useViewerSettings } from "@/hooks/useViewerSettings";
+import { planQuality } from "@/lib/viewer/quality";
 import type { RoomInfo, ViewerSource, ViewMode } from "@/types/viewer";
 import { VIEW_MODES } from "@/types/viewer";
 
@@ -110,12 +111,31 @@ export function Viewer({
   const hasRoof = (index?.roofs.length ?? 0) > 0;
   const quality = useMemo(() => detectionQuality(index), [index]);
 
+  // What the GPU is actually asked to do, from the model's object count.
+  const renderQuality = useMemo(
+    () =>
+      planQuality({
+        meshes: index?.stats.meshes ?? null,
+        shadows: settings.shadows,
+        autoQuality: settings.autoQuality,
+      }),
+    [index?.stats.meshes, settings.shadows, settings.autoQuality],
+  );
+
   // -- Toast -------------------------------------------------------------
   useEffect(() => {
     if (!toast) return;
     const timer = setTimeout(() => setToast(null), 2600);
     return () => clearTimeout(timer);
   }, [toast]);
+
+  // Say so when the model was too heavy to draw at full settings. Silently
+  // rendering a worse image than the user configured is how a viewer gets
+  // blamed for looking bad; the toast names the cause and the fix.
+  const reducedReason = renderQuality.reducedReason;
+  useEffect(() => {
+    if (reducedReason) setToast(reducedReason);
+  }, [reducedReason]);
 
   // -- Fullscreen --------------------------------------------------------
   useEffect(() => {
@@ -282,8 +302,10 @@ export function Viewer({
         // default can silently land on integrated graphics and halve the frame
         // rate for no visible reason.
         gl={{ antialias: true, powerPreference: "high-performance" }}
-        dpr={[1, 2]}
-        shadows={settings.shadows}
+        // Both derived from how many objects the model actually has, not from
+        // the settings alone — see lib/viewer/quality.ts.
+        dpr={renderQuality.dpr as [number, number]}
+        shadows={renderQuality.shadows}
         camera={{ fov: 55, near: 0.05, far: 1000, position: [8, 6, 8] }}
         // Only redraw when something changed. An architectural model being
         // looked at rather than walked through is a still image, and rendering
@@ -292,7 +314,7 @@ export function Viewer({
         frameloop={settings.cameraMode === "walk" ? "always" : "demand"}
         className="absolute inset-0"
       >
-        <RendererSettings shadows={settings.shadows} />
+        <RendererSettings shadows={renderQuality.shadows} />
         {/*
           Suspense catches drei's `Environment`, which fetches an HDRI. The
           model itself is loaded outside Suspense so its progress can be shown;
@@ -302,6 +324,7 @@ export function Viewer({
           <Scene
             scene={model?.scene ?? null}
             settings={settings}
+            quality={renderQuality}
             rooms={rooms}
             modelUrl={source.url}
             commandsRef={commandsRef}
