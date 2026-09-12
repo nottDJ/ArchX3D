@@ -457,6 +457,42 @@ def _cad_document(geometry: Dict[str, Any]):
         return None
 
 
+def _stamp_recon_room_types(geometry, regions, log) -> int:
+    """Fill untyped regions from the reconstruction's own room records.
+
+    Matches by containment of the reconstruction's room centroid, which is a
+    point the engine computed inside the room's own polygon, so it cannot land
+    in a neighbour the way a label near a party wall can.
+    """
+    rooms = [r for r in (geometry.get("rooms") or [])
+             if r.get("room_type") and r["room_type"] != "unknown"]
+    if not rooms:
+        return 0
+
+    stamped = 0
+    for region in regions:
+        if getattr(region, "room_type", "unknown") not in ("unknown", "", None):
+            continue
+        lo = getattr(region, "bounds_min", None)
+        hi = getattr(region, "bounds_max", None)
+        if not lo or not hi:
+            continue
+        for room in rooms:
+            cx, cy = room.get("centroid", (None, None))[:2] or (None, None)
+            if cx is None:
+                continue
+            if lo[0] <= cx <= hi[0] and lo[1] <= cy <= hi[1]:
+                region.room_type = room["room_type"]
+                region.room_type_confidence = float(
+                    room.get("label_confidence") or 0.8)
+                stamped += 1
+                break
+    if stamped:
+        log("[SEMANTIC] %d room(s) typed from the reconstruction's own labels"
+            % stamped)
+    return stamped
+
+
 def _classify_from_cad(geometry, regions, log):
     """Classify every region from the drawing alone, before imagery is used.
 
@@ -482,6 +518,14 @@ def _classify_from_cad(geometry, regions, log):
         if result and result.room_type != "unknown":
             region.room_type = result.room_type
             region.room_type_confidence = result.confidence
+
+    # The reconstruction engine already typed every room from the drawing's
+    # own labels, and ``geometry.json`` carries the answer. Where the semantic
+    # tier has nothing to say — which is every room when the file was written
+    # by the reconstruction rather than the legacy CAD extractor, since that
+    # path embeds no ``cad`` document — the drawing's own naming is better
+    # evidence than the floor area alone.
+    _stamp_recon_room_types(geometry, regions, log)
 
     identified = sum(1 for r in results.values() if r.room_type != "unknown")
     if document is None:
