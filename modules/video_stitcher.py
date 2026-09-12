@@ -3,9 +3,17 @@ import os
 import shutil
 import sys
 
-# Set up paths
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
+from app_paths import data_path
+
+# The frames to read and the video to write both live under the *data* root,
+# not beside this file. Running from a checkout the two are the same directory,
+# which is why deriving them from __file__ went unnoticed; inside a frozen
+# build they are not. There the code is unpacked into PyInstaller's temp
+# directory while the pipeline renders into %LOCALAPPDATA%\ArchX3D, so this
+# looked for frames under the bundle, found none, and exited — and because
+# step 4 is spawned as non-critical, the run still reported success while
+# silently producing no walkthrough.mp4. See modules/app_paths.py.
+OUTPUT_DIR = data_path('output')
 FRAMES_DIR = os.path.join(OUTPUT_DIR, 'frames')
 VIDEO_OUTPUT_PATH = os.path.join(OUTPUT_DIR, 'walkthrough.mp4')
 
