@@ -47,12 +47,29 @@ function Step($message) {
 $vsInstaller = "C:\Program Files (x86)\Microsoft Visual Studio\Installer"
 if (Test-Path $vsInstaller) { $env:Path = "$vsInstaller;$env:Path" }
 
-$devShell = Get-ChildItem "C:\Program Files*\Microsoft Visual Studio\*\*\Common7\Tools\Launch-VsDevShell.ps1" `
+# VsDevCmd.bat, not Launch-VsDevShell.ps1: the PowerShell wrapper only grew
+# -Arch/-HostArch in VS 2022. On VS 2019 Build Tools — a documented prerequisite
+# — those parameters do not exist, and because this script runs with
+# $ErrorActionPreference = "Stop" the binding failure aborted the whole build
+# before it reached stage 1. The batch file has taken -arch/-host_arch since
+# VS 2017, so one call covers every supported version.
+$vsDevCmd = Get-ChildItem "C:\Program Files*\Microsoft Visual Studio\*\*\Common7\Tools\VsDevCmd.bat" `
     -ErrorAction SilentlyContinue | Select-Object -First 1
-if ($devShell) {
-    & $devShell.FullName -Arch amd64 -HostArch amd64 3>$null | Out-Null
+if ($vsDevCmd) {
+    # Best effort: rustc can often locate link.exe unaided, so a failure here
+    # should let the link step speak for itself rather than stop the build.
+    try {
+        cmd /c "`"$($vsDevCmd.FullName)`" -arch=x64 -host_arch=x64 >nul 2>&1 && set" |
+            ForEach-Object {
+                if ($_ -match '^([^=]+)=(.*)$') {
+                    Set-Item -Path "env:$($matches[1])" -Value $matches[2] -ErrorAction SilentlyContinue
+                }
+            }
+    } catch {
+        Write-Warning "Could not import the Visual Studio build environment: $_"
+    }
 } else {
-    Write-Warning "Visual Studio developer shell not found; the Rust link step may fail."
+    Write-Warning "Visual Studio build environment not found; the Rust link step may fail."
 }
 $env:Path = "$env:USERPROFILE\.cargo\bin;$env:Path"
 
