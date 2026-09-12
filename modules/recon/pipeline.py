@@ -121,19 +121,20 @@ def reconstruct(path: str, *,
         timings["validate"] = round(time.perf_counter() - t, 3)
         timings["total"] = round(time.perf_counter() - t_all, 3)
         building.timings = dict(timings)
+        if diagnostics_dir:
+            D.write_bundle(diagnostics_dir, drawing=drawing,
+                           wall_result=wall_result, building=building)
         return building
 
     except ReconstructionError as exc:
+        # Refusal is exactly when the stages are worth seeing, so the bundle
+        # is written here too — with whatever got as far as existing.
         exc.diagnostics.setdefault("timings", timings)
         if diagnostics_dir:
             D.write_bundle(diagnostics_dir, drawing=drawing,
                            wall_result=wall_result, building=building,
                            error=exc.as_dict())
         raise
-    finally:
-        if diagnostics_dir and building is not None:
-            D.write_bundle(diagnostics_dir, drawing=drawing,
-                           wall_result=wall_result, building=building)
 
 
 def _diag_payload(drawing, wall_result) -> dict:
