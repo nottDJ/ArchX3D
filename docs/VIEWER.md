@@ -222,6 +222,14 @@ it is entering, so orbit → walk → orbit returns you to where you were.
 4. Face the middle of the building, so the first thing you see is the interior
    rather than the wall you happen to be against.
 
+**Step 3 probes from the feet, not from above the head.** The probe originally
+started at `eyeY + 3`, meaning a spawn at 1.65 m cast its ray from 4.65 m — and
+in a building with 3 m walls the first surface below that is the *ceiling*. The
+camera was then placed an eye height above the roof, so walk mode began
+standing on top of the building looking down at it. `floorProbeHeight` starts
+the ray `FLOOR_PROBE_MARGIN` (0.3 m) above the feet: enough to clear being
+slightly sunk into the slab, far too little to ever begin above a ceiling.
+
 ### Framing
 
 `fitCameraToBox` fits on **both** axes and takes the larger distance. Fitting on
@@ -574,6 +582,48 @@ wait for.
 
 No other route gained a byte.
 
+### The budget that actually binds: draw calls
+
+A generated building is the opposite shape to a game asset — very few
+triangles, very many objects. A real 124-room plan measures:
+
+| | | |
+| --- | --- | --- |
+| Triangles | 114,072 | trivial; a laptop GPU eats millions |
+| **Draw calls** | **1,075** | the actual cost |
+| Meshes | 448 | one per object, no instancing |
+| Textures | 0 | — |
+
+Each object is a separate draw call with its own state change, and in a browser
+every one crosses from JavaScript into WebGL. Tuning by *polygon* count — the
+usual instinct — would conclude this scene is cheap and change nothing.
+
+Shadows double it: a shadow-casting light re-renders every object into the depth
+map before the visible pass, so this scene costs ~2,150 draw calls per frame
+plus a 4-megapixel depth render, and at `dpr` 2 on a HiDPI display the visible
+pass covers four times the pixels.
+
+### Adaptive quality
+
+`lib/viewer/quality.ts` reads the model's object count and steps down:
+
+| Objects | Shadows | DPR | Shadow map |
+| --- | --- | --- | --- |
+| < 200 | as configured | 1–2 | 2048² |
+| 200–599 | **off** | 1–1.5 | 1024² |
+| ≥ 600 | **off** | 1 | 1024² |
+
+Every reduction is **reported** in the viewer's toast, naming the object count.
+Silently rendering a worse image than the user configured is how a viewer gets
+blamed for looking bad. The behaviour is a setting (*Adapt quality to model
+size*), so it can be turned off.
+
+**Merging geometry by material is deliberately not done**, though it is by far
+the largest theoretical win — 1,075 draw calls would become ~26. The roof
+toggle, view modes and room navigation all work by hiding individual objects,
+which a merged mesh cannot do. Losing the product's defining features to gain
+frame rate is the wrong trade; cutting per-frame *passes* is the right one.
+
 ### Techniques in use
 
 | Technique | Effect |
@@ -582,6 +632,7 @@ No other route gained a byte.
 | Lazy, client-only viewer | Instant first paint; no wasted SSR of a canvas |
 | Index once at load | Mode switches are lookups, not traversals |
 | `frameloop="demand"` in orbit | A model being *looked at* renders once, not 60×/s |
+| Adaptive quality | Drops the shadow pass on scenes where it doubles the cost |
 | Frustum culling | On for every mesh |
 | Precomputed bounding volumes | No first-frame hitch deriving them lazily |
 | Merged collision geometry | One BVH, positions only |

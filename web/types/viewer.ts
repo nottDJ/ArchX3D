@@ -212,6 +212,11 @@ export interface ViewerSettings {
   /** Stop the camera passing through walls. */
   readonly collisionEnabled: boolean;
   readonly shadows: boolean;
+  /**
+   * Step render quality down on a model too large to draw at full settings.
+   * See `lib/viewer/quality.ts` for what it changes and why.
+   */
+  readonly autoQuality: boolean;
   /** Image-based lighting from a drei environment preset. */
   readonly environment: EnvironmentPreset;
   readonly exposure: number;

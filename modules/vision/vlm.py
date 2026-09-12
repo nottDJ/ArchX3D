@@ -38,8 +38,8 @@ from .cache import ResponseCache
 #: Resizing also makes the cache key stable across source resolutions.
 MAX_IMAGE_EDGE = 1536
 
-DEFAULT_MODEL = "gemini-2.5-pro"
-FALLBACK_MODEL = "gemini-2.5-flash"
+DEFAULT_MODEL = "gemini-flash-latest"
+FALLBACK_MODEL = "gemini-flash-lite-latest"
 
 
 class VLMError(RuntimeError):

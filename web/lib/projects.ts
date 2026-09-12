@@ -138,9 +138,18 @@ export function getSnapshot(): ProjectRecord[] {
   return snapshot;
 }
 
-/** Server render has no storage; an empty list is the truthful answer. */
+/**
+ * Server render has no storage; an empty list is the truthful answer.
+ *
+ * Must return the *same* array reference on every call — useSyncExternalStore
+ * compares with Object.is, and a fresh `[]` literal here is a new reference
+ * each time, which React reads as "the store never stops changing" and warns
+ * ("getServerSnapshot should be cached") or loops.
+ */
+const EMPTY_RECORDS: ProjectRecord[] = [];
+
 export function getServerSnapshot(): ProjectRecord[] {
-  return [];
+  return EMPTY_RECORDS;
 }
 
 /* -------------------------------------------------------------------------- */

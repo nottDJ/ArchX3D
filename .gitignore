@@ -26,8 +26,19 @@ output/sequence/
 .env
 .env.local
 
-# Wizard project workspaces (uploads + per-project outputs)
-projects/
+# Saved API key. Written next to the data root, which is the repository itself
+# when the server is run from a checkout — so without this a developer's real
+# Gemini key is one `git add .` away from being published.
+credentials.json
+
+# Wizard project workspaces (uploads + per-project outputs).
+#
+# Anchored with a leading slash so it matches only the workspace directory at
+# the repository root. Unanchored, `projects/` matches a directory of that name
+# at *any* depth — which silently excluded `web/components/projects/` and
+# `web/app/projects/`, the source for the Projects, Dashboard and Compare
+# pages, from the repository entirely.
+/projects/
 
 # Web app
 web/node_modules/
@@ -35,3 +46,19 @@ web/.next/
 web/tsconfig.tsbuildinfo
 # CommonJS build of lib/, produced by `npm test` for the node:test runner
 web/.test-build/
+# Static export consumed by the desktop shell, rebuilt by `npm run build`
+web/out/
+
+# Desktop app
+# Isolated interpreter the installer is built from; recreated from
+# requirements.txt (see docs/DESKTOP.md)
+.venv-build/
+# PyInstaller intermediate and output trees
+desktop/build/
+desktop/dist/
+desktop/testdata/
+# Rust build artefacts and the generated installers
+desktop/src-tauri/target/
+desktop/src-tauri/binaries/
+# Regenerated from tauri.conf.json on every build
+desktop/src-tauri/gen/schemas/

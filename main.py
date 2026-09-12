@@ -29,15 +29,22 @@ import json
 import argparse
 import logging
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+sys.path.insert(0, os.path.join(BASE_DIR, 'modules'))
+from child_process import child_command  # noqa: E402
+from app_paths import code_path, data_path, ensure_data_dirs  # noqa: E402
+
+# Code and data are the same directory in a source checkout and different ones
+# inside a frozen bundle; see modules/app_paths.py.
+MODULES_DIR = code_path('modules')
+CONFIG_PATH = code_path('config.json')
+DATA_DIR = data_path('data')
+OUTPUT_DIR = data_path('output')
+
 # --- Configuration ---
 BLENDER_EXECUTABLE_PATH = r"C:\Program Files\Blender Foundation\Blender 5.0\blender.exe"
 # ---------------------
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'data')
-MODULES_DIR = os.path.join(BASE_DIR, 'modules')
-OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
-CONFIG_PATH = os.path.join(BASE_DIR, 'config.json')
 
 # Set up logging
 logging.basicConfig(
@@ -60,8 +67,8 @@ def load_config():
         "wall_height": 3.0,
         "vision": {
             "enabled": True,
-            "model": "gemini-2.5-pro",
-            "fallback_model": "gemini-2.5-flash",
+            "model": "gemini-flash-latest",
+            "fallback_model": "gemini-flash-lite-latest",
             "cache": True,
             "cache_dir": ".cache/vision",
             "max_images": 6,
@@ -287,9 +294,8 @@ def main():
         log.error(f"Input DXF file not found: {input_dxf}")
         sys.exit(1)
 
-    # Ensure data and output dirs exist
-    os.makedirs(DATA_DIR, exist_ok=True)
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    # Ensure the writable directories exist (see modules/app_paths.py)
+    ensure_data_dirs()
 
     geometry_json = os.path.join(DATA_DIR, "geometry.json")
     styling_json = os.path.join(DATA_DIR, "styling.json")
@@ -298,6 +304,14 @@ def main():
     vision_cfg = config.get("vision", {})
     reference_images = resolve_reference_images(args.images, vision_cfg)
     run_vision = bool(reference_images) and not args.skip_vision and vision_cfg.get("enabled", True)
+    # Decided up front (not inside Step 2) so the stale-scene-graph cleanup
+    # below sees the same "will vision actually run" answer that Step 2 acts
+    # on. Otherwise a missing key left run_vision True, the cleanup branch
+    # never fired, and a leftover scene_graph.json from an earlier run with a
+    # key silently furnished this "unfurnished" build.
+    vision_key_missing = run_vision and not os.environ.get("GEMINI_API_KEY")
+    if vision_key_missing:
+        run_vision = False
 
     # Resolve layer names and scale
     layers = args.layers if args.layers else ','.join(config.get("layer_names", ["WALLS"]))
@@ -313,9 +327,14 @@ def main():
     if run_vision:
         log.info(f"  Vision:   {len(reference_images)} reference image(s), "
                  f"model {args.vision_model or vision_cfg.get('model')}")
+    elif vision_key_missing:
+        log.info("  Vision:   SKIP (GEMINI_API_KEY not set)")
+    elif not reference_images:
+        log.info("  Vision:   SKIP (no reference images)")
+    elif args.skip_vision:
+        log.info("  Vision:   SKIP (--skip-vision)")
     else:
-        log.info("  Vision:   SKIP (no reference images)"
-                 if not reference_images else "  Vision:   SKIP (--skip-vision)")
+        log.info("  Vision:   SKIP (disabled in config.json)")
     log.info(f"  Render:   {'SKIP' if args.skip_render else 'Enabled'}")
     log.info(f"  Evaluate: {'Enabled' if (args.evaluate or args.refine) else 'SKIP'}")
     log.info(f"  Refine:   {f'{args.refine_iterations} iterations' if args.refine else 'SKIP'}")
@@ -324,15 +343,10 @@ def main():
     # =========================================================================
     # STEP 1: DXF Extraction
     # =========================================================================
-    cmd_extract = [
-        sys.executable,
+    cmd_extract = child_command(
         os.path.join(MODULES_DIR, "dxf_extractor.py"),
-        input_dxf,
-        geometry_json,
-        layers,
-        scale,
-        arc_segs
-    ]
+        [input_dxf, geometry_json, layers, scale, arc_segs],
+    )
     run_step(cmd_extract, "Step 1: DXF Geometry Extraction")
 
     # Verify extraction produced output
@@ -368,44 +382,42 @@ def main():
     if args.use_scene_graph:
         pass  # Step 2 already satisfied above.
     elif run_vision:
-        if not os.environ.get("GEMINI_API_KEY"):
-            log.warning("GEMINI_API_KEY not set — skipping scene analysis.")
-            log.warning("The model will be generated unfurnished.")
-        else:
-            cmd_vision = [
-                sys.executable,
-                os.path.join(MODULES_DIR, "scene_analyzer.py"),
+        cmd_vision = child_command(
+            os.path.join(MODULES_DIR, "scene_analyzer.py"),
+            [
                 geometry_json,
                 scene_graph_json,
                 "--images", *reference_images,
                 "--wall-height", str(config.get("wall_height", 3.0)),
-                "--model", args.vision_model or vision_cfg.get("model", "gemini-2.5-pro"),
-                "--fallback-model", vision_cfg.get("fallback_model", "gemini-2.5-flash"),
+                "--model", args.vision_model or vision_cfg.get("model", "gemini-flash-latest"),
+                "--fallback-model", vision_cfg.get("fallback_model", "gemini-flash-lite-latest"),
                 "--cache-dir", vision_cfg.get("cache_dir", ".cache/vision"),
                 "--max-images", str(vision_cfg.get("max_images", 6)),
-            ]
-            if args.no_vision_cache or not vision_cfg.get("cache", True):
-                cmd_vision.append("--no-cache")
-            if args.include_uncertain or vision_cfg.get("include_uncertain", False):
-                cmd_vision.append("--include-uncertain")
+            ],
+        )
+        if args.no_vision_cache or not vision_cfg.get("cache", True):
+            cmd_vision.append("--no-cache")
+        if args.include_uncertain or vision_cfg.get("include_uncertain", False):
+            cmd_vision.append("--include-uncertain")
 
-            # Non-critical: a vision failure still yields a correct shell.
-            run_step(cmd_vision, "Step 2: Scene Analysis (vision)", critical=False)
+        # Non-critical: a vision failure still yields a correct shell.
+        run_step(cmd_vision, "Step 2: Scene Analysis (vision)", critical=False)
 
-            if os.path.exists(scene_graph_json):
-                _log_scene_graph_summary(scene_graph_json)
+        if os.path.exists(scene_graph_json):
+            _log_scene_graph_summary(scene_graph_json)
+    elif vision_key_missing:
+        log.warning("GEMINI_API_KEY not set — skipping scene analysis.")
+        log.warning("The model will be generated unfurnished.")
     else:
         skip_styling = args.skip_styling or config.get("skip_styling", False)
         if skip_styling or not os.environ.get("GEMINI_API_KEY"):
             log.info("Step 2: SKIPPED — no reference images and styling disabled")
         else:
             log.info("Step 2: No reference images; falling back to legacy text styling")
-            cmd_style = [
-                sys.executable,
+            cmd_style = child_command(
                 os.path.join(MODULES_DIR, "style_generator.py"),
-                geometry_json,
-                styling_json
-            ]
+                [geometry_json, styling_json],
+            )
             run_step(cmd_style, "Step 2: AI Style Generation (legacy)", critical=False)
 
     # =========================================================================
@@ -434,10 +446,9 @@ def main():
     if not args.skip_render:
         frames_dir = os.path.join(OUTPUT_DIR, 'frames')
         if os.path.exists(frames_dir) and os.listdir(frames_dir):
-            cmd_stitcher = [
-                sys.executable,
+            cmd_stitcher = child_command(
                 os.path.join(MODULES_DIR, "video_stitcher.py")
-            ]
+            )
             run_step(cmd_stitcher, "Step 4: Video Stitching", critical=False)
         else:
             log.warning("No rendered frames found. Skipping video stitching.")
@@ -452,10 +463,9 @@ def main():
     # the reference photographs. Non-critical and never destructive: it only
     # measures, and a build is still a build if nobody scored it.
     if args.evaluate or args.refine:
-        cmd_evaluate = [
-            sys.executable,
-            os.path.join(MODULES_DIR, "evaluation", "engine.py"),
-        ]
+        cmd_evaluate = child_command(
+            os.path.join(MODULES_DIR, "evaluation", "engine.py")
+        )
         if reference_images:
             cmd_evaluate += ["--images", os.path.dirname(reference_images[0])]
         run_step(cmd_evaluate, "Step 5: Reconstruction Evaluation", critical=False)
@@ -468,11 +478,10 @@ def main():
     # only what measurably improves the score. Non-critical: a build that was
     # not improved is still the build.
     if args.refine:
-        cmd_refine = [
-            sys.executable,
+        cmd_refine = child_command(
             os.path.join(MODULES_DIR, "optimizer", "pipeline.py"),
-            "--max-iterations", str(args.refine_iterations),
-        ]
+            ["--max-iterations", str(args.refine_iterations)],
+        )
         run_step(cmd_refine, "Step 6: Planning & Optimisation", critical=False)
 
     # =========================================================================

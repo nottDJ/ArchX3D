@@ -36,12 +36,23 @@ import math
 MODULES_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(MODULES_DIR)
 
-# Where the data lives, which is usually the project but not always. The
-# optimiser rebuilds a mutated scene graph many times over and must not
-# overwrite the project's own data/ and output/ while doing it, so it points
-# the generator at a working copy through ARCHX3D_BASE_DIR. Code and data are
-# separated for exactly that reason and no other.
-BASE_DIR = os.environ.get('ARCHX3D_BASE_DIR') or PROJECT_DIR
+# Where the data lives, which is usually the project but not always, in order
+# of decreasing specificity:
+#
+#   ARCHX3D_BASE_DIR   the optimiser's working copy. It rebuilds a mutated
+#                      scene graph many times over and must not overwrite the
+#                      project's own data/ and output/ while doing it.
+#   ARCHX3D_DATA_ROOT  the desktop build's writable root. This script runs in
+#                      Blender's interpreter, so it cannot import app_paths to
+#                      ask; the launcher exports the answer instead. Without
+#                      it PROJECT_DIR would be the read-only bundle directory
+#                      and no build would ever find its geometry.
+#   PROJECT_DIR        a source checkout, where code and data sit together.
+BASE_DIR = (
+    os.environ.get('ARCHX3D_BASE_DIR')
+    or os.environ.get('ARCHX3D_DATA_ROOT')
+    or PROJECT_DIR
+)
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
 GEOMETRY_PATH = os.path.join(DATA_DIR, 'geometry.json')

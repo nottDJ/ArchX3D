@@ -14,20 +14,29 @@
  *
  * What is deliberately absent
  * ---------------------------
- * No account, no billing, no team, no API keys. The ArchX3D backend has no
- * authentication and no notion of a user, so every one of those would be a
- * form that does nothing. Building them would be building a facade; the
- * "Connection" section says plainly what the app talks to instead.
+ * No account, no billing, no team. The ArchX3D backend has no authentication
+ * and no notion of a user, so every one of those would be a form that does
+ * nothing. Building them would be building a facade; the "Connection" section
+ * says plainly what the app talks to instead.
+ *
+ * The Gemini API key is the one exception, and it is not a facade: it is
+ * stored by the server and read by the pipeline. It lives here because the
+ * desktop build has no shell to export an environment variable from, so
+ * without it the AI features would be unreachable to anyone who installed the
+ * app rather than cloning the repository.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AppShell } from "@/components/shell/AppShell";
 import { ThemeSegmented } from "@/components/shell/ThemeToggle";
 import {
   Alert,
+  Badge,
   Button,
   Card,
+  Field,
+  Input,
   ConfirmDialog,
   Divider,
   Section,
@@ -35,10 +44,16 @@ import {
   Switch,
   useToast,
 } from "@/components/ui";
-import { DatabaseIcon, TrashIcon } from "@/components/ui/icons";
+import { DatabaseIcon, SparkIcon, TrashIcon } from "@/components/ui/icons";
 import { useProjects } from "@/hooks/useProjects";
 import { useViewerSettings } from "@/hooks/useViewerSettings";
-import { API_BASE_URL } from "@/lib/api";
+import {
+  API_BASE_URL,
+  clearApiKey,
+  fetchApiKeyStatus,
+  saveApiKey,
+  type ApiKeyStatus,
+} from "@/lib/api";
 import { formatBytes, pluralise } from "@/lib/format";
 import { forgetAll } from "@/lib/projects";
 import { SETTING_BOUNDS } from "@/lib/viewer/settings";
@@ -123,6 +138,12 @@ export function SettingsView() {
                 hint="The most expensive setting. Turn it off if the frame rate drops."
               />
               <Switch
+                label="Adapt quality to model size"
+                checked={settings.autoQuality}
+                onCheckedChange={(autoQuality) => update({ autoQuality })}
+                hint="Large plans have hundreds of separate objects, and drawing them twice — once for shadows — is what makes a walkthrough stutter. This turns shadows off and lowers the render resolution on those models, and says so when it does."
+              />
+              <Switch
                 label="Ground grid"
                 checked={settings.showGrid}
                 onCheckedChange={(showGrid) => update({ showGrid })}
@@ -172,6 +193,14 @@ export function SettingsView() {
               you to sign in — anyone who can reach the API can use it.
             </p>
           </Card>
+        </Section>
+
+        {/* ---- AI ------------------------------------------------------- */}
+        <Section
+          title="AI analysis"
+          description="Reference photographs are read by Google Gemini to recover furniture, materials and lighting."
+        >
+          <ApiKeyCard />
         </Section>
 
         {/* ---- Local index ---------------------------------------------- */}
@@ -235,5 +264,166 @@ export function SettingsView() {
         }}
       />
     </AppShell>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Gemini API key                                                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Enter, replace or remove the Gemini API key.
+ *
+ * The key is write-only from here: the server returns whether one is
+ * configured and a masked hint, never the value. So the field is always blank
+ * on load — showing dots that are not the real key would invite a user to
+ * "correct" them, and showing the real one puts a credential on screen for no
+ * reason.
+ *
+ * Without a key the pipeline still runs: DXF geometry, rooms, walls, doors and
+ * the 3D model are all deterministic. Only the furniture and finishes read from
+ * photographs need it, which is what the empty state says rather than implying
+ * the app is broken.
+ */
+function ApiKeyCard() {
+  const { toast } = useToast();
+  const [status, setStatus] = useState<ApiKeyStatus | null>(null);
+  const [draft, setDraft] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [unreachable, setUnreachable] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchApiKeyStatus()
+      .then((next) => {
+        if (!cancelled) setStatus(next);
+      })
+      .catch(() => {
+        if (!cancelled) setUnreachable(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const run = async (action: () => Promise<ApiKeyStatus>, message: string) => {
+    setBusy(true);
+    setError(null);
+    try {
+      setStatus(await action());
+      setDraft("");
+      toast({ tone: "success", title: message });
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Something went wrong");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (unreachable) {
+    return (
+      <Card elevation="flat" className="p-4">
+        <Alert tone="warning" title="Backend not reachable">
+          The API key is stored by the ArchX3D server, which is not responding.
+          Start it and reload this page.
+        </Alert>
+      </Card>
+    );
+  }
+
+  const configured = status?.configured ?? false;
+  const fromEnvironment = status?.source === "environment";
+
+  return (
+    <Card elevation="flat">
+      <div className="flex items-start gap-3 p-4">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-md border border-line-subtle bg-sunken text-tertiary [&_svg]:size-4">
+          <SparkIcon />
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-sm text-primary">Gemini API key</p>
+            {status && (
+              <Badge tone={configured ? "success" : "neutral"}>
+                {configured ? "Configured" : "Not set"}
+              </Badge>
+            )}
+          </div>
+          <p className="mt-0.5 text-xs text-tertiary">
+            {configured
+              ? `Using ${status?.hint} from ${
+                  fromEnvironment ? "the GEMINI_API_KEY environment variable" : "this machine"
+                }.`
+              : "Without a key, plans still build — walls, rooms and the 3D model are read from the DXF. Only furniture and finishes from photographs are skipped."}
+          </p>
+        </div>
+      </div>
+
+      {fromEnvironment ? (
+        <div className="border-t border-line-subtle p-4">
+          <Alert tone="info" title="Set by the environment">
+            <code className="rounded-xs bg-sunken px-1 py-0.5 font-mono">
+              GEMINI_API_KEY
+            </code>{" "}
+            is set for this process and takes precedence over anything saved
+            here. Unset it and restart to manage the key from this page.
+          </Alert>
+        </div>
+      ) : (
+        <div className="border-t border-line-subtle p-4">
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (draft.trim()) void run(() => saveApiKey(draft), "API key saved");
+            }}
+          >
+            <Field
+              label={configured ? "Replace the key" : "API key"}
+              error={error}
+              hint={
+                error
+                  ? undefined
+                  : "Stored on this machine in plain text, readable by your Windows account. Get one from aistudio.google.com."
+              }
+            >
+              <Input
+                type="password"
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+                placeholder={configured ? "Enter a new key to replace it" : "Paste your key"}
+                autoComplete="off"
+                spellCheck={false}
+                disabled={busy}
+              />
+            </Field>
+
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button
+                type="submit"
+                variant="primary"
+                size="sm"
+                loading={busy}
+                disabled={!draft.trim()}
+              >
+                {configured ? "Replace key" : "Save key"}
+              </Button>
+              {configured && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  icon={<TrashIcon />}
+                  disabled={busy}
+                  onClick={() => void run(clearApiKey, "API key removed")}
+                >
+                  Remove
+                </Button>
+              )}
+            </div>
+          </form>
+        </div>
+      )}
+    </Card>
   );
 }

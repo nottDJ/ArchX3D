@@ -1,0 +1,39 @@
+[package]
+name = "archx3d-desktop"
+version = "2.0.0"
+description = "ArchX3D — floor plans into explorable 3D"
+authors = ["ArchX3D"]
+edition = "2021"
+rust-version = "1.77.2"
+
+[lib]
+name = "archx3d_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[target.'cfg(windows)'.dependencies]
+# Job objects, so the OS kills the backend when this process dies by any route
+# — including a crash or Task Manager, where no Rust cleanup code runs at all.
+windows = { version = "0.58", features = [
+    "Win32_Foundation",
+    "Win32_System_JobObjects",
+    "Win32_System_Threading",
+    # CreateJobObjectW takes a SECURITY_ATTRIBUTES pointer and is gated behind
+    # this feature even though we pass None for it.
+    "Win32_Security",
+] }
+
+[profile.release]
+# The bundle already carries a ~390 MB Python runtime; shaving the Rust binary
+# matters far less than build time, so this stays at the defaults except for
+# stripping symbols, which is free.
+strip = true

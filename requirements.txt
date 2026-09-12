@@ -4,6 +4,12 @@ fastapi>=0.111.0
 uvicorn[standard]>=0.30.0
 python-multipart>=0.0.9
 
+# Room segmentation (modules/vision/rooms.py) labels connected floor regions
+# with scipy.ndimage. Not optional: without it the vision pipeline cannot
+# import, so every room in every plan goes undetected.
+scipy>=1.11.0
+numpy>=1.24.0
+
 # --- Vision pipeline ---------------------------------------------------------
 # Pillow downscales reference images before upload (optional but recommended:
 # without it the originals are sent, costing more tokens and latency).

@@ -25,19 +25,31 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "modules"))
+import credentials  # noqa: E402
 import project_api  # noqa: E402
+from child_process import child_command  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Paths — resolved relative to this file so it works regardless of CWD
 # ---------------------------------------------------------------------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
-OUTPUT_DIR = os.path.join(BASE_DIR, "output")
-PIPELINE_SCRIPT = os.path.join(BASE_DIR, "main.py")
+from app_paths import CODE_ROOT, code_path, data_path, ensure_data_dirs  # noqa: E402
+
+# Code and data are the same directory in a source checkout and different ones
+# inside a frozen bundle; see modules/app_paths.py.
+BASE_DIR = CODE_ROOT
+UPLOAD_DIR = data_path("uploads")
+OUTPUT_DIR = data_path("output")
+PIPELINE_SCRIPT = code_path("main.py")
 
 # Ensure required directories exist on startup
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+ensure_data_dirs()
+
+# Put a saved API key into the environment before anything spawns a pipeline
+# stage. Every stage reads GEMINI_API_KEY from its inherited environment, so
+# doing this once here is what makes a key entered in the UI take effect
+# without restarting the app or threading a credential through six subprocess
+# invocations.
+credentials.apply_to_environment()
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -59,13 +71,25 @@ app = FastAPI(
 )
 
 # ---------------------------------------------------------------------------
-# CORS — allow the Next.js dev server through
+# CORS — allow the Next.js dev server and the desktop shell through
 # ---------------------------------------------------------------------------
+#
+# The desktop build is a webview, not a terminal: it enforces the same-origin
+# policy, and its pages are served from Tauri's custom scheme rather than from
+# this server. Without its origin here every request from the installed app
+# fails CORS while the identical request from curl succeeds — which is exactly
+# how this was missed until the app was opened.
+#
+# The server binds 127.0.0.1 only and a desktop instance spawns its own copy on
+# a private port, so this list widens what a *local* page may call, not what
+# the network may reach.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",   # Next.js dev server
-        "http://127.0.0.1:3000",  # alternate loopback
+        "http://localhost:3000",    # Next.js dev server
+        "http://127.0.0.1:3000",    # alternate loopback
+        "http://tauri.localhost",   # desktop shell (Windows)
+        "tauri://localhost",        # desktop shell (macOS/Linux)
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -248,6 +272,58 @@ async def health_check():
 
 
 # ---------------------------------------------------------------------------
+# Credentials
+# ---------------------------------------------------------------------------
+#
+# The desktop app has no shell to export GEMINI_API_KEY from, so the key can be
+# saved through the UI instead. See modules/credentials.py for the precedence
+# rules and what this does and does not protect.
+#
+# The key is never sent back to the client — only whether one is configured,
+# where it came from, and a masked hint identifying which key it is.
+
+
+@app.get("/api/settings/api-key", tags=["System"])
+async def get_api_key_status():
+    """Whether a Gemini key is configured, and where it came from."""
+    return credentials.status()
+
+
+@app.put("/api/settings/api-key", tags=["System"])
+async def put_api_key(payload: Dict[str, Any] = Body(...)):
+    """Save a Gemini API key for this machine."""
+    # `externally_set()`, not a live read of os.environ: the server exports the
+    # effective key for its subprocesses, so os.environ is set either way once
+    # a key has been saved here.
+    if credentials.externally_set():
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "GEMINI_API_KEY is set in the environment and takes precedence. "
+                "Unset it to manage the key from here."
+            ),
+        )
+    try:
+        credentials.save_key(payload.get("key", ""))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    log.info("Gemini API key saved (%s)", credentials.masked())
+    return credentials.status()
+
+
+@app.delete("/api/settings/api-key", tags=["System"])
+async def delete_api_key():
+    """Forget the saved key. Leaves an environment-supplied key alone."""
+    try:
+        credentials.clear_key()
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    log.info("Gemini API key removed")
+    return credentials.status()
+
+
+# ---------------------------------------------------------------------------
 # POST /api/generate — core pipeline endpoint
 # ---------------------------------------------------------------------------
 @app.post("/api/generate", tags=["Pipeline"])
@@ -292,12 +368,13 @@ async def generate_model(file: UploadFile = File(...)):
     # inside a live ASGI server.  subprocess isolates the entire Blender
     # context in its own process.
     #
-    cmd = [
-        sys.executable,       # same Python interpreter running this server
+    cmd = child_command(
         PIPELINE_SCRIPT,
-        saved_path,
-        "--skip-styling",     # skip Gemini AI styling by default for speed
-    ]
+        [
+            saved_path,
+            "--skip-styling",  # skip Gemini AI styling by default for speed
+        ],
+    )
 
     log.info(f"Launching pipeline: {' '.join(cmd)}")
 
