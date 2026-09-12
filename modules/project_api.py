@@ -288,27 +288,51 @@ def _run_analysis(job: Job, project_id: str, options: Dict[str, Any]) -> None:
     manifest = load_manifest(project_id)
 
     geometry_path = os.path.join(root, "data", "geometry.json")
+    building_path = os.path.join(root, "data", "building.json")
     graph_path = os.path.join(root, "data", "scene_graph.json")
     review_path = os.path.join(root, "data", "review.json")
     dxf_path = os.path.join(root, manifest["dxf"]["filename"])
 
     try:
-        # --- 1. DXF extraction --------------------------------------------
-        job.emit("EXTRACTING_DXF", "Parsing DXF layers and geometry...")
-        extract = subprocess.run(
-            child_command(
-                os.path.join(MODULES_DIR, "dxf_extractor.py"),
-                [dxf_path, geometry_path,
-                 options.get("layers", "WALLS"), str(options.get("scale", 1.0)), "16"],
-            ),
-            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=300,
-        )
-        if extract.returncode != 0 or not os.path.exists(geometry_path):
-            raise RuntimeError(f"DXF extraction failed: {_tail(extract.stderr)}")
+        # --- 1. DXF reconstruction ----------------------------------------
+        #
+        # In-process and deterministic. It must be the *same* reconstruction
+        # the build step uses: running one reader here and another in main.py
+        # would let the two disagree about the drawing's unit, and every
+        # furniture position the user then reviews would be in a frame the
+        # built model does not share.
+        job.emit("EXTRACTING_DXF", "Reading the CAD drawing (CPU, no API key)...")
+        from recon import compat as recon_compat
+        from recon.ir import ReconstructionError
+        from recon.pipeline import reconstruct
 
-        with open(geometry_path, "r", encoding="utf-8") as fh:
-            segments = len(json.load(fh).get("walls", []))
-        job.emit("EXTRACTING_DXF", f"Extracted {segments} wall segments.")
+        try:
+            building = reconstruct(
+                dxf_path,
+                wall_height=float(options.get("wall_height", 2.7)),
+                user_scale=options.get("scale") or None,
+                diagnostics_dir=os.path.join(root, "output", "diagnostics"),
+            )
+        except ReconstructionError as exc:
+            detail = "; ".join(exc.failures[:3]) or str(exc)
+            raise RuntimeError(
+                "The drawing could not be reconstructed into a building "
+                "(%s): %s. Diagnostics are in output/diagnostics."
+                % (exc.stage, detail)
+            ) from exc
+
+        os.makedirs(os.path.dirname(building_path), exist_ok=True)
+        building.to_json(building_path)
+        recon_compat.write_geometry_json(building, geometry_path)
+
+        job.emit("EXTRACTING_DXF",
+                 "Reconstructed %d walls, %d rooms and %d openings "
+                 "(%.1f x %.1f m, %s)."
+                 % (len(building.walls), len(building.rooms),
+                    len(building.openings), building.width, building.depth,
+                    building.units.unit_name if building.units else "unknown units"))
+        for warning in building.validation.get("warnings", [])[:3]:
+            job.emit("EXTRACTING_DXF", "Note: %s" % warning)
 
         # --- 2. Vision analysis -------------------------------------------
         images_dir = os.path.join(root, "images")
@@ -543,7 +567,7 @@ def _run_generation(job: Job, project_id: str, options: Dict[str, Any]) -> None:
                 if os.path.exists(stale):
                     os.remove(stale)
 
-            for name in ("geometry.json", "scene_graph.json"):
+            for name in ("geometry.json", "building.json", "scene_graph.json"):
                 source = os.path.join(root, "data", name)
                 if os.path.exists(source):
                     shutil.copy2(source, os.path.join(repo_data, name))

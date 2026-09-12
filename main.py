@@ -3,7 +3,7 @@ ArchX3D — Pipeline Orchestrator
 =================================
 Runs the full 2D DXF → 3D model pipeline:
 
-  Step 1: DXF Extraction   (dxf_extractor.py)
+  Step 1: DXF Reconstruction (modules/recon) — deterministic, CPU-only
   Step 2: Scene Analysis    (scene_analyzer.py)   — with --images
           or AI Styling     (style_generator.py)  — legacy, colours only
   Step 3: Blender 3D Gen    (blender_generator.py)
@@ -15,6 +15,12 @@ Usage:
   python main.py <input.dxf> --images ref1.jpg ref2.jpg
   python main.py <input.dxf> --images reference_images/
   python main.py <input.dxf> --skip-vision          # unfurnished shell
+
+Step 1 needs no API key, no network and no model: it reads the CAD geometry,
+resolves the drawing's units from its own evidence, reconstructs wall systems,
+rooms and openings, and refuses to continue if the result does not validate.
+Everything after it is optional enrichment. "No API key" never means
+"no building".
 
 Supplying reference photographs of the interior runs the vision pipeline,
 which produces data/scene_graph.json — furniture, lighting, finishes and
@@ -283,11 +289,32 @@ def main():
         "--scale",
         type=float,
         default=None,
-        help="Scale factor for DXF units to meters (overrides config.json)"
+        help="Metres per DXF unit. Overrides the reconstruction's own unit "
+             "resolution — use only when the drawing's evidence is wrong"
+    )
+    parser.add_argument(
+        "--diagnostics",
+        default=None,
+        help="Directory for the reconstruction diagnostics bundle "
+             "(default: output/diagnostics). Pass '' to disable"
+    )
+    parser.add_argument(
+        "--offline",
+        action="store_true",
+        help="Deterministic CPU-only build: no vision, no styling, no network. "
+             "Equivalent to --skip-vision --skip-styling, and stated as such "
+             "in the log so a build is never silently AI-assisted"
     )
 
     args = parser.parse_args()
     config = load_config()
+
+    if args.offline:
+        # Explicit offline mode. The geometry engine never needed a key; this
+        # switch is about being able to say so, and about not having a build
+        # quietly reach for the network because a key happened to be present.
+        args.skip_vision = True
+        args.skip_styling = True
 
     input_dxf = os.path.abspath(args.input_dxf)
     if not os.path.exists(input_dxf):
@@ -298,6 +325,12 @@ def main():
     ensure_data_dirs()
 
     geometry_json = os.path.join(DATA_DIR, "geometry.json")
+    building_json = os.path.join(DATA_DIR, "building.json")
+    # None means "the default place"; an empty string means "nowhere".
+    if args.diagnostics is None:
+        diagnostics_dir = os.path.join(OUTPUT_DIR, "diagnostics")
+    else:
+        diagnostics_dir = args.diagnostics or None
     styling_json = os.path.join(DATA_DIR, "styling.json")
     scene_graph_json = os.path.join(DATA_DIR, "scene_graph.json")
 
@@ -313,17 +346,27 @@ def main():
     if vision_key_missing:
         run_vision = False
 
-    # Resolve layer names and scale
-    layers = args.layers if args.layers else ','.join(config.get("layer_names", ["WALLS"]))
-    scale = str(args.scale if args.scale else config.get("scale_factor", 1.0))
-    arc_segs = str(config.get("arc_segments", 16))
+    # --layers is no longer how walls are found: the reconstruction classifies
+    # every layer itself, by AIA/ISO convention and by vernacular, and an
+    # explicit list is now a restriction rather than a requirement. It is kept
+    # because scripts pass it, and reported so nobody assumes it still steers
+    # the extraction.
+    if args.layers:
+        log.warning("--layers is ignored by the reconstruction engine, which "
+                    "classifies layers from their names and the geometry. "
+                    "Restricting to %r is no longer necessary.", args.layers)
 
     log.info("=" * 60)
     log.info("  ArchX3D Pipeline")
     log.info("=" * 60)
     log.info(f"  Input:    {input_dxf}")
-    log.info(f"  Layers:   {layers}")
-    log.info(f"  Scale:    {scale}")
+    log.info(f"  Engine:   deterministic CPU reconstruction (no API key needed)")
+    if args.offline:
+        log.info(f"  Mode:     OFFLINE — CPU only, no network, no AI")
+    if args.scale:
+        log.info(f"  Scale:    {args.scale} m/unit (overridden)")
+    else:
+        log.info(f"  Scale:    resolved from the drawing's own evidence")
     if run_vision:
         log.info(f"  Vision:   {len(reference_images)} reference image(s), "
                  f"model {args.vision_model or vision_cfg.get('model')}")
@@ -341,23 +384,61 @@ def main():
     log.info("=" * 60)
 
     # =========================================================================
-    # STEP 1: DXF Extraction
+    # STEP 1: DXF Reconstruction (deterministic, CPU-only)
     # =========================================================================
-    cmd_extract = child_command(
-        os.path.join(MODULES_DIR, "dxf_extractor.py"),
-        [input_dxf, geometry_json, layers, scale, arc_segs],
-    )
-    run_step(cmd_extract, "Step 1: DXF Geometry Extraction")
+    #
+    # Runs in-process rather than as a child: it is pure Python, it is the
+    # step whose failure must stop the build, and its diagnostics are worth
+    # more than a subprocess exit code.
+    log.info("")
+    log.info("-" * 60)
+    log.info("Step 1: DXF Reconstruction (CPU / offline)")
+    log.info("-" * 60)
+    from recon import compat as recon_compat          # noqa: E402
+    from recon.ir import ReconstructionError          # noqa: E402
+    from recon.pipeline import reconstruct            # noqa: E402
 
-    # Verify extraction produced output
-    if not os.path.exists(geometry_json):
-        log.error("geometry.json was not created!")
+    try:
+        building = reconstruct(
+            input_dxf,
+            wall_height=config.get("wall_height", 2.7),
+            user_scale=args.scale,
+            diagnostics_dir=diagnostics_dir,
+        )
+    except ReconstructionError as exc:
+        log.error("Reconstruction failed at stage '%s': %s", exc.stage, exc)
+        for failure in exc.failures:
+            log.error("  - %s", failure)
+        log.error("No 3D model was generated. Generating one from a "
+                  "reconstruction this broken would produce the distorted "
+                  "geometry this check exists to prevent.")
+        if diagnostics_dir:
+            log.error("  Diagnostics written to %s", diagnostics_dir)
         sys.exit(1)
 
-    with open(geometry_json, 'r') as f:
-        geo = json.load(f)
-    seg_count = geo.get("metadata", {}).get("segment_count", 0)
-    log.info(f"  Extracted {seg_count} wall segments")
+    building.to_json(building_json)
+    recon_compat.write_geometry_json(building, geometry_json)
+
+    units = building.units
+    log.info("  Units:     %s (%s, confidence %.2f)",
+             units.unit_name, units.method, units.confidence)
+    if units.conflict:
+        log.warning("  %s", units.conflict)
+    log.info("  Size:      %.2f x %.2f m", building.width, building.depth)
+    log.info("  Walls:     %d (%.1f m total)", len(building.walls),
+             building.total_wall_length)
+    log.info("  Rooms:     %d (%.1f m2 floor, %.1f m2 footprint)",
+             len(building.rooms), building.floor_area, building.footprint_area)
+    summary = building.summary()
+    log.info("  Openings:  %d doors, %d windows",
+             summary.get("doors", 0), summary.get("windows", 0))
+    for warning in building.validation.get("warnings", [])[:6]:
+        log.warning("  ! %s", warning)
+    named = [r.label for r in building.rooms if r.label]
+    if named:
+        log.info("  Named:     %s", ", ".join(named[:12]) +
+                 (" ..." if len(named) > 12 else ""))
+    log.info("  Wrote      %s", os.path.basename(building_json))
 
     # =========================================================================
     # STEP 2: Scene Analysis (vision) — or legacy text styling

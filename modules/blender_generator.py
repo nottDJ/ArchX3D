@@ -56,6 +56,13 @@ BASE_DIR = (
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
 GEOMETRY_PATH = os.path.join(DATA_DIR, 'geometry.json')
+# The validated 2D building model. When present it supersedes geometry.json
+# entirely: it carries walls with measured thicknesses, rooms as polygons and
+# openings as holes, so the shell is extruded from it rather than guessed at
+# again here. geometry.json remains for the vision and furnishing stages,
+# which index into it, and as the fallback for a reconstruction that predates
+# this format.
+BUILDING_PATH = os.path.join(DATA_DIR, 'building.json')
 STYLING_PATH = os.path.join(DATA_DIR, 'styling.json')
 SCENE_GRAPH_PATH = os.path.join(DATA_DIR, 'scene_graph.json')
 # Configuration follows the project, not the working copy: a run's settings
@@ -71,6 +78,12 @@ if MODULES_DIR not in sys.path:
 # The vision modules imported here are deliberately stdlib-only so they load
 # inside Blender. If they are unavailable the generator still runs, producing
 # the unfurnished architectural shell.
+try:
+    import blender_build
+except ImportError as _exc:  # pragma: no cover - depends on install layout
+    print(f"[WARN] blender_build unavailable ({_exc}); falling back to segments.")
+    blender_build = None
+
 try:
     import blender_furniture
     from vision import assets as vision_assets
@@ -200,6 +213,28 @@ def load_geometry():
         sys.exit(1)
     with open(GEOMETRY_PATH, 'r') as f:
         return json.load(f)
+
+
+def load_building():
+    """Load the validated building model — optional but strongly preferred."""
+    if blender_build is None:
+        return None
+    building = blender_build.load_building(BUILDING_PATH)
+    if building is None:
+        return None
+    s = building.get("summary", {})
+    units = (building.get("units") or {}).get("unit_name", "?")
+    print("[BUILDING] %s: %d walls, %d rooms, %d openings, units %s"
+          % (os.path.basename(BUILDING_PATH), len(building.get("walls", [])),
+             len(building.get("rooms", [])), len(building.get("openings", [])),
+             units))
+    if not (building.get("validation") or {}).get("ok", True):
+        # Should be unreachable: the pipeline refuses to write a building that
+        # failed. Refusing again here rather than building it anyway keeps that
+        # guarantee true even if something wrote the file by another route.
+        print("[ERROR] building.json did not pass validation; refusing to build")
+        sys.exit(1)
+    return building
 
 
 def load_styling():
@@ -1001,6 +1036,7 @@ def main():
     # Load all data
     config = load_config()
     geometry = load_geometry()
+    building = load_building()
     graph = load_scene_graph()
     styling = load_styling() if graph is None else None
 
@@ -1014,19 +1050,36 @@ def main():
     else:
         wall_mat, floor_mat, ceiling_mat = resolve_materials(styling)
 
-    # Build geometry
-    walls_obj = create_walls(geometry, config, wall_mat)
-
-    if config.get("generate_floor", True):
-        floor_obj, cx, cy, max_dim = create_floor(geometry, floor_mat)
+    # Build geometry. With a validated building model this is a direct
+    # extrusion of it — walls at their own measured thicknesses, floors on the
+    # real footprint, openings as actual holes. Without one, the legacy
+    # segment extrusion still runs so older projects keep working.
+    if building is not None:
+        materials = {"wall": wall_mat, "floor": floor_mat, "ceiling": ceiling_mat,
+                     "glass": create_material("Glass", "#BFD9E8", 0.05, 0.0),
+                     "door": create_material("DoorLeaf", "#8D6E63", 0.6, 0.0)}
+        blender_build.build(
+            building, materials,
+            wall_height=config.get("wall_height"),
+            generate_floor=config.get("generate_floor", True),
+            generate_ceiling=config.get("generate_ceiling", True),
+        )
+        x0, y0, x1, y1 = blender_build.bounds(building)
+        cx, cy = (x0 + x1) / 2.0, (y0 + y1) / 2.0
+        max_dim = max(x1 - x0, y1 - y0)
     else:
-        bb_min, bb_max = get_bounding_box(geometry)
-        cx = (bb_min[0] + bb_max[0]) / 2
-        cy = (bb_min[1] + bb_max[1]) / 2
-        max_dim = max(bb_max[0] - bb_min[0], bb_max[1] - bb_min[1])
+        walls_obj = create_walls(geometry, config, wall_mat)
 
-    if config.get("generate_ceiling", True):
-        create_ceiling(geometry, config, ceiling_mat)
+        if config.get("generate_floor", True):
+            floor_obj, cx, cy, max_dim = create_floor(geometry, floor_mat)
+        else:
+            bb_min, bb_max = get_bounding_box(geometry)
+            cx = (bb_min[0] + bb_max[0]) / 2
+            cy = (bb_min[1] + bb_max[1]) / 2
+            max_dim = max(bb_max[0] - bb_min[0], bb_max[1] - bb_min[1])
+
+        if config.get("generate_ceiling", True):
+            create_ceiling(geometry, config, ceiling_mat)
 
     # Furniture, openings and structure from the vision scene graph
     if graph is not None and library is not None:
