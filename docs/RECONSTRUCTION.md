@@ -43,14 +43,21 @@ DXF
  ├─ openings.py   collect opening evidence (headers, swings,
  │                glazing, blocks)                         → Evidence[]
  ├─ walls.py      faces → pairing → centrelines → cleanup  → Wall[]
+ ├─ structure.py  walls that hang together; fragments      → Structure[]
+ ├─ openings.py   match evidence onto walls, classify      → Opening[]
  ├─ topology.py   planar graph → bounded faces → rooms     → Room[]
- ├─ openings.py   match evidence onto walls; link rooms    → Opening[]
+ │                rooms and openings back to structures;
+ │                link each opening to the rooms it joins
+ ├─ levels.py     which structures are buildings and which
+ │                are storeys of one building              → Building[]
+ ├─ evidence.py   the entities each wall, room and opening
+ │                came from; the semantic CAD document     → evidence
  ├─ validate.py   refuse anything that is not a building
  │
- └─ ir.py         Building  →  building.json  →  Blender
+ └─ ir.py         Drawing  →  building.json  →  Blender
 ```
 
-Two orderings in that list are load-bearing.
+Four orderings in that list are load-bearing.
 
 **Opening evidence comes before walls.** A wall's line work stops at every door
 and window — that is what an opening *is* on a plan. So the faces arrive
@@ -61,10 +68,21 @@ openings are drawn *positively*: as headers, swing arcs, glazing lines and
 blocks, all of which exist independently of the walls. That evidence is
 gathered first and handed to the wall builder as **bridges**.
 
+**Structures come before openings are classified.** Whether a wall is on a
+building's envelope decides what a hole in it is: a 3 m gap in an exterior wall
+is a garage door, and the same gap inside is a cased opening between two rooms.
+Exterior is therefore settled per structure, from that structure's own walls.
+Settled across the whole sheet, every building but the largest came out
+"interior".
+
 **Rooms come after walls.** A room is a bounded face of the planar subdivision
 induced by the wall centrelines. It is therefore impossible for the engine to
 invent a room where the drawing has no walls, and impossible to miss one that
 the walls do enclose. Text only *names* a face that geometry has already found.
+
+**Storeys come after rooms.** A plan title is only worth attaching to a plan
+that turned out to exist, and a structure that encloses no room is not one. So
+the house-or-storey question is answered last, on the structures that survived.
 
 ---
 
@@ -189,32 +207,36 @@ faces.
 
 Thickness is measured, never configured. Conventions only break ties.
 
-## Stage 5 — Topology and rooms (`topology.py`)
+## Stage 5 — Structures (`structure.py`)
 
-Wall centrelines are noded and polygonised; each bounded face is a candidate
-room. The face runs down the middle of the walls, so it is half a thickness too
-big on every side; the interior is recovered by subtracting the wall solids —
-which keeps a room bounded by a 100 mm partition on one side and a 200 mm
-exterior wall on the other correct on *both* sides.
+A structure is a set of walls that physically hang together, and the test is
+geometric: two walls are in the same structure if they touch, and two groups of
+touching walls are one structure if the gap between them is under 0.6 m —
+wide enough to absorb a joint the wall repair could not close, narrower than
+any real separation between buildings, since fire separation, access paths and
+setbacks are all wider.
 
-A doorway is a hole in a wall, not a wall, so it never appears in the graph and
-never splits a room. A cased opening between a dining room and a great room
-likewise leaves one face, which is architecturally correct. Where such a face
-carries more than one *recognised room name*, it is partitioned between them
-and every part is flagged `open_plan`, so "a wall divides these" and "a drafter
-named two parts of one space" stay distinguishable.
+A structure is **not yet a building**. Two structures may be a house and its
+detached garage, or a ground-floor plan and a first-floor plan drawn side by
+side; that question needs text, and `levels.py` answers it. This stage
+guarantees only that it never welds two separate pieces of construction into
+one and never splits one piece into two.
 
-**Labels name; they never place.** Candidate room names are short strings that
-are not construction notes, drawn at the sheet's room-name text height. Two
-lines of one name are joined (`MASTER` / `BEDROOM`). AutoCAD formatting codes
-are stripped, so nothing is called `%%uKITCHEN`.
+**Substance and fragments.** Real sheets carry wall-layer geometry that
+encloses nothing: a boundary-wall stub, a freestanding screen, a planter, a
+length of fence, a deck post. Treating each as a building reports sixty
+buildings on a site plan. So a group of walls founds a structure only when it
+encloses at least 4 m² — a guard booth clears that, a fence line does not. A
+group that encloses nothing is a **fragment**: it joins the structure it sits
+against when one is within 3 m, and is otherwise reported as unassigned wall.
+Neither silently extruded as a building nor silently deleted.
 
-**The envelope.** When the drawing has a footprint layer, that is the
-drafter's own answer to where the building stops — and it includes the parts
-walls do not enclose: the covered porch, the deck, the carport. Envelope area
-that no wall encloses becomes an exterior room when it carries a porch/deck
-label, and is otherwise *measured and reported* as unenclosed rather than
-quietly absorbed.
+Once rooms exist the partition is settled again: rooms, openings and footprint
+parts are distributed to the structure that owns them, a structure left with no
+room is demoted, and each structure gets the part of the drawing's envelope
+that is actually its own. Exterior walls are labelled twice — once from the
+structure's own walls before openings are classified, and again from its real
+footprint once rooms exist.
 
 ## Stage 6 — Openings (`openings.py`)
 
@@ -243,22 +265,126 @@ glazing means a window, and a wide hole means a garage door only when the wall
 is an exterior one — a wide hole in an interior wall is a cased opening between
 two rooms.
 
-## Stage 7 — Validation (`validate.py`)
+## Stage 7 — Topology and rooms (`topology.py`)
 
-A `Building` is only ever returned if it passed here. A reconstruction that
+Wall centrelines are noded and polygonised; each bounded face is a candidate
+room. The face runs down the middle of the walls, so it is half a thickness too
+big on every side; the interior is recovered by subtracting the wall solids —
+which keeps a room bounded by a 100 mm partition on one side and a 200 mm
+exterior wall on the other correct on *both* sides.
+
+A doorway is a hole in a wall, not a wall, so it never appears in the graph and
+never splits a room. A cased opening between a dining room and a great room
+likewise leaves one face, which is architecturally correct. Where such a face
+carries more than one *recognised room name*, it is partitioned between them
+and every part is flagged `open_plan`, so "a wall divides these" and "a drafter
+named two parts of one space" stay distinguishable.
+
+**Labels name; they never place.** Candidate room names are short strings that
+are not construction notes, drawn at the sheet's room-name text height. Two
+lines of one name are joined (`MASTER` / `BEDROOM`). AutoCAD formatting codes
+are stripped, so nothing is called `%%uKITCHEN`.
+
+**The envelope.** When the drawing has a footprint layer, that is the
+drafter's own answer to where the building stops — and it includes the parts
+walls do not enclose: the covered porch, the deck, the carport. Envelope area
+that no wall encloses becomes an exterior room when it carries a porch/deck
+label, and is otherwise *measured and reported* as unenclosed rather than
+quietly absorbed.
+
+## Stage 8 — Buildings and storeys (`levels.py`)
+
+A sheet with two disconnected floor plans on it is one of three things: two
+buildings on one site, two storeys of one building drawn side by side because
+paper is flat, or genuinely unclear. **Geometry cannot tell the first two
+apart** — a house beside its garage and a ground floor beside its first floor
+are both "two closed wall networks a few metres apart". What tells them apart
+is what the drafter wrote: a title under each plan (`GROUND FLOOR PLAN`), a
+level token in the layer names (`GF-WALL`), a building designation (`BLOCK A`).
+
+So storeys are only ever inferred from **positive evidence**, and disconnected
+geometry is never stacked because it happens to be disconnected:
+
+* Structures carrying distinct level designations become storeys of one
+  building, ordered by those designations and registered over each other by
+  their walls.
+* Structures with no level evidence are separate buildings.
+* Structures with no level evidence whose footprints are *congruent* — the same
+  floor plate repeated — are `LEVELS_AMBIGUOUS`: kept apart exactly as drawn
+  and flagged for a person to decide. Stacking them is a guess and merging them
+  is wrong.
+
+Text is evidence only when it is **placed like a title**, within 6 m of the
+plan it names (or 75% of the plan's own size, whichever is more — dimension
+strings on a large plan run several metres out), and only when no second plan
+is nearly as close. A floor-area schedule lists `FLOOR - FIRST` and
+`FLOOR - SECOND` one above the other in a table and a stair is labelled `UP TO
+FIRST FLOOR`; neither names a plan, both are rejected, and the reason is
+recorded.
+
+Storey elevations are measured from the drawing where it states them and are
+otherwise placed at multiples of the storey height — and when they are
+estimated, validation says so in as many words, because an estimated height
+must not read as a measured one.
+
+## Stage 9 — The evidence bridge (`evidence.py`)
+
+The wall model does not keep everything the downstream stages need: which block
+is a toilet, what a room label says and where it sits, what a block's
+`ROOM_NAME` attribute holds, which hatch pattern fills a space. That evidence
+used to come from `cad.reader`, a second DXF parser with its own unit detection
+and its own origin — and **two readers of one file eventually disagree**, about
+units first and then about where everything is, at which point a room label in
+one frame names the wrong room in the other.
+
+So there is one reader, and this stage *projects* its records into the two
+shapes the later stages consume:
+
+* `to_cad_document` — the `CadDocument` the semantic tier was written against,
+  in the reconstruction's own frame and units. Only the geometry and the
+  parsing moved; the interpretation of strings, block names and layer names is
+  still `cad.text`, `cad.blocks` and `cad.layers`.
+* `source_evidence` — an id-addressed record of every entity the model was
+  built from (`entity_id`, `entity_type`, `layer`, `block`, `transform`,
+  `geometry`) and, for each wall, room and opening, the entity ids that are its
+  evidence. A consumer that wants to know *why* there is a door somewhere
+  follows the ids rather than re-deriving them.
+
+The bridge is enrichment, so it may never cost the geometry: a failure here is
+a warning on a model that is otherwise complete.
+
+## Stage 10 — Validation (`validate.py`)
+
+A `Drawing` is only ever returned if it passed here. A reconstruction that
 cannot pass is raised as a `ReconstructionError` carrying the diagnostics.
 **"No building, and here is why" is a supported outcome; "a wrong building" is
 not.**
+
+Every storey is validated in its own right, then every building, then the
+drawing as a whole; a multi-storey drawing's report prefixes each finding with
+where it came from, so one list says everything.
 
 Errors (refuse the build): implausible overall size; no walls; no rooms; a wall
 longer than the whole plan; an impossible wall thickness; overlapping rooms; an
 opening that does not fit its host wall; a large share of wall length that
 encloses nothing; long free-floating walls outside the envelope that bound no
-room (the signature of a dimension layer that got through).
+room (the signature of a dimension layer that got through); a large share of
+wall length belonging to no building at all.
 
 Warnings (build anyway, but say so): a header/geometry unit conflict; more than
 one structure on the sheet; rooms partly outside the envelope; low area
-coverage; no openings found.
+coverage; no openings found; an upper storey that does not stand on the one
+below; storey elevations that were estimated rather than measured; part of the
+sheet that took no part in the reconstruction.
+
+Three of the checks are measurements of whether the *reconstruction itself* is
+sound rather than of the building:
+
+| Measure | What a bad value means |
+|---|---|
+| `repair_ratio` — reconstructed wall length over wall line work actually drawn | Most of the wall was invented by gap repair rather than drawn |
+| `orientation_coherence` — share of wall length on the plan's main directions | The lines read as walls are unrelated strokes, not construction |
+| `scale_confidence` — how a building's proportions should measure | With an uncertain unit, the scale is almost certainly wrong |
 
 Two checks are deliberately *not* errors. **Multiple wall islands** are normal —
 a house and its detached garage are two islands and both are real; what matters
@@ -266,7 +392,7 @@ is wall length that encloses *nothing*. And **long walls outside the envelope**
 are only an error when they also account for a real share of total wall length;
 one of them is a fence, a third of them is the annotation layer.
 
-## Stage 8 — 3D (`modules/blender_build.py`)
+## Stage 11 — 3D (`modules/blender_build.py`)
 
 A direct extrusion of the validated model, and nothing more. It decides
 nothing: every question was answered and validated before it was called.
@@ -285,6 +411,19 @@ model's daylight out and misrepresent the building.
 Blender's interpreter has `bpy` but not `shapely` or `ezdxf`, so this module
 imports nothing from `modules/recon` and reads plain JSON. The seam is the file.
 
+## Stage 12 — Checking the GLB (`modules/glb_validate.py`)
+
+The failure this engine was written to fix shipped a **valid GLB** of a 0.8 m
+building. "The exporter reported success" and "the file loads" were both true
+and neither meant anything. So the export is checked back against the
+`building.json` it was built from: that the file is well-formed glTF 2.0, and
+that the geometry in it is the building — every storey present, at its
+elevation, over its footprint.
+
+```bash
+python modules/glb_validate.py output/model.glb data/building.json
+```
+
 ---
 
 ## Diagnostics
@@ -299,6 +438,7 @@ walls.json      the wall list plus face/pairing statistics
 rooms.json      room polygons, areas, labels, boundary walls
 doors.json      openings classified as doors, garage doors, cased openings
 windows.json    openings classified as windows
+levels.json     the buildings, their storeys, and the evidence for each
 validation.json every check, its result, and the measured values
 building.json   the complete IR
 error.json      on refusal: the stage, the failures, the partial diagnostics
@@ -309,6 +449,7 @@ debug_walls.svg        centrelines over the line work they came from
 debug_rooms.svg        room polygons, labelled, with areas
 debug_openings.svg     doors and windows on their host walls
 debug_topology.svg     nodes by degree — degree 1 is a free end
+debug_structures.svg   which walls the partition put in which structure
 reconstruction.svg     everything together; look at this one first
 ```
 
@@ -333,20 +474,46 @@ Peak traced memory is 6 MB for the residential plan and 42 MB for the site
 plan. The large-sheet figure is dominated by `ezdxf` parsing a 6 MB file with
 423 nested `INSERT`s.
 
-## Testing
+Across the 79-drawing corpus the slowest reconstruction is 10.5 s — a five-storey
+apartment building converted from BIM, with 210 doors and 263 windows. A
+typical single-storey ResPlan house takes about 0.1 s. Every figure in
+`docs/CORPUS_REPORT.md` is timed, so a change that makes the engine slower
+shows up there without anyone having to look for it.
+
+## Testing, and measuring
 
 ```bash
 python -m pytest tests/test_recon_*.py tests/test_blender_build.py -q
-python tests/fixtures/make_plans.py      # regenerate the synthetic fixtures
+python -m pytest tests/test_corpus_metrics.py -q   # the release gates
+python tools/corpus/evaluate.py                    # remeasure, rewrite the report
+python tests/fixtures/make_plans.py                # regenerate the synthetic fixtures
 ```
 
-Two kinds of fixture, and neither substitutes for the other. The **generated**
-set (`tests/fixtures/plans/t*.dxf`) isolates one construction each — blocks, a
-lying header, dimension clutter, a rotated sheet, each unit — so the expected
-geometry is known exactly. The **real** set says whether the engine handles
-what people actually send; `residential_us.dxf` is the drawing that failed the
-desktop acceptance test and is now a permanent regression fixture.
+Three kinds of fixture, and none substitutes for the others.
 
-Assertions are geometric — overall size, wall thickness, room count, footprint
-area, opening count — because "the tests pass" is what the old engine could
-say while producing a 0.8 m building.
+The **generated** set (`tests/fixtures/plans/t*.dxf`, `multi/`, `doors/`,
+`failures/`) isolates one construction each — blocks, a lying header, dimension
+clutter, a rotated sheet, each unit, a doorway drawn only as a gap — so the
+expected geometry is known exactly.
+
+The **real** set says whether the engine handles what people actually send;
+`residential_us.dxf` is the drawing that failed the desktop acceptance test and
+is now a permanent regression fixture.
+
+The **corpus** (`tests/corpus/`, 79 drawings) is the one that produces numbers
+rather than verdicts. Every drawing has a `.truth.json` beside it in metres, so
+`modules/recon/metrics.py` can measure the reconstruction against it: where the
+openings are and what they are, where the walls run and how thick, how many
+rooms and how big, what the footprint covers, whether the scale is right.
+`tests/test_corpus_metrics.py` holds each dataset group to a floor and fails
+the build with the number that moved; `docs/CORPUS_REPORT.md` is the current
+measurement and `tests/corpus/README.md` says where each drawing came from,
+what is real in it and what was drafted for it.
+
+**Assertions are geometric, and the gates are measurements**, because "the
+tests pass" is exactly what the old engine could say while producing a 0.8 m
+building. A metric is a number a wrong reconstruction cannot accidentally hit.
+The floors are per group rather than global: a single threshold across the
+corpus would be set by whichever group is hardest and then met trivially by the
+rest. The reasoning for each one is in the corpus README, and a change that
+improves a number should raise its floor rather than leave slack behind it.
