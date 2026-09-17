@@ -1,0 +1,6409 @@
+{
+ "groups": {
+  "ALL": {
+   "drawings": 79,
+   "statuses": {
+    "AMBIGUOUS": 2,
+    "VALID": 49,
+    "VALID_WITH_WARNINGS": 28
+   },
+   "door_precision": 0.9888,
+   "door_recall": 0.9002,
+   "window_precision": 0.997,
+   "window_recall": 0.8804,
+   "doors_truth": 1172,
+   "windows_truth": 1120,
+   "opening_position_error_m": 0.0037,
+   "room_recall": 0.8692,
+   "room_count_accuracy": 0.8395,
+   "room_area_error_median": 0.0748,
+   "footprint_iou_mean": 0.896,
+   "footprint_iou_median": 0.9925,
+   "wall_position_error_m": 0.039,
+   "wall_recall": 0.9848,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.2374,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0024,
+   "structure_accuracy": 0.9592,
+   "seconds_total": 35.89,
+   "seconds_max": 10.778
+  },
+  "category:apartment": {
+   "drawings": 14,
+   "statuses": {
+    "VALID": 12,
+    "VALID_WITH_WARNINGS": 2
+   },
+   "door_precision": 0.971,
+   "door_recall": 0.8499,
+   "window_precision": 0.992,
+   "window_recall": 0.7576,
+   "doors_truth": 433,
+   "windows_truth": 491,
+   "opening_position_error_m": 0.0083,
+   "room_recall": 0.9461,
+   "room_count_accuracy": 0.8881,
+   "room_area_error_median": 0.0824,
+   "footprint_iou_mean": 0.9493,
+   "footprint_iou_median": 0.9937,
+   "wall_position_error_m": 0.0578,
+   "wall_recall": 0.9898,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.3071,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0018,
+   "structure_accuracy": 1.0,
+   "seconds_total": 16.93,
+   "seconds_max": 10.778
+  },
+  "category:commercial": {
+   "drawings": 1,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 1
+   },
+   "door_precision": 1.0,
+   "door_recall": 0.975,
+   "window_precision": 1.0,
+   "window_recall": 1.0,
+   "doors_truth": 240,
+   "windows_truth": 58,
+   "opening_position_error_m": 0.0052,
+   "room_recall": 0.8712,
+   "room_count_accuracy": 1.0,
+   "room_area_error_median": 0.0126,
+   "footprint_iou_mean": 0.8905,
+   "footprint_iou_median": 0.8905,
+   "wall_position_error_m": 0.0271,
+   "wall_recall": 0.8994,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.195,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0596,
+   "structure_accuracy": 1.0,
+   "seconds_total": 6.73,
+   "seconds_max": 6.728
+  },
+  "category:generated": {
+   "drawings": 14,
+   "statuses": {
+    "VALID": 12,
+    "VALID_WITH_WARNINGS": 2
+   },
+   "door_precision": 1.0,
+   "door_recall": 1.0,
+   "window_precision": 1.0,
+   "window_recall": 1.0,
+   "doors_truth": 40,
+   "windows_truth": 51,
+   "opening_position_error_m": 0.0,
+   "room_recall": null,
+   "room_count_accuracy": null,
+   "room_area_error_median": null,
+   "footprint_iou_mean": null,
+   "footprint_iou_median": null,
+   "wall_position_error_m": 0.0001,
+   "wall_recall": 1.0,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.0002,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": null,
+   "structure_accuracy": null,
+   "seconds_total": 4.04,
+   "seconds_max": 1.759
+  },
+  "category:generated-doors": {
+   "drawings": 4,
+   "statuses": {
+    "VALID": 4
+   },
+   "door_precision": 1.0,
+   "door_recall": 1.0,
+   "window_precision": 1.0,
+   "window_recall": 1.0,
+   "doors_truth": 15,
+   "windows_truth": 9,
+   "opening_position_error_m": 0.0,
+   "room_recall": null,
+   "room_count_accuracy": null,
+   "room_area_error_median": null,
+   "footprint_iou_mean": null,
+   "footprint_iou_median": null,
+   "wall_position_error_m": 0.0001,
+   "wall_recall": 1.0,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.0001,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": null,
+   "structure_accuracy": null,
+   "seconds_total": 0.25,
+   "seconds_max": 0.075
+  },
+  "category:generated-multi": {
+   "drawings": 12,
+   "statuses": {
+    "AMBIGUOUS": 2,
+    "VALID": 10
+   },
+   "door_precision": 1.0,
+   "door_recall": 1.0,
+   "window_precision": 1.0,
+   "window_recall": 1.0,
+   "doors_truth": 66,
+   "windows_truth": 86,
+   "opening_position_error_m": 0.0,
+   "room_recall": null,
+   "room_count_accuracy": null,
+   "room_area_error_median": null,
+   "footprint_iou_mean": null,
+   "footprint_iou_median": null,
+   "wall_position_error_m": 0.0001,
+   "wall_recall": 1.0,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.0002,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": null,
+   "structure_accuracy": null,
+   "seconds_total": 1.25,
+   "seconds_max": 0.175
+  },
+  "category:multi_building": {
+   "drawings": 5,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 5
+   },
+   "door_precision": 0.9895,
+   "door_recall": 0.8704,
+   "window_precision": 1.0,
+   "window_recall": 0.9462,
+   "doors_truth": 108,
+   "windows_truth": 130,
+   "opening_position_error_m": 0.0063,
+   "room_recall": 0.7311,
+   "room_count_accuracy": 0.8595,
+   "room_area_error_median": 0.0958,
+   "footprint_iou_mean": 0.8442,
+   "footprint_iou_median": 0.7894,
+   "wall_position_error_m": 0.0569,
+   "wall_recall": 0.938,
+   "wall_thickness_error_m": 0.0004,
+   "wall_length_error": 0.3631,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.1017,
+   "structure_accuracy": 0.8,
+   "seconds_total": 1.93,
+   "seconds_max": 0.583
+  },
+  "category:residential": {
+   "drawings": 24,
+   "statuses": {
+    "VALID": 11,
+    "VALID_WITH_WARNINGS": 13
+   },
+   "door_precision": 1.0,
+   "door_recall": 0.8927,
+   "window_precision": 1.0,
+   "window_recall": 0.9712,
+   "doors_truth": 177,
+   "windows_truth": 208,
+   "opening_position_error_m": 0.0043,
+   "room_recall": 0.8457,
+   "room_count_accuracy": 0.7934,
+   "room_area_error_median": 0.0731,
+   "footprint_iou_mean": 0.883,
+   "footprint_iou_median": 0.9958,
+   "wall_position_error_m": 0.0656,
+   "wall_recall": 0.9748,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.3145,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0017,
+   "structure_accuracy": 0.9583,
+   "seconds_total": 3.21,
+   "seconds_max": 0.272
+  },
+  "category:site_plan": {
+   "drawings": 5,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 5
+   },
+   "door_precision": 1.0,
+   "door_recall": 0.8602,
+   "window_precision": 1.0,
+   "window_recall": 0.977,
+   "doors_truth": 93,
+   "windows_truth": 87,
+   "opening_position_error_m": 0.0049,
+   "room_recall": 0.7857,
+   "room_count_accuracy": 0.8724,
+   "room_area_error_median": 0.0681,
+   "footprint_iou_mean": 0.8622,
+   "footprint_iou_median": 0.9606,
+   "wall_position_error_m": 0.0602,
+   "wall_recall": 0.9978,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.2918,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0147,
+   "structure_accuracy": 1.0,
+   "seconds_total": 1.55,
+   "seconds_max": 0.399
+  },
+  "style:A": {
+   "drawings": 12,
+   "statuses": {
+    "VALID": 7,
+    "VALID_WITH_WARNINGS": 5
+   },
+   "door_precision": 0.9907,
+   "door_recall": 0.9224,
+   "window_precision": 1.0,
+   "window_recall": 0.9667,
+   "doors_truth": 116,
+   "windows_truth": 120,
+   "opening_position_error_m": 0.0095,
+   "room_recall": 0.816,
+   "room_count_accuracy": 0.875,
+   "room_area_error_median": 0.0759,
+   "footprint_iou_mean": 0.9242,
+   "footprint_iou_median": 0.988,
+   "wall_position_error_m": 0.0561,
+   "wall_recall": 0.9714,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.3055,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0042,
+   "structure_accuracy": 1.0,
+   "seconds_total": 1.83,
+   "seconds_max": 0.361
+  },
+  "style:B": {
+   "drawings": 12,
+   "statuses": {
+    "VALID": 4,
+    "VALID_WITH_WARNINGS": 8
+   },
+   "door_precision": 1.0,
+   "door_recall": 0.878,
+   "window_precision": 1.0,
+   "window_recall": 0.9662,
+   "doors_truth": 123,
+   "windows_truth": 148,
+   "opening_position_error_m": 0.0021,
+   "room_recall": 0.7914,
+   "room_count_accuracy": 0.8028,
+   "room_area_error_median": 0.084,
+   "footprint_iou_mean": 0.8593,
+   "footprint_iou_median": 0.9329,
+   "wall_position_error_m": 0.0637,
+   "wall_recall": 0.9882,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.2921,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0321,
+   "structure_accuracy": 0.9167,
+   "seconds_total": 2.57,
+   "seconds_max": 0.583
+  },
+  "style:C": {
+   "drawings": 10,
+   "statuses": {
+    "VALID": 6,
+    "VALID_WITH_WARNINGS": 4
+   },
+   "door_precision": 1.0,
+   "door_recall": 0.7176,
+   "window_precision": 1.0,
+   "window_recall": 0.972,
+   "doors_truth": 85,
+   "windows_truth": 107,
+   "opening_position_error_m": 0.0036,
+   "room_recall": 0.8333,
+   "room_count_accuracy": 0.8168,
+   "room_area_error_median": 0.0831,
+   "footprint_iou_mean": 0.8575,
+   "footprint_iou_median": 0.9955,
+   "wall_position_error_m": 0.065,
+   "wall_recall": 0.9928,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.3135,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0018,
+   "structure_accuracy": 0.9,
+   "seconds_total": 2.1,
+   "seconds_max": 0.786
+  },
+  "style:D": {
+   "drawings": 10,
+   "statuses": {
+    "VALID": 6,
+    "VALID_WITH_WARNINGS": 4
+   },
+   "door_precision": 1.0,
+   "door_recall": 0.932,
+   "window_precision": 1.0,
+   "window_recall": 0.95,
+   "doors_truth": 103,
+   "windows_truth": 100,
+   "opening_position_error_m": 0.008,
+   "room_recall": 0.819,
+   "room_count_accuracy": 0.8095,
+   "room_area_error_median": 0.0742,
+   "footprint_iou_mean": 0.9261,
+   "footprint_iou_median": 0.9941,
+   "wall_position_error_m": 0.0568,
+   "wall_recall": 0.9975,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.347,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0015,
+   "structure_accuracy": 1.0,
+   "seconds_total": 1.58,
+   "seconds_max": 0.408
+  },
+  "style:IFC-A": {
+   "drawings": 2,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 2
+   },
+   "door_precision": 1.0,
+   "door_recall": 0.9777,
+   "window_precision": 1.0,
+   "window_recall": 0.935,
+   "doors_truth": 224,
+   "windows_truth": 277,
+   "opening_position_error_m": 0.0004,
+   "room_recall": 0.9526,
+   "room_count_accuracy": 0.977,
+   "room_area_error_median": 0.0272,
+   "footprint_iou_mean": 0.9235,
+   "footprint_iou_median": 0.9235,
+   "wall_position_error_m": 0.0693,
+   "wall_recall": 0.8695,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.1721,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0378,
+   "structure_accuracy": 1.0,
+   "seconds_total": 11.0,
+   "seconds_max": 10.778
+  },
+  "style:IFC-B": {
+   "drawings": 1,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 1
+   },
+   "door_precision": 1.0,
+   "door_recall": 0.975,
+   "window_precision": 1.0,
+   "window_recall": 1.0,
+   "doors_truth": 240,
+   "windows_truth": 58,
+   "opening_position_error_m": 0.0052,
+   "room_recall": 0.8712,
+   "room_count_accuracy": 1.0,
+   "room_area_error_median": 0.0126,
+   "footprint_iou_mean": 0.8905,
+   "footprint_iou_median": 0.8905,
+   "wall_position_error_m": 0.0271,
+   "wall_recall": 0.8994,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.195,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0596,
+   "structure_accuracy": 1.0,
+   "seconds_total": 6.73,
+   "seconds_max": 6.728
+  },
+  "style:IFC-C": {
+   "drawings": 1,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 1
+   },
+   "door_precision": 0.8962,
+   "door_recall": 0.6507,
+   "window_precision": 0.9444,
+   "window_recall": 0.34,
+   "doors_truth": 146,
+   "windows_truth": 150,
+   "opening_position_error_m": 0.021,
+   "room_recall": 0.9385,
+   "room_count_accuracy": 0.7846,
+   "room_area_error_median": 0.0173,
+   "footprint_iou_mean": 0.9315,
+   "footprint_iou_median": 0.9315,
+   "wall_position_error_m": 0.0673,
+   "wall_recall": 0.9575,
+   "wall_thickness_error_m": 0.0051,
+   "wall_length_error": 0.0508,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0042,
+   "structure_accuracy": 1.0,
+   "seconds_total": 4.28,
+   "seconds_max": 4.281
+  },
+  "style:IFC-D": {
+   "drawings": 1,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 1
+   },
+   "door_precision": 1.0,
+   "door_recall": 1.0,
+   "window_precision": 1.0,
+   "window_recall": 1.0,
+   "doors_truth": 14,
+   "windows_truth": 14,
+   "opening_position_error_m": 0.0,
+   "room_recall": 1.0,
+   "room_count_accuracy": 1.0,
+   "room_area_error_median": 0.0472,
+   "footprint_iou_mean": 0.9975,
+   "footprint_iou_median": 0.9975,
+   "wall_position_error_m": 0.1074,
+   "wall_recall": 0.816,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.3282,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0012,
+   "structure_accuracy": 1.0,
+   "seconds_total": 0.27,
+   "seconds_max": 0.272
+  },
+  "dataset:ResPlan": {
+   "drawings": 34,
+   "statuses": {
+    "VALID": 23,
+    "VALID_WITH_WARNINGS": 11
+   },
+   "door_precision": 1.0,
+   "door_recall": 0.8761,
+   "window_precision": 1.0,
+   "window_recall": 0.969,
+   "doors_truth": 226,
+   "windows_truth": 258,
+   "opening_position_error_m": 0.0059,
+   "room_recall": 0.8629,
+   "room_count_accuracy": 0.8158,
+   "room_area_error_median": 0.0789,
+   "footprint_iou_mean": 0.9031,
+   "footprint_iou_median": 0.9951,
+   "wall_position_error_m": 0.0609,
+   "wall_recall": 0.9923,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.3098,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0017,
+   "structure_accuracy": 0.9706,
+   "seconds_total": 4.59,
+   "seconds_max": 0.786
+  },
+  "dataset:ResPlan + OpenStreetMap (composed)": {
+   "drawings": 10,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 10
+   },
+   "door_precision": 0.9943,
+   "door_recall": 0.8657,
+   "window_precision": 1.0,
+   "window_recall": 0.9585,
+   "doors_truth": 201,
+   "windows_truth": 217,
+   "opening_position_error_m": 0.0056,
+   "room_recall": 0.7558,
+   "room_count_accuracy": 0.866,
+   "room_area_error_median": 0.0801,
+   "footprint_iou_mean": 0.8532,
+   "footprint_iou_median": 0.8503,
+   "wall_position_error_m": 0.0586,
+   "wall_recall": 0.9679,
+   "wall_thickness_error_m": 0.0001,
+   "wall_length_error": 0.2966,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0708,
+   "structure_accuracy": 0.9,
+   "seconds_total": 3.48,
+   "seconds_max": 0.583
+  },
+  "dataset:buildingSMART Community Sample Test Files": {
+   "drawings": 5,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 5
+   },
+   "door_precision": 0.9808,
+   "door_recall": 0.9006,
+   "window_precision": 0.9922,
+   "window_recall": 0.7655,
+   "doors_truth": 624,
+   "windows_truth": 499,
+   "opening_position_error_m": 0.0054,
+   "room_recall": 0.9173,
+   "room_count_accuracy": 0.9477,
+   "room_area_error_median": 0.0173,
+   "footprint_iou_mean": 0.9333,
+   "footprint_iou_median": 0.9315,
+   "wall_position_error_m": 0.0681,
+   "wall_recall": 0.8824,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.195,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0042,
+   "structure_accuracy": 1.0,
+   "seconds_total": 22.28,
+   "seconds_max": 10.778
+  },
+  "dataset:generated": {
+   "drawings": 30,
+   "statuses": {
+    "AMBIGUOUS": 2,
+    "VALID": 26,
+    "VALID_WITH_WARNINGS": 2
+   },
+   "door_precision": 1.0,
+   "door_recall": 1.0,
+   "window_precision": 1.0,
+   "window_recall": 1.0,
+   "doors_truth": 121,
+   "windows_truth": 146,
+   "opening_position_error_m": 0.0,
+   "room_recall": null,
+   "room_count_accuracy": null,
+   "room_area_error_median": null,
+   "footprint_iou_mean": null,
+   "footprint_iou_median": null,
+   "wall_position_error_m": 0.0001,
+   "wall_recall": 1.0,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.0002,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": null,
+   "structure_accuracy": null,
+   "seconds_total": 5.54,
+   "seconds_max": 1.759
+  },
+  "tag:composed": {
+   "drawings": 10,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 10
+   },
+   "door_precision": 0.9943,
+   "door_recall": 0.8657,
+   "window_precision": 1.0,
+   "window_recall": 0.9585,
+   "doors_truth": 201,
+   "windows_truth": 217,
+   "opening_position_error_m": 0.0056,
+   "room_recall": 0.7558,
+   "room_count_accuracy": 0.866,
+   "room_area_error_median": 0.0801,
+   "footprint_iou_mean": 0.8532,
+   "footprint_iou_median": 0.8503,
+   "wall_position_error_m": 0.0586,
+   "wall_recall": 0.9679,
+   "wall_thickness_error_m": 0.0001,
+   "wall_length_error": 0.2966,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0708,
+   "structure_accuracy": 0.9,
+   "seconds_total": 3.48,
+   "seconds_max": 0.583
+  },
+  "tag:ifc_section": {
+   "drawings": 5,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 5
+   },
+   "door_precision": 0.9808,
+   "door_recall": 0.9006,
+   "window_precision": 0.9922,
+   "window_recall": 0.7655,
+   "doors_truth": 624,
+   "windows_truth": 499,
+   "opening_position_error_m": 0.0054,
+   "room_recall": 0.9173,
+   "room_count_accuracy": 0.9477,
+   "room_area_error_median": 0.0173,
+   "footprint_iou_mean": 0.9333,
+   "footprint_iou_median": 0.9315,
+   "wall_position_error_m": 0.0681,
+   "wall_recall": 0.8824,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.195,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0042,
+   "structure_accuracy": 1.0,
+   "seconds_total": 22.28,
+   "seconds_max": 10.778
+  },
+  "tag:multi_building": {
+   "drawings": 10,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 10
+   },
+   "door_precision": 0.9943,
+   "door_recall": 0.8657,
+   "window_precision": 1.0,
+   "window_recall": 0.9585,
+   "doors_truth": 201,
+   "windows_truth": 217,
+   "opening_position_error_m": 0.0056,
+   "room_recall": 0.7558,
+   "room_count_accuracy": 0.866,
+   "room_area_error_median": 0.0801,
+   "footprint_iou_mean": 0.8532,
+   "footprint_iou_median": 0.8503,
+   "wall_position_error_m": 0.0586,
+   "wall_recall": 0.9679,
+   "wall_thickness_error_m": 0.0001,
+   "wall_length_error": 0.2966,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0708,
+   "structure_accuracy": 0.9,
+   "seconds_total": 3.48,
+   "seconds_max": 0.583
+  },
+  "tag:multi_storey": {
+   "drawings": 5,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 5
+   },
+   "door_precision": 0.9808,
+   "door_recall": 0.9006,
+   "window_precision": 0.9922,
+   "window_recall": 0.7655,
+   "doors_truth": 624,
+   "windows_truth": 499,
+   "opening_position_error_m": 0.0054,
+   "room_recall": 0.9173,
+   "room_count_accuracy": 0.9477,
+   "room_area_error_median": 0.0173,
+   "footprint_iou_mean": 0.9333,
+   "footprint_iou_median": 0.9315,
+   "wall_position_error_m": 0.0681,
+   "wall_recall": 0.8824,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.195,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0042,
+   "structure_accuracy": 1.0,
+   "seconds_total": 22.28,
+   "seconds_max": 10.778
+  },
+  "tag:site_plan": {
+   "drawings": 5,
+   "statuses": {
+    "VALID_WITH_WARNINGS": 5
+   },
+   "door_precision": 1.0,
+   "door_recall": 0.8602,
+   "window_precision": 1.0,
+   "window_recall": 0.977,
+   "doors_truth": 93,
+   "windows_truth": 87,
+   "opening_position_error_m": 0.0049,
+   "room_recall": 0.7857,
+   "room_count_accuracy": 0.8724,
+   "room_area_error_median": 0.0681,
+   "footprint_iou_mean": 0.8622,
+   "footprint_iou_median": 0.9606,
+   "wall_position_error_m": 0.0602,
+   "wall_recall": 0.9978,
+   "wall_thickness_error_m": 0.0,
+   "wall_length_error": 0.2918,
+   "unit_accuracy": 1.0,
+   "linear_scale_error_median": 0.0147,
+   "structure_accuracy": 1.0,
+   "seconds_total": 1.55,
+   "seconds_max": 0.399
+  }
+ },
+ "rows": [
+  {
+   "file": "tests/corpus/apartment/resplan_apa_00749_C.dxf",
+   "category": "apartment",
+   "style": "C",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.786,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 7,
+      "reported": 7,
+      "true_positive": 7,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0288,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 9,
+      "reported": 9,
+      "true_positive": 9,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0045,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 7
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.9982,
+     "area_ratio": 1.0018,
+     "truth_area_m2": 110.86,
+     "found_area_m2": 111.06
+    },
+    "rooms": {
+     "truth_enclosed": 8,
+     "truth_rooms_most": 8,
+     "reported": 8,
+     "matched": 8,
+     "recall": 1.0,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.1971,
+     "median_area_error": 0.0821
+    },
+    "walls": {
+     "reported": 17,
+     "mean_position_error_m": 0.0767,
+     "within_0_1m": 0.7914,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3725
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0009
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_01759_B.dxf",
+   "category": "apartment",
+   "style": "B",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.098,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.8333,
+      "mean_position_error_m": 0.0035,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5,
+      "probable_door": 1
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.9985,
+     "area_ratio": 1.0015,
+     "truth_area_m2": 108.28,
+     "found_area_m2": 108.44
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 6,
+     "matched": 6,
+     "recall": 0.8571,
+     "count_accuracy": 0.8571,
+     "mean_area_error": 0.1607,
+     "median_area_error": 0.0854
+    },
+    "walls": {
+     "reported": 14,
+     "mean_position_error_m": 0.0391,
+     "within_0_1m": 0.8896,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2924
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0007
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_01931_A.dxf",
+   "category": "apartment",
+   "style": "A",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.087,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0054,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 2,
+      "reported": 2,
+      "true_positive": 2,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0093,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 8
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.9983,
+     "area_ratio": 1.0016,
+     "truth_area_m2": 129.69,
+     "found_area_m2": 129.9
+    },
+    "rooms": {
+     "truth_enclosed": 9,
+     "truth_rooms_most": 9,
+     "reported": 9,
+     "matched": 9,
+     "recall": 1.0,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.1889,
+     "median_area_error": 0.0858
+    },
+    "walls": {
+     "reported": 20,
+     "mean_position_error_m": 0.0421,
+     "within_0_1m": 0.8909,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.1693
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0008
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_04385_D.dxf",
+   "category": "apartment",
+   "style": "D",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.135,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 9,
+      "reported": 9,
+      "true_positive": 9,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0115,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 9,
+      "reported": 9,
+      "true_positive": 9,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0292,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 9
+     },
+     "spurious_openings": 3,
+     "spurious_by_class": {
+      "unknown_opening": 3
+     }
+    },
+    "footprint": {
+     "iou": 0.9918,
+     "area_ratio": 1.0019,
+     "truth_area_m2": 153.9,
+     "found_area_m2": 154.19
+    },
+    "rooms": {
+     "truth_enclosed": 9,
+     "truth_rooms_most": 9,
+     "reported": 11,
+     "matched": 9,
+     "recall": 1.0,
+     "count_accuracy": 0.7778,
+     "mean_area_error": 0.1812,
+     "median_area_error": 0.0665
+    },
+    "walls": {
+     "reported": 29,
+     "mean_position_error_m": 0.0468,
+     "within_0_1m": 0.8621,
+     "recall": 0.9832,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3575
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.0009
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_04390_D.dxf",
+   "category": "apartment",
+   "style": "D",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.1,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0139,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0178,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 3,
+     "spurious_by_class": {
+      "unknown_opening": 3
+     }
+    },
+    "footprint": {
+     "iou": 0.9925,
+     "area_ratio": 1.0017,
+     "truth_area_m2": 74.79,
+     "found_area_m2": 74.92
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 8,
+     "matched": 7,
+     "recall": 1.0,
+     "count_accuracy": 0.8571,
+     "mean_area_error": 0.2579,
+     "median_area_error": 0.091
+    },
+    "walls": {
+     "reported": 23,
+     "mean_position_error_m": 0.0491,
+     "within_0_1m": 0.8538,
+     "recall": 0.9981,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3534
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.0008
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_04806_C.dxf",
+   "category": "apartment",
+   "style": "C",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.073,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 4,
+      "reported": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "missed": 3,
+      "precision": 1.0,
+      "recall": 0.25,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 1,
+      "probable_door": 3
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.9951,
+     "area_ratio": 1.0049,
+     "truth_area_m2": 55.09,
+     "found_area_m2": 55.36
+    },
+    "rooms": {
+     "truth_enclosed": 5,
+     "truth_rooms_most": 5,
+     "reported": 7,
+     "matched": 5,
+     "recall": 1.0,
+     "count_accuracy": 0.6,
+     "mean_area_error": 0.298,
+     "median_area_error": 0.1658
+    },
+    "walls": {
+     "reported": 13,
+     "mean_position_error_m": 0.0653,
+     "within_0_1m": 0.8252,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2926
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0024
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_05158_A.dxf",
+   "category": "apartment",
+   "style": "A",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.083,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 7,
+      "reported": 7,
+      "true_positive": 7,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0003,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0036,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 7
+     },
+     "spurious_openings": 2,
+     "spurious_by_class": {
+      "unknown_opening": 2
+     }
+    },
+    "footprint": {
+     "iou": 0.9948,
+     "area_ratio": 1.0052,
+     "truth_area_m2": 84.53,
+     "found_area_m2": 84.97
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 7,
+     "matched": 7,
+     "recall": 1.0,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.2346,
+     "median_area_error": 0.0676
+    },
+    "walls": {
+     "reported": 15,
+     "mean_position_error_m": 0.0916,
+     "within_0_1m": 0.8121,
+     "recall": 0.9999,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3722
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0026
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_08335_B.dxf",
+   "category": "apartment",
+   "style": "B",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.112,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 2,
+     "spurious_by_class": {
+      "unknown_opening": 2
+     }
+    },
+    "footprint": {
+     "iou": 0.9985,
+     "area_ratio": 1.0015,
+     "truth_area_m2": 78.97,
+     "found_area_m2": 79.08
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 7,
+     "matched": 6,
+     "recall": 0.8571,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.1118,
+     "median_area_error": 0.0826
+    },
+    "walls": {
+     "reported": 13,
+     "mean_position_error_m": 0.0926,
+     "within_0_1m": 0.7692,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.4377
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0007
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_09049_D.dxf",
+   "category": "apartment",
+   "style": "D",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.145,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 8,
+      "reported": 7,
+      "true_positive": 7,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.875,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 11,
+      "reported": 10,
+      "true_positive": 10,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.9091,
+      "mean_position_error_m": 0.0098,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 7,
+      "not found": 1
+     },
+     "spurious_openings": 5,
+     "spurious_by_class": {
+      "unknown_opening": 5
+     }
+    },
+    "footprint": {
+     "iou": 0.7003,
+     "area_ratio": 0.7084,
+     "truth_area_m2": 194.54,
+     "found_area_m2": 137.8
+    },
+    "rooms": {
+     "truth_enclosed": 9,
+     "truth_rooms_most": 9,
+     "reported": 10,
+     "matched": 8,
+     "recall": 0.8889,
+     "count_accuracy": 0.8889,
+     "mean_area_error": 0.1961,
+     "median_area_error": 0.0772
+    },
+    "walls": {
+     "reported": 37,
+     "mean_position_error_m": 0.0443,
+     "within_0_1m": 0.887,
+     "recall": 0.9952,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3046
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.1583
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_12319_B.dxf",
+   "category": "apartment",
+   "style": "B",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.107,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 7,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 3,
+      "precision": 1.0,
+      "recall": 0.5714,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 5,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.8,
+      "mean_position_error_m": 0.005,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 4,
+      "not found": 1,
+      "probable_door": 2
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.8711,
+     "area_ratio": 0.8789,
+     "truth_area_m2": 80.02,
+     "found_area_m2": 70.34
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 6,
+     "matched": 6,
+     "recall": 0.8571,
+     "count_accuracy": 0.8571,
+     "mean_area_error": 0.254,
+     "median_area_error": 0.0878
+    },
+    "walls": {
+     "reported": 21,
+     "mean_position_error_m": 0.0422,
+     "within_0_1m": 0.8961,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2669
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0625
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_15795_A.dxf",
+   "category": "apartment",
+   "style": "A",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.076,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0225,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.017,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 2,
+     "spurious_by_class": {
+      "unknown_opening": 2
+     }
+    },
+    "footprint": {
+     "iou": 0.9719,
+     "area_ratio": 1.0289,
+     "truth_area_m2": 41.81,
+     "found_area_m2": 43.02
+    },
+    "rooms": {
+     "truth_enclosed": 6,
+     "truth_rooms_most": 6,
+     "reported": 6,
+     "matched": 6,
+     "recall": 1.0,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.251,
+     "median_area_error": 0.065
+    },
+    "walls": {
+     "reported": 14,
+     "mean_position_error_m": 0.051,
+     "within_0_1m": 0.8117,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3097
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0143
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/apartment/resplan_apa_16534_C.dxf",
+   "category": "apartment",
+   "style": "C",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.073,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.8333,
+      "mean_position_error_m": 0.0018,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0062,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5,
+      "probable_door": 1
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.9976,
+     "area_ratio": 1.0024,
+     "truth_area_m2": 71.86,
+     "found_area_m2": 72.03
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 6,
+     "matched": 6,
+     "recall": 0.8571,
+     "count_accuracy": 0.8571,
+     "mean_area_error": 0.0739,
+     "median_area_error": 0.1004
+    },
+    "walls": {
+     "reported": 12,
+     "mean_position_error_m": 0.0695,
+     "within_0_1m": 0.8106,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3575
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0012
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/multibuilding/composed_cesson_D.dxf",
+   "category": "multi_building",
+   "style": "D",
+   "dataset": "ResPlan + OpenStreetMap (composed)",
+   "native_cad": false,
+   "tags": [
+    "multi_building",
+    "composed"
+   ],
+   "seconds": 0.408,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 25,
+      "reported": 22,
+      "true_positive": 22,
+      "false_positive": 0,
+      "missed": 3,
+      "precision": 1.0,
+      "recall": 0.88,
+      "mean_position_error_m": 0.001,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 25,
+      "reported": 23,
+      "true_positive": 23,
+      "false_positive": 0,
+      "missed": 2,
+      "precision": 1.0,
+      "recall": 0.92,
+      "mean_position_error_m": 0.0038,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 22,
+      "not found": 3
+     },
+     "spurious_openings": 8,
+     "spurious_by_class": {
+      "probable_door": 1,
+      "unknown_opening": 7
+     }
+    },
+    "footprint": {
+     "iou": 0.9967,
+     "area_ratio": 1.0028,
+     "truth_area_m2": 549.61,
+     "found_area_m2": 551.15
+    },
+    "rooms": {
+     "truth_enclosed": 25,
+     "truth_rooms_most": 25,
+     "reported": 19,
+     "matched": 15,
+     "recall": 0.6,
+     "count_accuracy": 0.76,
+     "mean_area_error": 0.0709,
+     "median_area_error": 0.0748
+    },
+    "walls": {
+     "reported": 79,
+     "mean_position_error_m": 0.0613,
+     "within_0_1m": 0.8446,
+     "recall": 0.9989,
+     "thickness_error_m": 0.0,
+     "length_error": 0.422
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.0014
+    },
+    "structure": {
+     "buildings_expected": 3,
+     "buildings_found": 3,
+     "levels_expected": 3,
+     "levels_found": 3
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/multibuilding/composed_houten_A.dxf",
+   "category": "multi_building",
+   "style": "A",
+   "dataset": "ResPlan + OpenStreetMap (composed)",
+   "native_cad": false,
+   "tags": [
+    "multi_building",
+    "composed"
+   ],
+   "seconds": 0.3,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 20,
+      "reported": 19,
+      "true_positive": 19,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.95,
+      "mean_position_error_m": 0.021,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 25,
+      "reported": 23,
+      "true_positive": 23,
+      "false_positive": 0,
+      "missed": 2,
+      "precision": 1.0,
+      "recall": 0.92,
+      "mean_position_error_m": 0.0113,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 19,
+      "not found": 1
+     },
+     "spurious_openings": 4,
+     "spurious_by_class": {
+      "unknown_opening": 4
+     }
+    },
+    "footprint": {
+     "iou": 0.9113,
+     "area_ratio": 0.9219,
+     "truth_area_m2": 391.25,
+     "found_area_m2": 360.69
+    },
+    "rooms": {
+     "truth_enclosed": 22,
+     "truth_rooms_most": 22,
+     "reported": 22,
+     "matched": 20,
+     "recall": 0.9091,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.2234,
+     "median_area_error": 0.0958
+    },
+    "walls": {
+     "reported": 68,
+     "mean_position_error_m": 0.0568,
+     "within_0_1m": 0.8476,
+     "recall": 0.8045,
+     "thickness_error_m": 0.0004,
+     "length_error": 0.1127
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0398
+    },
+    "structure": {
+     "buildings_expected": 3,
+     "buildings_found": 3,
+     "levels_expected": 3,
+     "levels_found": 3
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/multibuilding/composed_rieselfeld_A.dxf",
+   "category": "multi_building",
+   "style": "A",
+   "dataset": "ResPlan + OpenStreetMap (composed)",
+   "native_cad": false,
+   "tags": [
+    "multi_building",
+    "composed"
+   ],
+   "seconds": 0.361,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 18,
+      "reported": 15,
+      "true_positive": 14,
+      "false_positive": 1,
+      "missed": 4,
+      "precision": 0.9333,
+      "recall": 0.7778,
+      "mean_position_error_m": 0.0051,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 29,
+      "reported": 28,
+      "true_positive": 28,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.9655,
+      "mean_position_error_m": 0.0088,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 14,
+      "not found": 4
+     },
+     "spurious_openings": 10,
+     "spurious_by_class": {
+      "door": 1,
+      "unknown_opening": 9
+     }
+    },
+    "footprint": {
+     "iou": 0.7894,
+     "area_ratio": 0.807,
+     "truth_area_m2": 526.5,
+     "found_area_m2": 424.91
+    },
+    "rooms": {
+     "truth_enclosed": 24,
+     "truth_rooms_most": 24,
+     "reported": 16,
+     "matched": 13,
+     "recall": 0.5417,
+     "count_accuracy": 0.6667,
+     "mean_area_error": 0.2669,
+     "median_area_error": 0.1087
+    },
+    "walls": {
+     "reported": 87,
+     "mean_position_error_m": 0.061,
+     "within_0_1m": 0.8579,
+     "recall": 0.892,
+     "thickness_error_m": 0.0021,
+     "length_error": 0.0722
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.1017
+    },
+    "structure": {
+     "buildings_expected": 3,
+     "buildings_found": 3,
+     "levels_expected": 3,
+     "levels_found": 3
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/multibuilding/composed_zwolle_B.dxf",
+   "category": "multi_building",
+   "style": "B",
+   "dataset": "ResPlan + OpenStreetMap (composed)",
+   "native_cad": false,
+   "tags": [
+    "multi_building",
+    "composed"
+   ],
+   "seconds": 0.583,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 29,
+      "reported": 26,
+      "true_positive": 26,
+      "false_positive": 0,
+      "missed": 3,
+      "precision": 1.0,
+      "recall": 0.8966,
+      "mean_position_error_m": 0.0059,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 30,
+      "reported": 28,
+      "true_positive": 28,
+      "false_positive": 0,
+      "missed": 2,
+      "precision": 1.0,
+      "recall": 0.9333,
+      "mean_position_error_m": 0.0027,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 26,
+      "not found": 1,
+      "unknown_opening": 2
+     },
+     "spurious_openings": 7,
+     "spurious_by_class": {
+      "unknown_opening": 7
+     }
+    },
+    "footprint": {
+     "iou": 0.7878,
+     "area_ratio": 0.7937,
+     "truth_area_m2": 597.46,
+     "found_area_m2": 474.18
+    },
+    "rooms": {
+     "truth_enclosed": 31,
+     "truth_rooms_most": 31,
+     "reported": 27,
+     "matched": 24,
+     "recall": 0.7742,
+     "count_accuracy": 0.871,
+     "mean_area_error": 0.1907,
+     "median_area_error": 0.0733
+    },
+    "walls": {
+     "reported": 91,
+     "mean_position_error_m": 0.0531,
+     "within_0_1m": 0.8731,
+     "recall": 0.9955,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3687
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.1091
+    },
+    "structure": {
+     "buildings_expected": 4,
+     "buildings_found": 5,
+     "levels_expected": 4,
+     "levels_found": 5
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/multibuilding/composed_zwolle_C.dxf",
+   "category": "multi_building",
+   "style": "C",
+   "dataset": "ResPlan + OpenStreetMap (composed)",
+   "native_cad": false,
+   "tags": [
+    "multi_building",
+    "composed"
+   ],
+   "seconds": 0.28,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 16,
+      "reported": 13,
+      "true_positive": 13,
+      "false_positive": 0,
+      "missed": 3,
+      "precision": 1.0,
+      "recall": 0.8125,
+      "mean_position_error_m": 0.0002,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 21,
+      "reported": 21,
+      "true_positive": 21,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0037,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 13,
+      "not found": 2,
+      "unknown_opening": 1
+     },
+     "spurious_openings": 3,
+     "spurious_by_class": {
+      "unknown_opening": 3
+     }
+    },
+    "footprint": {
+     "iou": 0.7357,
+     "area_ratio": 0.7953,
+     "truth_area_m2": 330.19,
+     "found_area_m2": 262.61
+    },
+    "rooms": {
+     "truth_enclosed": 17,
+     "truth_rooms_most": 17,
+     "reported": 17,
+     "matched": 15,
+     "recall": 0.8824,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.2339,
+     "median_area_error": 0.1008
+    },
+    "walls": {
+     "reported": 70,
+     "mean_position_error_m": 0.0524,
+     "within_0_1m": 0.874,
+     "recall": 0.9993,
+     "thickness_error_m": 0.0086,
+     "length_error": 0.3631
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.1082
+    },
+    "structure": {
+     "buildings_expected": 2,
+     "buildings_found": 2,
+     "levels_expected": 2,
+     "levels_found": 2
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/multistorey/bsc_clinic_B.dxf",
+   "category": "commercial",
+   "style": "IFC-B",
+   "dataset": "buildingSMART Community Sample Test Files",
+   "native_cad": false,
+   "tags": [
+    "multi_storey",
+    "ifc_section"
+   ],
+   "seconds": 6.728,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 240,
+      "reported": 234,
+      "true_positive": 234,
+      "false_positive": 0,
+      "missed": 6,
+      "precision": 1.0,
+      "recall": 0.975,
+      "mean_position_error_m": 0.0101,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 58,
+      "reported": 58,
+      "true_positive": 58,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0003,
+      "mean_width_error_m": 0.0,
+      "on_curtain_wall": 9
+     },
+     "door_outcomes": {
+      "door": 234,
+      "not found": 4,
+      "unknown_opening": 2
+     },
+     "spurious_openings": 45,
+     "spurious_by_class": {
+      "unknown_opening": 45
+     }
+    },
+    "footprint": {
+     "iou": 0.8905,
+     "area_ratio": 1.1228,
+     "truth_area_m2": 4083.04,
+     "found_area_m2": 4584.37
+    },
+    "rooms": {
+     "truth_enclosed": 233,
+     "truth_rooms_most": 277,
+     "reported": 253,
+     "matched": 203,
+     "recall": 0.8712,
+     "count_accuracy": 1.0,
+     "mean_area_error": 1.0375,
+     "median_area_error": 0.0126
+    },
+    "walls": {
+     "reported": 602,
+     "mean_position_error_m": 0.0271,
+     "within_0_1m": 0.912,
+     "recall": 0.8994,
+     "thickness_error_m": 0.0,
+     "length_error": 0.195
+    },
+    "scale": {
+     "unit_expected": "feet",
+     "unit_found": "feet",
+     "unit_correct": true,
+     "linear_scale_error": 0.0596
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 2,
+     "levels_found": 2
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/multistorey/bsc_duplex_A.dxf",
+   "category": "residential",
+   "style": "IFC-A",
+   "dataset": "buildingSMART Community Sample Test Files",
+   "native_cad": false,
+   "tags": [
+    "multi_storey",
+    "ifc_section"
+   ],
+   "seconds": 0.224,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 14,
+      "reported": 14,
+      "true_positive": 14,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 14,
+      "reported": 14,
+      "true_positive": 14,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 14
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.9975,
+     "area_ratio": 1.0025,
+     "truth_area_m2": 313.28,
+     "found_area_m2": 314.07
+    },
+    "rooms": {
+     "truth_enclosed": 14,
+     "truth_rooms_most": 20,
+     "reported": 19,
+     "matched": 14,
+     "recall": 1.0,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.4545,
+     "median_area_error": 0.0474
+    },
+    "walls": {
+     "reported": 30,
+     "mean_position_error_m": 0.1074,
+     "within_0_1m": 0.8242,
+     "recall": 0.816,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3282
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0012
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 2,
+     "levels_found": 2
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/multistorey/bsc_duplex_D.dxf",
+   "category": "residential",
+   "style": "IFC-D",
+   "dataset": "buildingSMART Community Sample Test Files",
+   "native_cad": false,
+   "tags": [
+    "multi_storey",
+    "ifc_section"
+   ],
+   "seconds": 0.272,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 14,
+      "reported": 14,
+      "true_positive": 14,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 14,
+      "reported": 14,
+      "true_positive": 14,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 14
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.9975,
+     "area_ratio": 1.0025,
+     "truth_area_m2": 313.28,
+     "found_area_m2": 314.07
+    },
+    "rooms": {
+     "truth_enclosed": 14,
+     "truth_rooms_most": 20,
+     "reported": 19,
+     "matched": 14,
+     "recall": 1.0,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.4556,
+     "median_area_error": 0.0472
+    },
+    "walls": {
+     "reported": 30,
+     "mean_position_error_m": 0.1074,
+     "within_0_1m": 0.8242,
+     "recall": 0.816,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3282
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.0012
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 2,
+     "levels_found": 2
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/multistorey/bsc_esplanades_A.dxf",
+   "category": "apartment",
+   "style": "IFC-A",
+   "dataset": "buildingSMART Community Sample Test Files",
+   "native_cad": false,
+   "tags": [
+    "multi_storey",
+    "ifc_section"
+   ],
+   "seconds": 10.778,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 210,
+      "reported": 205,
+      "true_positive": 205,
+      "false_positive": 0,
+      "missed": 5,
+      "precision": 1.0,
+      "recall": 0.9762,
+      "mean_position_error_m": 0.0015,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 263,
+      "reported": 245,
+      "true_positive": 245,
+      "false_positive": 0,
+      "missed": 18,
+      "precision": 1.0,
+      "recall": 0.9316,
+      "mean_position_error_m": 0.0001,
+      "mean_width_error_m": 0.0002
+     },
+     "door_outcomes": {
+      "door": 205,
+      "not found": 2,
+      "probable_door": 3
+     },
+     "spurious_openings": 21,
+     "spurious_by_class": {
+      "unknown_opening": 21
+     }
+    },
+    "footprint": {
+     "iou": 0.8495,
+     "area_ratio": 0.857,
+     "truth_area_m2": 4884.3,
+     "found_area_m2": 4185.83
+    },
+    "rooms": {
+     "truth_enclosed": 218,
+     "truth_rooms_most": 294,
+     "reported": 208,
+     "matched": 207,
+     "recall": 0.9495,
+     "count_accuracy": 0.9541,
+     "mean_area_error": 0.0138,
+     "median_area_error": 0.007
+    },
+    "walls": {
+     "reported": 586,
+     "mean_position_error_m": 0.0313,
+     "within_0_1m": 0.9246,
+     "recall": 0.9229,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0159
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0743
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 5,
+     "levels_found": 5
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/multistorey/bsc_schependomlaan_C.dxf",
+   "category": "apartment",
+   "style": "IFC-C",
+   "dataset": "buildingSMART Community Sample Test Files",
+   "native_cad": false,
+   "tags": [
+    "multi_storey",
+    "ifc_section"
+   ],
+   "seconds": 4.281,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 146,
+      "reported": 106,
+      "true_positive": 95,
+      "false_positive": 11,
+      "missed": 51,
+      "precision": 0.8962,
+      "recall": 0.6507,
+      "mean_position_error_m": 0.0225,
+      "mean_width_error_m": 0.0271
+     },
+     "window": {
+      "truth": 150,
+      "reported": 54,
+      "true_positive": 51,
+      "false_positive": 3,
+      "missed": 99,
+      "precision": 0.9444,
+      "recall": 0.34,
+      "mean_position_error_m": 0.0195,
+      "mean_width_error_m": 0.003
+     },
+     "door_outcomes": {
+      "door": 121,
+      "not found": 17,
+      "probable_door": 2,
+      "unknown_opening": 6
+     },
+     "spurious_openings": 27,
+     "spurious_by_class": {
+      "door": 10,
+      "unknown_opening": 14,
+      "window": 3
+     }
+    },
+    "footprint": {
+     "iou": 0.9315,
+     "area_ratio": 0.9916,
+     "truth_area_m2": 934.85,
+     "found_area_m2": 926.97
+    },
+    "rooms": {
+     "truth_enclosed": 65,
+     "truth_rooms_most": 69,
+     "reported": 83,
+     "matched": 61,
+     "recall": 0.9385,
+     "count_accuracy": 0.7846,
+     "mean_area_error": 0.0471,
+     "median_area_error": 0.0173
+    },
+    "walls": {
+     "reported": 328,
+     "mean_position_error_m": 0.0673,
+     "within_0_1m": 0.8107,
+     "recall": 0.9575,
+     "thickness_error_m": 0.0051,
+     "length_error": 0.0508
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0042
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 4,
+     "levels_found": 4
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_00421_C.dxf",
+   "category": "residential",
+   "style": "C",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.146,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 8,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 3,
+      "precision": 1.0,
+      "recall": 0.625,
+      "mean_position_error_m": 0.0004,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 13,
+      "reported": 12,
+      "true_positive": 12,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.9231,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5,
+      "not found": 2,
+      "probable_door": 1
+     },
+     "spurious_openings": 2,
+     "spurious_by_class": {
+      "unknown_opening": 2
+     }
+    },
+    "footprint": {
+     "iou": 0.9983,
+     "area_ratio": 1.0016,
+     "truth_area_m2": 264.51,
+     "found_area_m2": 264.94
+    },
+    "rooms": {
+     "truth_enclosed": 9,
+     "truth_rooms_most": 9,
+     "reported": 9,
+     "matched": 7,
+     "recall": 0.7778,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.0742,
+     "median_area_error": 0.0676
+    },
+    "walls": {
+     "reported": 35,
+     "mean_position_error_m": 0.1008,
+     "within_0_1m": 0.839,
+     "recall": 0.9361,
+     "thickness_error_m": 0.0,
+     "length_error": 0.212
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0008
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_00668_D.dxf",
+   "category": "residential",
+   "style": "D",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.118,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0117,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 7,
+      "reported": 7,
+      "true_positive": 7,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0064,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 8
+     },
+     "spurious_openings": 3,
+     "spurious_by_class": {
+      "unknown_opening": 3
+     }
+    },
+    "footprint": {
+     "iou": 0.9957,
+     "area_ratio": 1.0039,
+     "truth_area_m2": 110.43,
+     "found_area_m2": 110.86
+    },
+    "rooms": {
+     "truth_enclosed": 9,
+     "truth_rooms_most": 9,
+     "reported": 12,
+     "matched": 9,
+     "recall": 1.0,
+     "count_accuracy": 0.6667,
+     "mean_area_error": 0.2043,
+     "median_area_error": 0.0659
+    },
+    "walls": {
+     "reported": 24,
+     "mean_position_error_m": 0.0628,
+     "within_0_1m": 0.8333,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3099
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.0019
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_01336_C.dxf",
+   "category": "residential",
+   "style": "C",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.12,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.8,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 7,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.8571,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 4,
+      "not found": 1
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.4952,
+     "area_ratio": 0.5008,
+     "truth_area_m2": 96.16,
+     "found_area_m2": 48.15
+    },
+    "rooms": {
+     "truth_enclosed": 6,
+     "truth_rooms_most": 6,
+     "reported": 3,
+     "matched": 3,
+     "recall": 0.5,
+     "count_accuracy": 0.5,
+     "mean_area_error": 0.0685,
+     "median_area_error": 0.0416
+    },
+    "walls": {
+     "reported": 19,
+     "mean_position_error_m": 0.0314,
+     "within_0_1m": 0.9139,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.241
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.2923
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_01873_B.dxf",
+   "category": "residential",
+   "style": "B",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.234,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0001,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 17,
+      "reported": 17,
+      "true_positive": 17,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0046,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 8
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.9962,
+     "area_ratio": 1.0036,
+     "truth_area_m2": 252.52,
+     "found_area_m2": 253.43
+    },
+    "rooms": {
+     "truth_enclosed": 9,
+     "truth_rooms_most": 9,
+     "reported": 11,
+     "matched": 9,
+     "recall": 1.0,
+     "count_accuracy": 0.7778,
+     "mean_area_error": 0.227,
+     "median_area_error": 0.0726
+    },
+    "walls": {
+     "reported": 37,
+     "mean_position_error_m": 0.1139,
+     "within_0_1m": 0.801,
+     "recall": 0.8893,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3029
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0018
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_02139_D.dxf",
+   "category": "residential",
+   "style": "D",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.172,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 12,
+      "reported": 12,
+      "true_positive": 12,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0011,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 8
+     },
+     "spurious_openings": 3,
+     "spurious_by_class": {
+      "unknown_opening": 3
+     }
+    },
+    "footprint": {
+     "iou": 0.9983,
+     "area_ratio": 1.0017,
+     "truth_area_m2": 206.95,
+     "found_area_m2": 207.3
+    },
+    "rooms": {
+     "truth_enclosed": 9,
+     "truth_rooms_most": 9,
+     "reported": 11,
+     "matched": 8,
+     "recall": 0.8889,
+     "count_accuracy": 0.7778,
+     "mean_area_error": 0.2636,
+     "median_area_error": 0.072
+    },
+    "walls": {
+     "reported": 23,
+     "mean_position_error_m": 0.0861,
+     "within_0_1m": 0.8261,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3998
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.0008
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_02830_C.dxf",
+   "category": "residential",
+   "style": "C",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.126,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 3,
+      "precision": 1.0,
+      "recall": 0.5,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 7,
+      "reported": 7,
+      "true_positive": 7,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3,
+      "not found": 1,
+      "probable_door": 1,
+      "unknown_opening": 1
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.9959,
+     "area_ratio": 1.0016,
+     "truth_area_m2": 185.81,
+     "found_area_m2": 186.11
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 9,
+     "matched": 6,
+     "recall": 0.8571,
+     "count_accuracy": 0.7143,
+     "mean_area_error": 0.3223,
+     "median_area_error": 0.35
+    },
+    "walls": {
+     "reported": 25,
+     "mean_position_error_m": 0.0647,
+     "within_0_1m": 0.8182,
+     "recall": 0.9928,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3344
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0008
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_08577_A.dxf",
+   "category": "residential",
+   "style": "A",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.088,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 7,
+      "reported": 7,
+      "true_positive": 7,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0328,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0192,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 7
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.9906,
+     "area_ratio": 1.0082,
+     "truth_area_m2": 49.29,
+     "found_area_m2": 49.69
+    },
+    "rooms": {
+     "truth_enclosed": 6,
+     "truth_rooms_most": 6,
+     "reported": 5,
+     "matched": 5,
+     "recall": 0.8333,
+     "count_accuracy": 0.8333,
+     "mean_area_error": 0.0661,
+     "median_area_error": 0.0667
+    },
+    "walls": {
+     "reported": 15,
+     "mean_position_error_m": 0.0517,
+     "within_0_1m": 0.8485,
+     "recall": 0.9958,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3884
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0041
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_10114_B.dxf",
+   "category": "residential",
+   "style": "B",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.12,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 9,
+      "reported": 9,
+      "true_positive": 9,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0022,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.9969,
+     "area_ratio": 1.0016,
+     "truth_area_m2": 152.36,
+     "found_area_m2": 152.61
+    },
+    "rooms": {
+     "truth_enclosed": 6,
+     "truth_rooms_most": 6,
+     "reported": 3,
+     "matched": 3,
+     "recall": 0.5,
+     "count_accuracy": 0.5,
+     "mean_area_error": 0.071,
+     "median_area_error": 0.0799
+    },
+    "walls": {
+     "reported": 22,
+     "mean_position_error_m": 0.0527,
+     "within_0_1m": 0.905,
+     "recall": 0.9992,
+     "thickness_error_m": 0.0,
+     "length_error": 0.319
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0008
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_11068_A.dxf",
+   "category": "residential",
+   "style": "A",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.097,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.019,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 9,
+      "reported": 9,
+      "true_positive": 9,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 6
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.9972,
+     "area_ratio": 1.0028,
+     "truth_area_m2": 78.97,
+     "found_area_m2": 79.19
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 7,
+     "matched": 7,
+     "recall": 1.0,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.2045,
+     "median_area_error": 0.078
+    },
+    "walls": {
+     "reported": 18,
+     "mean_position_error_m": 0.053,
+     "within_0_1m": 0.8687,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.4044
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0014
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_11216_A.dxf",
+   "category": "residential",
+   "style": "A",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.118,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.8333,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 9,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.8889,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5,
+      "not found": 1
+     },
+     "spurious_openings": 5,
+     "spurious_by_class": {
+      "unknown_opening": 5
+     }
+    },
+    "footprint": {
+     "iou": 0.4974,
+     "area_ratio": 1.9915,
+     "truth_area_m2": 61.0,
+     "found_area_m2": 121.48
+    },
+    "rooms": {
+     "truth_enclosed": 3,
+     "truth_rooms_most": 3,
+     "reported": 4,
+     "matched": 3,
+     "recall": 1.0,
+     "count_accuracy": 0.6667,
+     "mean_area_error": 0.0656,
+     "median_area_error": 0.0691
+    },
+    "walls": {
+     "reported": 29,
+     "mean_position_error_m": 0.0557,
+     "within_0_1m": 0.8652,
+     "recall": 0.9968,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3376
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.4112
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_11399_A.dxf",
+   "category": "residential",
+   "style": "A",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.113,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0059,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 6
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.9982,
+     "area_ratio": 1.0018,
+     "truth_area_m2": 125.42,
+     "found_area_m2": 125.65
+    },
+    "rooms": {
+     "truth_enclosed": 8,
+     "truth_rooms_most": 8,
+     "reported": 8,
+     "matched": 8,
+     "recall": 1.0,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.2216,
+     "median_area_error": 0.0957
+    },
+    "walls": {
+     "reported": 19,
+     "mean_position_error_m": 0.0361,
+     "within_0_1m": 0.89,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2547
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0009
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_11676_A.dxf",
+   "category": "residential",
+   "style": "A",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.073,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 2,
+      "precision": 1.0,
+      "recall": 0.6,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0031,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3,
+      "not found": 1,
+      "probable_door": 1
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.9952,
+     "area_ratio": 1.0047,
+     "truth_area_m2": 139.36,
+     "found_area_m2": 140.01
+    },
+    "rooms": {
+     "truth_enclosed": 6,
+     "truth_rooms_most": 6,
+     "reported": 3,
+     "matched": 3,
+     "recall": 0.5,
+     "count_accuracy": 0.5,
+     "mean_area_error": 0.0567,
+     "median_area_error": 0.0739
+    },
+    "walls": {
+     "reported": 17,
+     "mean_position_error_m": 0.0486,
+     "within_0_1m": 0.9037,
+     "recall": 0.983,
+     "thickness_error_m": 0.0,
+     "length_error": 0.1997
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0023
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_12307_D.dxf",
+   "category": "residential",
+   "style": "D",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.099,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 9,
+      "reported": 9,
+      "true_positive": 9,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0072,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 9
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.9972,
+     "area_ratio": 1.0021,
+     "truth_area_m2": 116.1,
+     "found_area_m2": 116.34
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 7,
+     "matched": 7,
+     "recall": 1.0,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.2308,
+     "median_area_error": 0.0892
+    },
+    "walls": {
+     "reported": 19,
+     "mean_position_error_m": 0.0578,
+     "within_0_1m": 0.8517,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3239
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.001
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_12624_A.dxf",
+   "category": "residential",
+   "style": "A",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.128,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 10,
+      "reported": 10,
+      "true_positive": 10,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0052,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 7,
+      "reported": 7,
+      "true_positive": 7,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.025,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 10
+     },
+     "spurious_openings": 2,
+     "spurious_by_class": {
+      "unknown_opening": 2
+     }
+    },
+    "footprint": {
+     "iou": 0.9854,
+     "area_ratio": 1.0085,
+     "truth_area_m2": 131.57,
+     "found_area_m2": 132.69
+    },
+    "rooms": {
+     "truth_enclosed": 9,
+     "truth_rooms_most": 9,
+     "reported": 10,
+     "matched": 9,
+     "recall": 1.0,
+     "count_accuracy": 0.8889,
+     "mean_area_error": 0.2924,
+     "median_area_error": 0.1014
+    },
+    "walls": {
+     "reported": 30,
+     "mean_position_error_m": 0.0751,
+     "within_0_1m": 0.8242,
+     "recall": 0.9865,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3826
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0042
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_13803_B.dxf",
+   "category": "residential",
+   "style": "B",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.114,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 9,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.8889,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.8033,
+     "area_ratio": 0.8066,
+     "truth_area_m2": 270.75,
+     "found_area_m2": 218.39
+    },
+    "rooms": {
+     "truth_enclosed": 6,
+     "truth_rooms_most": 6,
+     "reported": 6,
+     "matched": 5,
+     "recall": 0.8333,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.3447,
+     "median_area_error": 0.3429
+    },
+    "walls": {
+     "reported": 22,
+     "mean_position_error_m": 0.0791,
+     "within_0_1m": 0.8678,
+     "recall": 0.9999,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2965
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.1019
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_14392_B.dxf",
+   "category": "residential",
+   "style": "B",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.126,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0017,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0016,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 8
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": {
+     "iou": 0.5714,
+     "area_ratio": 0.5751,
+     "truth_area_m2": 216.07,
+     "found_area_m2": 124.25
+    },
+    "rooms": {
+     "truth_enclosed": 9,
+     "truth_rooms_most": 9,
+     "reported": 5,
+     "matched": 5,
+     "recall": 0.5556,
+     "count_accuracy": 0.5556,
+     "mean_area_error": 0.0583,
+     "median_area_error": 0.0666
+    },
+    "walls": {
+     "reported": 25,
+     "mean_position_error_m": 0.0413,
+     "within_0_1m": 0.9018,
+     "recall": 0.9963,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2185
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.2416
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_15444_D.dxf",
+   "category": "residential",
+   "style": "D",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.084,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0111,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 6
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.9966,
+     "area_ratio": 1.0032,
+     "truth_area_m2": 100.69,
+     "found_area_m2": 101.01
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 7,
+     "matched": 7,
+     "recall": 1.0,
+     "count_accuracy": 1.0,
+     "mean_area_error": 0.2074,
+     "median_area_error": 0.0498
+    },
+    "walls": {
+     "reported": 13,
+     "mean_position_error_m": 0.0458,
+     "within_0_1m": 0.8881,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2659
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.0016
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_16147_C.dxf",
+   "category": "residential",
+   "style": "C",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.077,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 7,
+      "reported": 7,
+      "true_positive": 7,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 7
+     },
+     "spurious_openings": 2,
+     "spurious_by_class": {
+      "unknown_opening": 2
+     }
+    },
+    "footprint": {
+     "iou": 0.9987,
+     "area_ratio": 1.0013,
+     "truth_area_m2": 86.12,
+     "found_area_m2": 86.23
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 8,
+     "matched": 7,
+     "recall": 1.0,
+     "count_accuracy": 0.8571,
+     "mean_area_error": 0.2395,
+     "median_area_error": 0.084
+    },
+    "walls": {
+     "reported": 13,
+     "mean_position_error_m": 0.0475,
+     "within_0_1m": 0.8392,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2644
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0006
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_16389_D.dxf",
+   "category": "residential",
+   "style": "D",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.124,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 10,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 2,
+      "precision": 1.0,
+      "recall": 0.8,
+      "mean_position_error_m": 0.0278,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 7,
+      "reported": 7,
+      "true_positive": 7,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 8,
+      "not found": 2
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.6157,
+     "area_ratio": 0.6201,
+     "truth_area_m2": 187.96,
+     "found_area_m2": 116.56
+    },
+    "rooms": {
+     "truth_enclosed": 8,
+     "truth_rooms_most": 8,
+     "reported": 4,
+     "matched": 3,
+     "recall": 0.375,
+     "count_accuracy": 0.5,
+     "mean_area_error": 0.0636,
+     "median_area_error": 0.0736
+    },
+    "walls": {
+     "reported": 24,
+     "mean_position_error_m": 0.0712,
+     "within_0_1m": 0.8826,
+     "recall": 0.9998,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3407
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.2125
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_16706_B.dxf",
+   "category": "residential",
+   "style": "B",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.157,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 3,
+      "precision": 1.0,
+      "recall": 0.5,
+      "mean_position_error_m": 0.0014,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 12,
+      "reported": 12,
+      "true_positive": 12,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0004,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3,
+      "not found": 3
+     },
+     "spurious_openings": 3,
+     "spurious_by_class": {
+      "unknown_opening": 3
+     }
+    },
+    "footprint": {
+     "iou": 0.9948,
+     "area_ratio": 1.0,
+     "truth_area_m2": 229.94,
+     "found_area_m2": 229.93
+    },
+    "rooms": {
+     "truth_enclosed": 8,
+     "truth_rooms_most": 8,
+     "reported": 9,
+     "matched": 8,
+     "recall": 1.0,
+     "count_accuracy": 0.875,
+     "mean_area_error": 0.2428,
+     "median_area_error": 0.0996
+    },
+    "walls": {
+     "reported": 31,
+     "mean_position_error_m": 0.0434,
+     "within_0_1m": 0.8944,
+     "recall": 0.9928,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2865
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_16893_C.dxf",
+   "category": "residential",
+   "style": "C",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.123,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 3,
+      "precision": 1.0,
+      "recall": 0.5,
+      "mean_position_error_m": 0.0155,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 12,
+      "reported": 11,
+      "true_positive": 11,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.9167,
+      "mean_position_error_m": 0.0049,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3,
+      "not found": 1,
+      "probable_door": 2
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.6013,
+     "area_ratio": 0.645,
+     "truth_area_m2": 116.13,
+     "found_area_m2": 74.91
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 6,
+     "matched": 5,
+     "recall": 0.7143,
+     "count_accuracy": 0.8571,
+     "mean_area_error": 0.0462,
+     "median_area_error": 0.0392
+    },
+    "walls": {
+     "reported": 20,
+     "mean_position_error_m": 0.077,
+     "within_0_1m": 0.7909,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.3831
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.1969
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 2,
+     "levels_expected": 1,
+     "levels_found": 2
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/residential/resplan_res_17030_B.dxf",
+   "category": "residential",
+   "style": "B",
+   "dataset": "ResPlan",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.156,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.8333,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 7,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.8571,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5,
+      "not found": 1
+     },
+     "spurious_openings": 1,
+     "spurious_by_class": {
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.6772,
+     "area_ratio": 0.6904,
+     "truth_area_m2": 167.23,
+     "found_area_m2": 115.46
+    },
+    "rooms": {
+     "truth_enclosed": 7,
+     "truth_rooms_most": 7,
+     "reported": 4,
+     "matched": 4,
+     "recall": 0.5714,
+     "count_accuracy": 0.5714,
+     "mean_area_error": 0.0623,
+     "median_area_error": 0.0949
+    },
+    "walls": {
+     "reported": 24,
+     "mean_position_error_m": 0.0645,
+     "within_0_1m": 0.8674,
+     "recall": 0.9949,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2374
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.1691
+    },
+    "structure": {
+     "buildings_expected": 1,
+     "buildings_found": 1,
+     "levels_expected": 1,
+     "levels_found": 1
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/siteplan/site_cesson_C.dxf",
+   "category": "site_plan",
+   "style": "C",
+   "dataset": "ResPlan + OpenStreetMap (composed)",
+   "native_cad": false,
+   "tags": [
+    "multi_building",
+    "composed",
+    "site_plan"
+   ],
+   "seconds": 0.294,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 20,
+      "reported": 13,
+      "true_positive": 13,
+      "false_positive": 0,
+      "missed": 7,
+      "precision": 1.0,
+      "recall": 0.65,
+      "mean_position_error_m": 0.0001,
+      "mean_width_error_m": 0.0001
+     },
+     "window": {
+      "truth": 22,
+      "reported": 22,
+      "true_positive": 22,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0055,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 13,
+      "not found": 3,
+      "probable_door": 4
+     },
+     "spurious_openings": 6,
+     "spurious_by_class": {
+      "unknown_opening": 6
+     }
+    },
+    "footprint": {
+     "iou": 0.7588,
+     "area_ratio": 0.7652,
+     "truth_area_m2": 468.56,
+     "found_area_m2": 358.55
+    },
+    "rooms": {
+     "truth_enclosed": 23,
+     "truth_rooms_most": 23,
+     "reported": 18,
+     "matched": 18,
+     "recall": 0.7826,
+     "count_accuracy": 0.7826,
+     "mean_area_error": 0.1229,
+     "median_area_error": 0.0681
+    },
+    "walls": {
+     "reported": 60,
+     "mean_position_error_m": 0.0648,
+     "within_0_1m": 0.8621,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2635
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true,
+     "linear_scale_error": 0.1252
+    },
+    "structure": {
+     "buildings_expected": 3,
+     "buildings_found": 3,
+     "levels_expected": 3,
+     "levels_found": 3
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/siteplan/site_houten_B.dxf",
+   "category": "site_plan",
+   "style": "B",
+   "dataset": "ResPlan + OpenStreetMap (composed)",
+   "native_cad": false,
+   "tags": [
+    "multi_building",
+    "composed",
+    "site_plan"
+   ],
+   "seconds": 0.36,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 19,
+      "reported": 17,
+      "true_positive": 17,
+      "false_positive": 0,
+      "missed": 2,
+      "precision": 1.0,
+      "recall": 0.8947,
+      "mean_position_error_m": 0.0005,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 18,
+      "reported": 18,
+      "true_positive": 18,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0059,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 17,
+      "not found": 1,
+      "unknown_opening": 1
+     },
+     "spurious_openings": 2,
+     "spurious_by_class": {
+      "probable_door": 1,
+      "unknown_opening": 1
+     }
+    },
+    "footprint": {
+     "iou": 0.9969,
+     "area_ratio": 1.0022,
+     "truth_area_m2": 401.35,
+     "found_area_m2": 402.25
+    },
+    "rooms": {
+     "truth_enclosed": 20,
+     "truth_rooms_most": 20,
+     "reported": 19,
+     "matched": 18,
+     "recall": 0.9,
+     "count_accuracy": 0.95,
+     "mean_area_error": 0.1984,
+     "median_area_error": 0.0881
+    },
+    "walls": {
+     "reported": 59,
+     "mean_position_error_m": 0.0776,
+     "within_0_1m": 0.8552,
+     "recall": 0.9995,
+     "thickness_error_m": 0.0,
+     "length_error": 0.2918
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0011
+    },
+    "structure": {
+     "buildings_expected": 3,
+     "buildings_found": 3,
+     "levels_expected": 3,
+     "levels_found": 3
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/siteplan/site_houten_D.dxf",
+   "category": "site_plan",
+   "style": "D",
+   "dataset": "ResPlan + OpenStreetMap (composed)",
+   "native_cad": false,
+   "tags": [
+    "multi_building",
+    "composed",
+    "site_plan"
+   ],
+   "seconds": 0.197,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 15,
+      "reported": 14,
+      "true_positive": 14,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.9333,
+      "mean_position_error_m": 0.002,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 13,
+      "reported": 11,
+      "true_positive": 11,
+      "false_positive": 0,
+      "missed": 2,
+      "precision": 1.0,
+      "recall": 0.8462,
+      "mean_position_error_m": 0.0058,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 14,
+      "not found": 1
+     },
+     "spurious_openings": 4,
+     "spurious_by_class": {
+      "probable_door": 1,
+      "unknown_opening": 3
+     }
+    },
+    "footprint": {
+     "iou": 0.9761,
+     "area_ratio": 0.982,
+     "truth_area_m2": 180.7,
+     "found_area_m2": 177.44
+    },
+    "rooms": {
+     "truth_enclosed": 15,
+     "truth_rooms_most": 15,
+     "reported": 13,
+     "matched": 13,
+     "recall": 0.8667,
+     "count_accuracy": 0.8667,
+     "mean_area_error": 0.2323,
+     "median_area_error": 0.0854
+    },
+    "walls": {
+     "reported": 37,
+     "mean_position_error_m": 0.0429,
+     "within_0_1m": 0.8624,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.5072
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true,
+     "linear_scale_error": 0.009
+    },
+    "structure": {
+     "buildings_expected": 2,
+     "buildings_found": 2,
+     "levels_expected": 2,
+     "levels_found": 2
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/siteplan/site_rieselfeld_B.dxf",
+   "category": "site_plan",
+   "style": "B",
+   "dataset": "ResPlan + OpenStreetMap (composed)",
+   "native_cad": false,
+   "tags": [
+    "multi_building",
+    "composed",
+    "site_plan"
+   ],
+   "seconds": 0.399,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 21,
+      "reported": 19,
+      "true_positive": 19,
+      "false_positive": 0,
+      "missed": 2,
+      "precision": 1.0,
+      "recall": 0.9048,
+      "mean_position_error_m": 0.0083,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 19,
+      "reported": 19,
+      "true_positive": 19,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.007,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 19,
+      "not found": 2
+     },
+     "spurious_openings": 7,
+     "spurious_by_class": {
+      "unknown_opening": 7
+     }
+    },
+    "footprint": {
+     "iou": 0.6186,
+     "area_ratio": 0.6265,
+     "truth_area_m2": 451.27,
+     "found_area_m2": 282.72
+    },
+    "rooms": {
+     "truth_enclosed": 22,
+     "truth_rooms_most": 22,
+     "reported": 18,
+     "matched": 16,
+     "recall": 0.7273,
+     "count_accuracy": 0.8182,
+     "mean_area_error": 0.0803,
+     "median_area_error": 0.0415
+    },
+    "walls": {
+     "reported": 82,
+     "mean_position_error_m": 0.0646,
+     "within_0_1m": 0.8548,
+     "recall": 0.9905,
+     "thickness_error_m": 0.0033,
+     "length_error": 0.1428
+    },
+    "scale": {
+     "unit_expected": "centimetres",
+     "unit_found": "centimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.2085
+    },
+    "structure": {
+     "buildings_expected": 3,
+     "buildings_found": 3,
+     "levels_expected": 3,
+     "levels_found": 3
+    }
+   }
+  },
+  {
+   "file": "tests/corpus/siteplan/site_zwolle_A.dxf",
+   "category": "site_plan",
+   "style": "A",
+   "dataset": "ResPlan + OpenStreetMap (composed)",
+   "native_cad": false,
+   "tags": [
+    "multi_building",
+    "composed",
+    "site_plan"
+   ],
+   "seconds": 0.302,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 18,
+      "reported": 17,
+      "true_positive": 17,
+      "false_positive": 0,
+      "missed": 1,
+      "precision": 1.0,
+      "recall": 0.9444,
+      "mean_position_error_m": 0.0065,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 15,
+      "reported": 15,
+      "true_positive": 15,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0071,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 17,
+      "probable_door": 1
+     },
+     "spurious_openings": 6,
+     "spurious_by_class": {
+      "unknown_opening": 6
+     }
+    },
+    "footprint": {
+     "iou": 0.9606,
+     "area_ratio": 0.9709,
+     "truth_area_m2": 322.2,
+     "found_area_m2": 312.84
+    },
+    "rooms": {
+     "truth_enclosed": 18,
+     "truth_rooms_most": 18,
+     "reported": 17,
+     "matched": 12,
+     "recall": 0.6667,
+     "count_accuracy": 0.9444,
+     "mean_area_error": 0.1523,
+     "median_area_error": 0.0608
+    },
+    "walls": {
+     "reported": 61,
+     "mean_position_error_m": 0.0511,
+     "within_0_1m": 0.8718,
+     "recall": 0.9988,
+     "thickness_error_m": 0.0001,
+     "length_error": 0.3014
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true,
+     "linear_scale_error": 0.0147
+    },
+    "structure": {
+     "buildings_expected": 3,
+     "buildings_found": 3,
+     "levels_expected": 3,
+     "levels_found": 3
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t01_simple_rect.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.055,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t02_l_shape.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.059,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 4
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 8,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0001
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t03_multi_room.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.091,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 6
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 10,
+     "mean_position_error_m": 0.0002,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0003
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t04_garage_porch.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.058,
+   "status": "VALID",
+   "confidence": 0.75,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 2,
+      "reported": 2,
+      "true_positive": 2,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 4
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0001
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t05_irregular.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.081,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 2,
+      "reported": 2,
+      "true_positive": 2,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 2
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 14,
+     "mean_position_error_m": 0.0,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t06_dimension_heavy.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.066,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t07_many_layers.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.061,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t08_blocks.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 1.759,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 0,
+      "reported": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": null,
+      "recall": null,
+      "mean_position_error_m": null,
+      "mean_width_error_m": null
+     },
+     "window": {
+      "truth": 0,
+      "reported": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": null,
+      "recall": null,
+      "mean_position_error_m": null,
+      "mean_width_error_m": null
+     },
+     "door_outcomes": {},
+     "spurious_openings": 5,
+     "spurious_by_class": {
+      "unknown_opening": 5
+     }
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": null,
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t09_feet_inches.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.956,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t10_millimetres.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.354,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t11_metres.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.114,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t12_lying_header.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.174,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "inches",
+     "unit_found": "inches",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t13_single_line.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.107,
+   "status": "VALID_WITH_WARNINGS",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 0,
+      "reported": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": null,
+      "recall": null,
+      "mean_position_error_m": null,
+      "mean_width_error_m": null
+     },
+     "window": {
+      "truth": 0,
+      "reported": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": null,
+      "recall": null,
+      "mean_position_error_m": null,
+      "mean_width_error_m": null
+     },
+     "door_outcomes": {},
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": null,
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/plans/t14_rotated.dxf",
+   "category": "generated",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.104,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m01_house_and_garage.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.122,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 10,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0001
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m02_three_buildings.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.097,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 7,
+      "reported": 7,
+      "true_positive": 7,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 7
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 17,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0001
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m03_semi_detached.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.074,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 8,
+     "mean_position_error_m": 0.0002,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m04_close_buildings.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.071,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 10,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0001
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m05_two_storey_titled.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.123,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 9,
+      "reported": 9,
+      "true_positive": 9,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 12,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m06_three_storey_stacked.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.175,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 13,
+      "reported": 13,
+      "true_positive": 13,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 8
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 18,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m07_repeated_untitled.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.099,
+   "status": "AMBIGUOUS",
+   "confidence": 0.588,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 6
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 12,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m08_floor_schedule.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.057,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 4,
+      "reported": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 3
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m09_block_designations.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.093,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 6
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 12,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m10_layer_levels.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.111,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 9,
+      "reported": 9,
+      "true_positive": 9,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 12,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m11_basement.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.113,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 9,
+      "reported": 9,
+      "true_positive": 9,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 12,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/multi/m12_one_title_one_twin.dxf",
+   "category": "generated-multi",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.12,
+   "status": "AMBIGUOUS",
+   "confidence": 0.588,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 6,
+      "reported": 6,
+      "true_positive": 6,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 8,
+      "reported": 8,
+      "true_positive": 8,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "door_outcomes": {
+      "door": 6
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 12,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0002
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/doors/d01_jamb_doors.dxf",
+   "category": "generated-doors",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.065,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.1
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0001
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/doors/d02_symbol_blocks.dxf",
+   "category": "generated-doors",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.072,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.0
+     },
+     "window": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.1
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0001
+    },
+    "scale": {
+     "unit_expected": "millimetres",
+     "unit_found": "millimetres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/doors/d03_door_layer_clutter.dxf",
+   "category": "generated-doors",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.075,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 5,
+      "reported": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.1
+     },
+     "window": {
+      "truth": 3,
+      "reported": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "mean_position_error_m": 0.0,
+      "mean_width_error_m": 0.1
+     },
+     "door_outcomes": {
+      "door": 5
+     },
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 6,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0001
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  },
+  {
+   "file": "tests/fixtures/doors/d04_gaps_only.dxf",
+   "category": "generated-doors",
+   "style": "-",
+   "dataset": "generated",
+   "native_cad": false,
+   "tags": [],
+   "seconds": 0.034,
+   "status": "VALID",
+   "confidence": 0.98,
+   "metrics": {
+    "openings": {
+     "door": {
+      "truth": 0,
+      "reported": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": null,
+      "recall": null,
+      "mean_position_error_m": null,
+      "mean_width_error_m": null
+     },
+     "window": {
+      "truth": 0,
+      "reported": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "missed": 0,
+      "precision": null,
+      "recall": null,
+      "mean_position_error_m": null,
+      "mean_width_error_m": null
+     },
+     "door_outcomes": {},
+     "spurious_openings": 0,
+     "spurious_by_class": {}
+    },
+    "footprint": null,
+    "rooms": null,
+    "walls": {
+     "reported": 5,
+     "mean_position_error_m": 0.0001,
+     "within_0_1m": 1.0,
+     "recall": 1.0,
+     "thickness_error_m": 0.0,
+     "length_error": 0.0001
+    },
+    "scale": {
+     "unit_expected": "metres",
+     "unit_found": "metres",
+     "unit_correct": true
+    }
+   }
+  }
+ ]
+}

@@ -129,6 +129,8 @@ def build_review(graph: SceneGraph) -> Dict[str, Any]:
         "schema_version": graph.schema_version,
         "generated_at": provenance.get("generated_at"),
         "images": diagnostics.get("images", []),
+        # How the analysis ran (engine, AI, network, image count), when known.
+        "analysis": diagnostics.get("analysis"),
         "image_summary": diagnostics.get("image_summary", {}),
         "rooms": rooms,
         "unassigned_objects": [_object_view(o, graph) for o in unassigned],
@@ -297,11 +299,16 @@ def _warnings(graph: SceneGraph, diagnostics: Dict[str, Any]) -> List[str]:
     """Everything the user should look at before spending render time."""
     warnings = list(diagnostics.get("warnings", []))
 
-    empty = [r.id for r in graph.rooms if not r.source_images]
+    # Only rooms that will really be empty. A room with no photograph is
+    # furnished from its drawn type, so "no reference image" alone does not
+    # mean "empty" — saying it did told every offline user their building would
+    # be bare while the same panel counted the furniture it would contain.
+    furnished = {o.room_id for o in graph.objects if o.room_id}
+    empty = [r.id for r in graph.rooms if not r.source_images and r.id not in furnished]
     if empty:
         warnings.append(
-            f"{len(empty)} room(s) have no reference image and will be built "
-            f"empty: {', '.join(empty)}"
+            f"{len(empty)} room(s) have no reference image and nothing to furnish "
+            f"them from, and will be built empty: {', '.join(empty)}"
         )
 
     uncertain = [o for o in graph.objects if o.uncertain]

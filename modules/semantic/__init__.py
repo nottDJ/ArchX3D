@@ -12,10 +12,10 @@ imports neither ezdxf nor numpy.
 
 Typical use::
 
-    from cad import read_dxf
+    from recon import evidence, read
     from semantic import build_inputs, classify_plan
 
-    document = read_dxf("plan.dxf")
+    document = evidence.to_cad_document(read.read("plan.dxf"))
     inputs = build_inputs(document, regions)
     for result in classify_plan(inputs):
         print(result.summary())

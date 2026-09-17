@@ -19,6 +19,7 @@ Each SVG is deliberately one idea:
     debug_rooms.svg        room polygons with labels and areas
     debug_openings.svg     doors and windows on their host walls
     debug_topology.svg     the planar graph: nodes by degree, edges
+    debug_structures.svg   buildings and storeys, with the titles that named them
     reconstruction.svg     everything together, the one to look at first
 
 The y axis is flipped on the way out, because SVG counts downwards and a plan
@@ -33,9 +34,61 @@ import os
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 from . import classify as C
-from .ir import Building
+from .ir import Drawing, Level
 
 XY = Tuple[float, float]
+
+
+class _Sheet:
+    """Every storey of a drawing, as drawn, behind the one-plan interface.
+
+    The per-stage drawings predate buildings and storeys and draw a single
+    plan. Storeys stay where the drafter put them on the sheet, so drawing
+    them all together is exactly the picture of the sheet — which is what a
+    diagnostic should show.
+    """
+
+    def __init__(self, model: Drawing):
+        levels = list(model.levels())
+        self.walls = [w for l in levels for w in l.walls]
+        self.rooms = [r for l in levels for r in l.rooms]
+        self.openings = [o for l in levels for o in l.openings]
+        self.nodes = [n for l in levels for n in l.nodes]
+        self.footprint_parts = [r for l in levels
+                                for r in (l.footprint_parts or ([l.footprint] if l.footprint else []))]
+        self.footprint = self.footprint_parts[0] if self.footprint_parts else []
+        self.units = model.units
+        self._levels = levels
+        self._by_id = {w.id: w for w in self.walls}
+        xs = [p[0] for l in levels for p in (l.bounds_min, l.bounds_max)]
+        ys = [p[1] for l in levels for p in (l.bounds_min, l.bounds_max)]
+        self.width = (max(xs) - min(xs)) if xs else 0.0
+        self.depth = (max(ys) - min(ys)) if ys else 0.0
+
+    def wall(self, wall_id):
+        return self._by_id.get(wall_id)
+
+    @property
+    def footprint_area(self) -> float:
+        return sum(l.footprint_area for l in self._levels)
+
+    @property
+    def floor_area(self) -> float:
+        return sum(l.floor_area for l in self._levels)
+
+    @property
+    def total_wall_length(self) -> float:
+        return sum(w.length for w in self.walls)
+
+    def summary(self) -> dict:
+        return {
+            "doors": sum(1 for o in self.openings if o.kind in ("door", "garage")),
+            "windows": sum(1 for o in self.openings if o.kind == "window"),
+        }
+
+
+def _plan(model):
+    return _Sheet(model) if isinstance(model, Drawing) else model
 
 MARGIN = 24.0
 MAX_PX = 1400.0
@@ -228,8 +281,9 @@ def draw_walls(drawing, walls, faces, path: str) -> str:
     return canvas.save(path)
 
 
-def draw_rooms(building: Building, path: str) -> str:
+def draw_rooms(building, path: str) -> str:
     """Room polygons, labelled, with areas."""
+    building = _plan(building)
     pts = [p for r in building.rooms for p in r.polygon] or building.footprint
     canvas = _Canvas(_bounds_of(pts or [(0, 0), (1, 1)]), os.path.basename(path))
     if building.footprint:
@@ -254,8 +308,9 @@ def draw_rooms(building: Building, path: str) -> str:
     return canvas.save(path)
 
 
-def draw_openings(building: Building, path: str) -> str:
+def draw_openings(building, path: str) -> str:
     """Doors and windows in the walls that host them."""
+    building = _plan(building)
     pts = [p for w in building.walls for p in (w.start, w.end)]
     canvas = _Canvas(_bounds_of(pts or [(0, 0), (1, 1)]), os.path.basename(path))
     for w in building.walls:
@@ -279,13 +334,14 @@ def draw_openings(building: Building, path: str) -> str:
     return canvas.save(path)
 
 
-def draw_topology(building: Building, path: str) -> str:
+def draw_topology(building, path: str) -> str:
     """The planar graph: wall edges and nodes coloured by degree.
 
     Degree-1 nodes are the diagnostic that matters — a wall end that joins
     nothing is either a genuine free end (a stub at an opening) or the reason
     a room failed to close.
     """
+    building = _plan(building)
     pts = [n.point for n in building.nodes] or \
           [p for w in building.walls for p in (w.start, w.end)]
     canvas = _Canvas(_bounds_of(pts or [(0, 0), (1, 1)]), os.path.basename(path))
@@ -304,8 +360,9 @@ def draw_topology(building: Building, path: str) -> str:
     return canvas.save(path)
 
 
-def draw_reconstruction(building: Building, path: str) -> str:
+def draw_reconstruction(building, path: str) -> str:
     """Everything at once — the single picture to look at first."""
+    building = _plan(building)
     pts = ([p for r in building.rooms for p in r.polygon] +
            [p for w in building.walls for p in (w.start, w.end)])
     canvas = _Canvas(_bounds_of(pts or [(0, 0), (1, 1)]), os.path.basename(path))
@@ -350,19 +407,69 @@ def draw_reconstruction(building: Building, path: str) -> str:
     return canvas.save(path)
 
 
+def draw_structures(model: Drawing, path: str) -> str:
+    """Which walls became which building and storey, and what named them.
+
+    One colour per building, a darker shade per storey, each storey outlined
+    with its id and name, and every candidate title drawn where it sits with
+    whether it was used or why it was rejected. A wrong grouping — two
+    buildings welded, a floor schedule taken for a title — is visible here
+    without reading a line of JSON.
+    """
+    levels = list(model.levels())
+    pts = [p for l in levels for w in l.walls for p in (w.start, w.end)]
+    titles = model.level_structure.get("titles") or []
+    pts += [tuple(t["point"]) for t in titles if t.get("point")]
+    canvas = _Canvas(_bounds_of(pts or [(0, 0), (1, 1)], pad=2.0),
+                     os.path.basename(path))
+    hues = ["#2563eb", "#dc2626", "#16a34a", "#9333ea", "#ea580c", "#0891b2",
+            "#ca8a04", "#db2777"]
+    rows = []
+    for bi, b in enumerate(model.buildings):
+        colour = hues[bi % len(hues)]
+        for l in b.levels:
+            for w in l.walls:
+                canvas.line(w.start, w.end, colour, max(1.0, w.thickness * 12), 0.9)
+            for ring in l.footprint_parts or ([l.footprint] if l.footprint else []):
+                canvas.polyline(ring, colour, 1.2, closed=True, fill=colour,
+                                opacity=0.18)
+            cx = (l.bounds_min[0] + l.bounds_max[0]) / 2.0
+            canvas.text((cx, l.bounds_max[1] + 0.6), "%s  %s  z=%.1f" % (
+                l.id, l.name, l.elevation), 12.0, colour, weight="700")
+        rows.append((colour, "%s %s: %d level(s)" % (b.id, b.name, len(b.levels))))
+    for t in titles:
+        p = t.get("point")
+        if not p:
+            continue
+        used = t.get("structure") and not t.get("rejected")
+        canvas.text(tuple(p), t.get("text", ""), 10.0,
+                    "#111827" if used else "#9ca3af",
+                    anchor="start", weight="600" if used else "normal")
+        if not used and t.get("rejected"):
+            canvas.text((p[0], p[1] - 0.5), "rejected: %s" % t["rejected"], 8.0,
+                        "#9ca3af", anchor="start")
+    rows.append(("#111827", "level structure: %s" % model.level_structure.get("status")))
+    canvas.legend(rows)
+    return canvas.save(path)
+
+
 # ---------------------------------------------------------------------------
 # Bundle
 # ---------------------------------------------------------------------------
 
 def write_bundle(directory: str, *, drawing=None, wall_result=None,
-                 building: Optional[Building] = None,
-                 error: Optional[dict] = None) -> Dict[str, str]:
+                 model: Optional[Drawing] = None,
+                 error: Optional[dict] = None,
+                 building: Optional[Drawing] = None) -> Dict[str, str]:
     """Write everything available about this run into ``directory``.
 
-    Deliberately tolerant: it is called on the failure path too, where there
-    may be a drawing but no building, and the whole point is to emit whatever
-    got as far as existing.
+    ``drawing`` is the classified CAD content, ``model`` the reconstructed
+    architectural model. Deliberately tolerant: it is called on the failure
+    path too, where there may be a drawing but no model, and the whole point
+    is to emit whatever got as far as existing. ``building`` is the historical
+    name for ``model``.
     """
+    model = model if model is not None else building
     os.makedirs(directory, exist_ok=True)
     written: Dict[str, str] = {}
 
@@ -405,20 +512,36 @@ def write_bundle(directory: str, *, drawing=None, wall_result=None,
             except Exception as exc:
                 written["svg_error_walls"] = str(exc)
 
-    if building is not None:
-        _json("rooms.json", [r.as_dict() for r in building.rooms])
-        _json("doors.json", [o.as_dict() for o in building.openings
+    if model is not None:
+        _json("rooms.json", [r.as_dict() for r in model.rooms])
+        _json("doors.json", [o.as_dict() for o in model.openings
                              if o.kind in ("door", "garage", "cased")])
-        _json("windows.json", [o.as_dict() for o in building.openings
+        _json("windows.json", [o.as_dict() for o in model.openings
                                if o.kind == "window"])
-        _json("validation.json", building.validation)
-        _json("building.json", building.as_dict())
+        _json("validation.json", model.validation)
+        _json("levels.json", {
+            "level_structure": model.level_structure,
+            "review": model.review,
+            "unassigned": model.unassigned,
+            "buildings": [{**b.summary(), "evidence": b.evidence,
+                           "levels": [{"id": l.id, "name": l.name,
+                                       "index": l.index, "elevation": l.elevation,
+                                       "placement": list(l.placement),
+                                       "title": l.title,
+                                       "designation": l.designation,
+                                       "confidence": l.confidence,
+                                       "evidence": l.evidence}
+                                      for l in b.levels]}
+                          for b in model.buildings],
+        })
+        _json("building.json", model.as_dict())
         for fn, name in ((draw_rooms, "debug_rooms.svg"),
                          (draw_openings, "debug_openings.svg"),
                          (draw_topology, "debug_topology.svg"),
+                         (draw_structures, "debug_structures.svg"),
                          (draw_reconstruction, "reconstruction.svg")):
             try:
-                written[name] = fn(building, os.path.join(directory, name))
+                written[name] = fn(model, os.path.join(directory, name))
             except Exception as exc:
                 written["svg_error_" + name] = str(exc)
 

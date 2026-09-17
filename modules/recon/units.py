@@ -95,6 +95,10 @@ CONVENTIONS_M = (
 )
 CONVENTION_TOL = 0.013   # metres — half an inch of slack
 
+#: Wall-thickness evidence counts in full once this many parallel pairs
+#: support it; fewer pairs count proportionally less.
+THICKNESS_SUPPORT = 6
+
 #: A floor plan spans at least a small room and at most a large campus block.
 #: Anything outside this after conversion means the conversion is wrong.
 PLAN_BAND_M = (3.0, 400.0)
@@ -262,6 +266,8 @@ def _score_candidate(
     pair_distances: Sequence[float],
     extent: float,
     dimensions: Sequence[float],
+    swing_radii: Sequence[float] = (),
+    text_heights: Sequence[float] = (),
 ) -> Tuple[float, List[str]]:
     """Score one candidate unit. Returns ``(score, reasons)``; score < 0 rejects."""
     reasons: List[str] = []
@@ -279,7 +285,11 @@ def _score_candidate(
         in_band = [d * scale for d in pair_distances
                    if WALL_BAND[0] <= d * scale <= WALL_BAND[1]]
         fraction = len(in_band) / len(pair_distances)
-        score += 4.0 * fraction
+        # A share of one pair is not evidence: two of a hundred random strokes
+        # happening to lie 230 mm apart made "100% of pair distances" say feet,
+        # and outvoted a declared unit. The score grows with the pairs behind it.
+        support = min(1.0, len(pair_distances) / THICKNESS_SUPPORT)
+        score += 4.0 * fraction * support
         if in_band:
             modes = _modal_clusters(in_band)
             total = sum(c for _, c in modes) or 1
@@ -287,10 +297,10 @@ def _score_candidate(
                 c for v, c in modes
                 if any(abs(v - k) <= CONVENTION_TOL for k in CONVENTIONS_M)
             )
-            score += 4.0 * (conventional / total)
+            score += 4.0 * (conventional / total) * support
             reasons.append(
-                "%.0f%% of parallel-pair distances are plausible wall thicknesses; "
-                "modal %s" % (100 * fraction,
+                "%.0f%% of %d parallel-pair distances are plausible wall thicknesses; "
+                "modal %s" % (100 * fraction, len(pair_distances),
                               ", ".join("%.3f m x%d" % (v, c) for v, c in modes[:3]))
             )
         else:
@@ -313,10 +323,41 @@ def _score_candidate(
             score += 0.5
             reasons.append("dimension measurements are fractional, consistent with %s" % name)
 
+    # --- door leaves -------------------------------------------------------
+    # A door swing's radius is the leaf width, and leaves are 0.6-1.2 m wide in
+    # every building tradition. Where walls cannot separate two units — an
+    # 8-inch wall read as centimetres is an 81 mm partition, also a convention,
+    # and a 20 m house read that way is a plausible 8 m one — the doors can:
+    # a 900 mm leaf read as centimetres is a 35 cm cat flap.
+    if swing_radii and len(swing_radii) >= 2:
+        leaf = sorted(swing_radii)[len(swing_radii) // 2] * scale
+        if LEAF_BAND_M[0] <= leaf <= LEAF_BAND_M[1]:
+            score += 2.5
+            reasons.append("median door swing %.2f m is a door leaf" % leaf)
+        else:
+            score -= 1.5
+            reasons.append("median door swing would be %.2f m, not a door leaf" % leaf)
+
+    # --- lettering ------------------------------------------------------------
+    # Room names are plotted at a few millimetres on paper, which is 0.1-0.6 m
+    # in the model at any architectural scale. Weak, but independent.
+    if text_heights and len(text_heights) >= 3:
+        h = sorted(text_heights)[len(text_heights) // 2] * scale
+        if TEXT_BAND_M[0] <= h <= TEXT_BAND_M[1]:
+            score += 0.5
+            reasons.append("median text height %.2f m is plan lettering" % h)
+
     # --- how typical a plan of that size would be --------------------------
     score += _extent_score(extent_m)
     reasons.append("plan would be %.1f m across" % extent_m)
     return score, reasons
+
+
+#: A door leaf is this wide, in metres.
+LEAF_BAND_M = (0.55, 1.3)
+
+#: Plan lettering is this tall in the model, in metres.
+TEXT_BAND_M = (0.07, 0.6)
 
 
 # ---------------------------------------------------------------------------
@@ -330,6 +371,8 @@ def resolve(
     dimensions: Sequence[float] = (),
     user_scale: Optional[float] = None,
     measurement: Optional[int] = None,
+    swing_radii: Sequence[float] = (),
+    text_heights: Sequence[float] = (),
 ) -> UnitDecision:
     """Decide the drawing's unit from all available evidence.
 
@@ -344,6 +387,10 @@ def resolve(
         measurement: The ``$MEASUREMENT`` header (0 imperial, 1 metric). Weak
             evidence, used only to break a tie between two units of the same
             system.
+        swing_radii: Radii of quarter arcs that could be door swings, in
+            drawing units.
+        text_heights: Heights of short text that could be room names, in
+            drawing units.
 
     Returns:
         A :class:`UnitDecision` recording the choice, the confidence, every
@@ -383,7 +430,8 @@ def resolve(
 
     scored: List[dict] = []
     for scale, name in CANDIDATES:
-        score, reasons = _score_candidate(scale, name, pair_distances, extent, dimensions)
+        score, reasons = _score_candidate(scale, name, pair_distances, extent, dimensions,
+                                         swing_radii, text_heights)
         scored.append({
             "unit": name, "scale_to_m": scale,
             "score": round(score, 3), "reasons": reasons,
@@ -395,7 +443,8 @@ def resolve(
         # scored, so an honest exotic header is not thrown away.
         if not any(abs(c["scale_to_m"] - declared[0]) < 1e-12 for c in scored):
             score, reasons = _score_candidate(
-                declared[0], declared[1], pair_distances, extent, dimensions)
+                declared[0], declared[1], pair_distances, extent, dimensions,
+                swing_radii, text_heights)
             scored.append({"unit": declared[1], "scale_to_m": declared[0],
                            "score": round(score, 3), "reasons": reasons})
         # The header is real evidence, just not conclusive evidence — and how

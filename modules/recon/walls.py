@@ -51,7 +51,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 from . import classify as C
 from .ir import Wall
-from .read import Drawing, Prim
+from .read import CadDrawing, Prim
 
 XY = Tuple[float, float]
 Segment = Tuple[XY, XY]
@@ -117,6 +117,27 @@ class Face:
     runs: List[Tuple[float, float]] = field(default_factory=list)
     source_ids: List[str] = field(default_factory=list)
     layers: List[str] = field(default_factory=list)
+    #: ``(t0, t1, prim_id, layer)`` for every segment on the line, so a wall
+    #: built from part of the line can cite the entities of *that part*. Two
+    #: plans drawn on one sheet share gridlines, and a wall that cited the
+    #: whole line claimed the other plan's layer and entities as its own.
+    rows: List[Tuple[float, float, str, str]] = field(default_factory=list)
+
+    def provenance(self, a: float, b: float, pad: float = 0.02
+                   ) -> Tuple[List[str], List[Tuple[str, float]]]:
+        """Entity ids and per-layer overlap length for the span ``[a, b]``."""
+        lo, hi = min(a, b), max(a, b)
+        ids = set()
+        by_layer: Dict[str, float] = {}
+        for t0, t1, pid, layer in self.rows:
+            overlap = min(t1, hi + pad) - max(t0, lo - pad)
+            if overlap <= 0:
+                continue
+            ids.add(pid)
+            by_layer[layer] = by_layer.get(layer, 0.0) + overlap
+        if not ids:
+            return list(self.source_ids), [(l, 0.0) for l in self.layers]
+        return sorted(ids), sorted(by_layer.items(), key=lambda kv: (-kv[1], kv[0]))
 
     @property
     def direction(self) -> XY:
@@ -191,12 +212,85 @@ def _bridge_runs(runs: Sequence[Tuple[float, float]], cover,
     out = [list(runs[0])]
     for a, b in runs[1:]:
         gap = a - out[-1][1]
-        if 0 < gap and cover.covers(LineString([pt(out[-1][1] + 1e-4),
-                                                pt(a - 1e-4)])):
+        joined = False
+        if gap > 0:
+            span = LineString([pt(out[-1][1] + 1e-4), pt(a - 1e-4)])
+            if cover.covers(span):
+                joined = True
+            else:
+                # An opening symbol is often drawn a little inside the
+                # structural gap — a frame set in from the jambs — so its
+                # rectangle stops a few centimetres short of the wall line at
+                # each end. Most of the gap covered, with only a jamb's worth
+                # left over at the ends, is still one wall through one hole.
+                covered = span.intersection(cover).length
+                if covered >= 0.8 * span.length and \
+                        span.length - covered <= BRIDGE_SLACK:
+                    joined = True
+        if joined:
             out[-1][1] = max(out[-1][1], b)
         else:
             out.append([a, b])
     return [(x, y) for x, y in out]
+
+
+#: How much of a gap an opening's evidence may leave uncovered and still join
+#: the wall across it, in metres — two frame insets.
+BRIDGE_SLACK = 0.3
+
+#: A face continues through an opening that starts within this distance of
+#: where the face stops, in metres — a frame set in from its jamb.
+THROUGH_START = 0.1
+
+#: The farthest a face is continued through openings, in metres: the widest
+#: opening the openings stage accepts.
+THROUGH_REACH = 7.0
+
+#: A face continues only through an opening running its way, within this
+#: angle, in degrees.
+THROUGH_ANGLE_TOL = 5.0
+
+
+def _extend_through(runs: Sequence[Tuple[float, float]], cover,
+                    angle: float, offset: float) -> List[Tuple[float, float]]:
+    """Continue each run through an opening that begins where the run ends.
+
+    Unlike :func:`_bridge_runs` this needs no line work on the far side: the
+    opening itself is the evidence that the wall goes on. It stops where the
+    opening stops, and never past the next run.
+    """
+    if not runs or cover is None:
+        return list(runs)
+    from shapely.geometry import LineString, Point
+    r = math.radians(angle)
+    d = (math.cos(r), math.sin(r))
+    n = (-math.sin(r), math.cos(r))
+
+    def pt(t: float) -> XY:
+        return (d[0] * t + n[0] * offset, d[1] * t + n[1] * offset)
+
+    def reach(t_from: float, t_to: float) -> float:
+        span = abs(t_to - t_from)
+        if span <= 0.05:
+            return 0.0
+        probe = LineString([pt(t_from), pt(t_to)])
+        hit = probe.intersection(cover)
+        best = 0.0
+        for g in getattr(hit, "geoms", [hit]):
+            if g.is_empty or g.geom_type != "LineString":
+                continue
+            ends = sorted(probe.project(Point(c)) for c in (g.coords[0], g.coords[-1]))
+            if ends[0] <= THROUGH_START:
+                best = max(best, ends[1])
+        return min(best, span)
+
+    out = [list(x) for x in sorted(runs)]
+    for i, run in enumerate(out):
+        ahead = out[i + 1][0] if i + 1 < len(out) else run[1] + THROUGH_REACH
+        run[1] += reach(run[1], ahead)
+        behind = out[i - 1][1] if i > 0 else run[0] - THROUGH_REACH
+        run[0] -= reach(run[0], behind)
+    return _merge_intervals([(a, b) for a, b in out], 1e-6)
 
 
 def _subtract(runs: Sequence[Tuple[float, float]], a: float, b: float
@@ -214,7 +308,8 @@ def _subtract(runs: Sequence[Tuple[float, float]], a: float, b: float
 
 
 def build_faces(prims: Sequence[Prim], *, join_gap: float = FACE_JOIN_GAP,
-                bridges: Optional[Sequence] = None) -> List[Face]:
+                bridges: Optional[Sequence] = None,
+                through: Optional[Sequence] = None) -> List[Face]:
     """Group segments into maximal collinear runs.
 
     Clustering is done on angle first and offset second, both greedily over
@@ -225,8 +320,21 @@ def build_faces(prims: Sequence[Prim], *, join_gap: float = FACE_JOIN_GAP,
     gap wider than ``join_gap`` is joined anyway when a bridge covers it,
     which is how a wall survives a 4.9 m garage door. Without them the line
     work's gaps and the wall's ends are indistinguishable.
+
+    ``through`` are the openings known to lie along a wall; a face that stops
+    at one continues through it (see :func:`_extend_through`).
     """
     cover = _bridge_cover(bridges)
+    through_covers: Dict[int, object] = {}
+
+    def through_cover_for(angle: float):
+        """The union of the openings that run along ``angle``."""
+        key = int(round(angle / ANGLE_TOL_DEG))
+        if key not in through_covers:
+            through_covers[key] = _bridge_cover([
+                poly for poly, a in through or ()
+                if abs(((a - angle + 90.0) % 180.0) - 90.0) <= THROUGH_ANGLE_TOL])
+        return through_covers[key]
     items: List[Tuple[float, float, float, float, str, str]] = []
     for p in prims:
         for (x0, y0), (x1, y1) in p.segments:
@@ -287,11 +395,14 @@ def build_faces(prims: Sequence[Prim], *, join_gap: float = FACE_JOIN_GAP,
             runs = _merge_intervals([(g[1], g[2]) for g in group], join_gap)
             if cover is not None:
                 runs = _bridge_runs(runs, cover, angle, offset)
+            if through:
+                runs = _extend_through(runs, through_cover_for(angle), angle, offset)
             fid += 1
             faces.append(Face(
                 id="f%d" % fid, angle=angle, offset=offset, runs=runs,
                 source_ids=sorted({g[3] for g in group}),
                 layers=sorted({g[4] for g in group}),
+                rows=[(g[1], g[2], g[3], g[4]) for g in group],
             ))
     return faces
 
@@ -428,6 +539,38 @@ def _intersect(p1: XY, p2: XY, p3: XY, p4: XY) -> Optional[Tuple[float, float, X
     t = ((x3 - x1) * (y4 - y3) - (y3 - y1) * (x4 - x3)) / d
     u = ((x3 - x1) * (y2 - y1) - (y3 - y1) * (x2 - x1)) / d
     return t, u, (x1 + t * (x2 - x1), y1 + t * (y2 - y1))
+
+
+def drop_embedded(walls: List[Wall], tol: float = 0.02) -> List[Wall]:
+    """Remove "walls" that lie wholly inside a thicker wall.
+
+    The two jamb lines of a narrow pier between a door and a window face each
+    other a pier's width apart, so they pair like a thin wall — one that runs
+    straight across the thick wall it is part of. No real wall is drawn
+    inside another; once extended to its neighbours it would cut the thick
+    wall in two and seal a sliver room.
+    """
+    out = []
+    for w in walls:
+        inside = False
+        for v in walls:
+            if v is w or v.thickness <= w.thickness + 1e-6 or v.length < 1e-9:
+                continue
+            d = v.direction
+            ok = True
+            for p in (w.start, w.end):
+                vx, vy = p[0] - v.start[0], p[1] - v.start[1]
+                t = vx * d[0] + vy * d[1]
+                if not (-tol <= t <= v.length + tol) or \
+                        abs(-vx * d[1] + vy * d[0]) > v.thickness / 2.0 + tol:
+                    ok = False
+                    break
+            if ok:
+                inside = True
+                break
+        if not inside:
+            out.append(w)
+    return out
 
 
 def merge_collinear(walls: List[Wall]) -> List[Wall]:
@@ -599,6 +742,10 @@ def _close_end_doorways(walls: List[Wall], max_gap: float
         return []
     ends = _free_ends(walls)
     inferred: List[Tuple[str, float, float]] = []
+    thickest = max(w.thickness for w in walls)
+    # A hit lies on the other wall's body to within 2% of its length, and
+    # walls repaired earlier in this pass have grown by up to ``max_gap``.
+    grid = _WallGrid(walls, lambda o: 0.02 * o.length + max_gap + 0.1)
     for w in walls:
         if w.length < 1e-9:
             continue
@@ -608,7 +755,12 @@ def _close_end_doorways(walls: List[Wall], max_gap: float
             if not _is_free(ends, p):
                 continue
             best: Optional[Tuple[float, XY]] = None
-            for other in walls:
+            sign = -1.0 if which == 0 else 1.0
+            back = thickest + 0.05
+            qa = (p[0] - sign * d[0] * back, p[1] - sign * d[1] * back)
+            qb = (p[0] + sign * d[0] * max_gap, p[1] + sign * d[1] * max_gap)
+            for other in grid.near(min(qa[0], qb[0]), min(qa[1], qb[1]),
+                                   max(qa[0], qb[0]), max(qa[1], qb[1])):
                 if other is w or other.length < 1e-9:
                     continue
                 hit = _intersect(w.start, w.end, other.start, other.end)
@@ -618,11 +770,19 @@ def _close_end_doorways(walls: List[Wall], max_gap: float
                 if not (-0.02 <= u <= 1.02):
                     continue        # misses the other wall's body
                 reach = (-t * w.length) if which == 0 else ((t - 1.0) * w.length)
-                if not (EXTEND_TOL < reach <= max_gap):
+                # Any wall at or just behind this end counts: an end that
+                # already tees into a wall is not free, however far the next
+                # wall beyond it lies.
+                if reach < -max(w.thickness, other.thickness):
                     continue
                 if best is None or reach < best[0]:
                     best = (reach, pt)
-            if best is None:
+            # The nearest wall ahead is the only candidate. If it is already
+            # within corner-closing reach, this end meets a wall and is no
+            # doorway; looking past it would extend the wall *through* that
+            # wall into whatever lies beyond — a courtyard, or the next
+            # building on the sheet.
+            if best is None or best[0] <= EXTEND_TOL or best[0] > max_gap:
                 continue
             reach, pt = best
             old_len = w.length
@@ -637,6 +797,39 @@ def _close_end_doorways(walls: List[Wall], max_gap: float
                 w.end = moved
                 inferred.append((w.id, old_len, old_len + reach))
     return inferred
+
+
+class _WallGrid:
+    """Walls by grid cell, for "which walls could be near here" queries.
+
+    Each wall is entered under its box grown by ``pad(wall)`` — as far from
+    the wall as any test using the grid can accept a point — so a query
+    returns every wall the exhaustive loop would have accepted, plus some it
+    rejects. Candidates come back in list order, so ties still resolve as
+    they did when every wall was visited.
+    """
+
+    CELL = 2.0
+
+    def __init__(self, walls: Sequence[Wall], pad):
+        self.walls = list(walls)
+        self.cells: Dict[Tuple[int, int], List[int]] = {}
+        for i, w in enumerate(self.walls):
+            p = pad(w)
+            x0 = min(w.start[0], w.end[0]) - p
+            x1 = max(w.start[0], w.end[0]) + p
+            y0 = min(w.start[1], w.end[1]) - p
+            y1 = max(w.start[1], w.end[1]) + p
+            for cx in range(int(math.floor(x0 / self.CELL)), int(math.floor(x1 / self.CELL)) + 1):
+                for cy in range(int(math.floor(y0 / self.CELL)), int(math.floor(y1 / self.CELL)) + 1):
+                    self.cells.setdefault((cx, cy), []).append(i)
+
+    def near(self, x0: float, y0: float, x1: float, y1: float) -> List[Wall]:
+        hits = set()
+        for cx in range(int(math.floor(x0 / self.CELL)), int(math.floor(x1 / self.CELL)) + 1):
+            for cy in range(int(math.floor(y0 / self.CELL)), int(math.floor(y1 / self.CELL)) + 1):
+                hits.update(self.cells.get((cx, cy), ()))
+        return [self.walls[i] for i in sorted(hits)]
 
 
 def _move_end(cells: Dict[Tuple[int, int], List[XY]], old: XY, new: XY,
@@ -736,6 +929,85 @@ def extend_to_intersections(walls: List[Wall], tol: float = EXTEND_TOL) -> None:
         w.end = (w.end[0] + d[0] * e, w.end[1] + d[1] * e)
 
 
+#: A wall end this close to another wall's body tees into it, in metres (or
+#: that wall's thickness, if more).
+TEE_TOL = 0.05
+
+#: How far a welded end is carried past the body it meets, in metres, so the
+#: two centrelines genuinely cross and the planar graph nodes them. The dangle
+#: this leaves is a millimetre and polygonisation discards it.
+TEE_OVERSHOOT = 0.002
+
+
+def weld_tees(walls: List[Wall], tol: float = TEE_TOL) -> int:
+    """Put every wall end that stops against another wall *onto* that wall.
+
+    Snapping averages clustered ends, which is exact at an L corner and
+    slightly wrong at a T: the end of the tee is pulled towards the ends
+    nearby and off the line of the wall it meets. On an axis-aligned plan the
+    error is along that wall and harmless. On a plan drawn at 30 degrees it is
+    six millimetres *off* the wall, the centrelines no longer touch, and not a
+    single room closes. So, last of all, each end near another wall's body is
+    moved along its own direction to cross that body.
+    """
+    moved = 0
+    if not walls:
+        return 0
+    thickest = max(w.thickness for w in walls)
+    # An accepted end lies within ``reach`` of the other wall's body, which is
+    # itself allowed 2% of its length past each end; ends welded earlier in
+    # this pass have moved by up to 2.5 reaches.
+    reach_max = max(tol, thickest * 0.6)
+    grid = _WallGrid(walls, lambda o: 0.02 * o.length + reach_max * 3.5 + 0.01)
+    for w in walls:
+        if w.length < 1e-9:
+            continue
+        d = w.direction
+        for which in (0, 1):
+            p = w.start if which == 0 else w.end
+            best = None
+            for o in grid.near(p[0], p[1], p[0], p[1]):
+                if o is w or o.length < 1e-9:
+                    continue
+                if abs(((w.angle_deg - o.angle_deg + 90) % 180) - 90) < 20.0:
+                    continue
+                reach = max(tol, o.thickness * 0.6)
+                ox, oy = o.start
+                ex, ey = o.end[0] - ox, o.end[1] - oy
+                L2 = ex * ex + ey * ey
+                t = ((p[0] - ox) * ex + (p[1] - oy) * ey) / L2
+                if t < -0.02 or t > 1.02:
+                    continue
+                q = (ox + ex * t, oy + ey * t)
+                dist = math.dist(p, q)
+                # An end that already lies *on* the body is welded too: "on"
+                # is only true to fifteen digits, and on a rotated plan the
+                # planar graph does not node a point that far off the line.
+                if dist > reach:
+                    continue
+                if t <= 1e-6 or t >= 1.0 - 1e-6:
+                    continue        # an end meeting an end is a corner, snapped already
+                hit = _intersect(w.start, w.end, o.start, o.end)
+                if hit is None:
+                    continue
+                s, _u, pt = hit
+                along = (-s * w.length) if which == 0 else ((s - 1.0) * w.length)
+                if abs(along) > reach * 2.5:
+                    continue
+                if best is None or dist < best[0]:
+                    best = (dist, along)
+            if best is None:
+                continue
+            _dist, along = best
+            ext = along + TEE_OVERSHOOT
+            if which == 0:
+                w.start = (w.start[0] - d[0] * ext, w.start[1] - d[1] * ext)
+            else:
+                w.end = (w.end[0] + d[0] * ext, w.end[1] + d[1] * ext)
+            moved += 1
+    return moved
+
+
 def snap_endpoints(walls: List[Wall], tol: float = SNAP_TOL) -> None:
     """Weld wall ends that are within ``tol`` into a single shared point."""
     pts: List[Tuple[Wall, str, XY]] = []
@@ -795,7 +1067,17 @@ class WallResult:
     inferred_openings: List[Tuple[str, float, float]] = field(default_factory=list)
 
 
-def _wall_source_prims(drawing: Drawing) -> Tuple[List[Prim], str]:
+def _dominant_layer(layers: Sequence[Tuple[str, float]]) -> str:
+    """The layer carrying most of a wall's line work."""
+    total: Dict[str, float] = {}
+    for name, length in layers:
+        total[name] = total.get(name, 0.0) + length
+    if not total:
+        return ""
+    return max(sorted(total), key=lambda k: total[k])
+
+
+def _wall_source_prims(drawing: CadDrawing) -> Tuple[List[Prim], str]:
     """The line work wall detection is allowed to look at.
 
     Layers first. Only when the drawing's layers cannot identify enough wall
@@ -825,14 +1107,15 @@ def _wall_source_prims(drawing: Drawing) -> Tuple[List[Prim], str]:
     return (geo, "geometry") if len(geo) > len(walls) else (walls, "layer")
 
 
-def reconstruct(drawing: Drawing, *,
+def reconstruct(drawing: CadDrawing, *,
                 default_thickness: float = DEFAULT_THICKNESS,
                 bridges: Optional[Sequence] = None,
+                through: Optional[Sequence] = None,
                 ) -> WallResult:
     """Reconstruct wall systems from a read drawing."""
     t0 = time.perf_counter()
     prims, selection = _wall_source_prims(drawing)
-    faces = build_faces(prims, bridges=bridges)
+    faces = build_faces(prims, bridges=bridges, through=through)
     total_face_length = sum(f.length for f in faces)
 
     from . import units as U
@@ -852,11 +1135,13 @@ def reconstruct(drawing: Drawing, *,
         d, nvec = c.a.direction, c.a.normal
         s = (d[0] * c.t0 + nvec[0] * mid_off, d[1] * c.t0 + nvec[1] * mid_off)
         e = (d[0] * c.t1 + nvec[0] * mid_off, d[1] * c.t1 + nvec[1] * mid_off)
+        ids_a, layers_a = c.a.provenance(c.t0, c.t1)
+        ids_b, layers_b = c.b.provenance(c.t0, c.t1)
         n += 1
         walls.append(Wall(
             id="w%d" % n, start=s, end=e, thickness=c.thickness,
-            source_ids=sorted(set(c.a.source_ids) | set(c.b.source_ids)),
-            layer=(c.a.layers[0] if c.a.layers else ""), confidence=0.95,
+            source_ids=sorted(set(ids_a) | set(ids_b)),
+            layer=_dominant_layer(layers_a + layers_b), confidence=0.95,
         ))
 
     method = "paired"
@@ -870,15 +1155,16 @@ def reconstruct(drawing: Drawing, *,
             for a, b in f.runs:
                 if b - a < MIN_WALL_LENGTH:
                     continue
+                ids, layers = f.provenance(a, b)
                 n += 1
                 walls.append(Wall(
                     id="w%d" % n, start=f.point(a), end=f.point(b),
-                    thickness=thickness, source_ids=list(f.source_ids),
-                    layer=(f.layers[0] if f.layers else ""), confidence=0.7,
+                    thickness=thickness, source_ids=ids,
+                    layer=_dominant_layer(layers), confidence=0.7,
                 ))
         method = "single-line"
 
-    walls = merge_collinear(walls)
+    walls = drop_embedded(merge_collinear(walls))
     for i, w in enumerate(walls, 1):
         w.id = "w%d" % i
     extend_to_intersections(walls)
@@ -892,6 +1178,7 @@ def reconstruct(drawing: Drawing, *,
     inferred = close_collinear_gaps(walls)
     extend_to_intersections(walls)
     snap_endpoints(walls)
+    weld_tees(walls)
     id_map = {w.id: "w%d" % i for i, w in enumerate(walls, 1)}
     inferred = [(id_map.get(wid, wid), lo, hi) for wid, lo, hi in inferred]
     for w in walls:

@@ -524,6 +524,72 @@ def area_plausibility(room_type: str, area: float) -> float:
     return max(0.0, 1.0 - (area - high) / max(high, 1e-6))
 
 
+def is_reconstruction(geometry: Dict) -> bool:
+    """Whether ``geometry.json`` was projected from the architectural model.
+
+    Such a document carries the reconstruction's own rooms, and those are the
+    rooms. Segmenting its walls again on a raster would be a second, weaker
+    reading of the same drawing, free to disagree with the model the 3D stage
+    builds — which is exactly what the architecture forbids.
+    """
+    meta = geometry.get("metadata") or {}
+    extractor = str(meta.get("extractor") or "")
+    return extractor.startswith("recon.pipeline") and isinstance(
+        geometry.get("rooms"), list)
+
+
+def regions_from_reconstruction(geometry: Dict) -> List[RoomRegion]:
+    """The reconstruction's rooms as regions, ids and all.
+
+    Region ids are the reconstruction's room ids, so anything a later stage
+    places in a region can be traced to the room — and to its storey — in
+    ``building.json``. Wall ids are translated to this stage's ``wall_<n>``
+    indices over ``geometry["walls"]``. Rooms are connected where an opening
+    joins them, which is what "reachable through a doorway" means.
+    """
+    index_of = {}
+    for n, segment in enumerate(geometry.get("walls") or []):
+        wid = segment.get("wall_id")
+        if wid:
+            index_of[wid] = "wall_%d" % n
+
+    regions: List[RoomRegion] = []
+    for room in geometry.get("rooms") or []:
+        polygon = [(float(p[0]), float(p[1])) for p in room.get("polygon") or []]
+        if len(polygon) < 3:
+            continue
+        xs = [p[0] for p in polygon]
+        ys = [p[1] for p in polygon]
+        centroid = room.get("centroid") or (sum(xs) / len(xs), sum(ys) / len(ys))
+        region = RoomRegion(
+            id=str(room.get("id")),
+            polygon=polygon,
+            bounds_min=(min(xs), min(ys)),
+            bounds_max=(max(xs), max(ys)),
+            area=float(room.get("area") or g2.polygon_area(polygon)),
+            centroid=(float(centroid[0]), float(centroid[1])),
+            wall_ids=[index_of[w] for w in room.get("boundary_wall_ids") or []
+                      if w in index_of],
+        )
+        rtype = room.get("room_type") or "unknown"
+        if rtype != "unknown":
+            region.room_type = rtype
+            region.room_type_confidence = float(room.get("label_confidence") or 0.8)
+        regions.append(region)
+
+    by_id = {r.id: r for r in regions}
+    for opening in geometry.get("openings") or []:
+        joined = [rid for rid in opening.get("rooms") or [] if rid in by_id]
+        for i, a in enumerate(joined):
+            for b in joined[i + 1:]:
+                if b not in by_id[a].connected_to:
+                    by_id[a].connected_to.append(b)
+                if a not in by_id[b].connected_to:
+                    by_id[b].connected_to.append(a)
+    regions.sort(key=lambda r: -r.area)
+    return regions
+
+
 def fallback_region(wall_segments: Sequence[Dict], padding: float = 0.0) -> RoomRegion:
     """A single region covering the whole plan.
 

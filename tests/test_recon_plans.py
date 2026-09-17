@@ -61,13 +61,28 @@ def built():
     return out
 
 
+def single_plan(drawing):
+    """The one storey of the one building a single-plan drawing must yield.
+
+    Every fixture in this module is one building of one storey, so this is an
+    assertion as much as an accessor: a plan that came back as two buildings,
+    or as a building with a phantom second storey, fails here.
+    """
+    assert len(drawing.buildings) == 1, \
+        "expected one building, got %d" % len(drawing.buildings)
+    levels = drawing.buildings[0].levels
+    assert len(levels) == 1, "expected one storey, got %d" % len(levels)
+    assert drawing.level_structure["status"] == "SINGLE_LEVEL"
+    return levels[0]
+
+
 def ok(built, name):
     b = built.get(name)
     if b is None:
         pytest.skip("fixture %s not generated" % name)
     if isinstance(b, ReconstructionError):
         pytest.fail("%s failed to reconstruct: %s" % (name, b.failures or b))
-    return b
+    return single_plan(b)
 
 
 def assert_rect_plan(b, *, thickness=None, tol=0.35):
@@ -183,7 +198,7 @@ class TestGeneratedPlans:
         b = ok(built, "t13_single_line.dxf")
         assert b.width == pytest.approx(10.0, abs=0.2)
         assert len(b.rooms) == 3
-        assert b.stats["walls"]["method"] == "single-line"
+        assert built["t13_single_line.dxf"].stats["walls"]["method"] == "single-line"
 
     def test_14_a_rotated_sheet(self, built):
         """23 degrees off axis: the same building, differently oriented."""
@@ -209,7 +224,7 @@ class TestTheFailedPlan:
 
     @pytest.fixture(scope="class")
     def b(self):
-        return reconstruct(plan("residential_us.dxf"))
+        return single_plan(reconstruct(plan("residential_us.dxf")))
 
     def test_the_unit_is_read_from_the_geometry_not_the_header(self, b):
         assert b.units.unit_name == "inches"
@@ -295,8 +310,8 @@ class TestTheFailedPlan:
 
 class TestDeterminism:
     def test_two_runs_give_the_same_building(self):
-        a = reconstruct(plan("t01_simple_rect.dxf"))
-        b = reconstruct(plan("t01_simple_rect.dxf"))
+        a = single_plan(reconstruct(plan("t01_simple_rect.dxf")))
+        b = single_plan(reconstruct(plan("t01_simple_rect.dxf")))
         assert a.as_dict()["walls"] == b.as_dict()["walls"]
         assert a.as_dict()["rooms"] == b.as_dict()["rooms"]
 
@@ -304,7 +319,7 @@ class TestDeterminism:
         """The geometry engine must never reach for a credential."""
         for var in ("GEMINI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY"):
             monkeypatch.delenv(var, raising=False)
-        b = reconstruct(plan("t01_simple_rect.dxf"))
+        b = single_plan(reconstruct(plan("t01_simple_rect.dxf")))
         assert len(b.rooms) == 3
 
 

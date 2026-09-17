@@ -2,7 +2,7 @@
 ArchX3D — DXF reading: entities in, classified metric geometry out
 ==================================================================
 The only module that knows what a DXF is. Everything downstream sees
-:class:`Drawing` — flat lists of classified polylines, labels and dimension
+:class:`CadDrawing` — flat lists of classified polylines, labels and dimension
 measurements, in metres, in a local frame.
 
 What this stage is responsible for
@@ -140,7 +140,15 @@ class Arc:
 
 @dataclass
 class Label:
-    """A TEXT/MTEXT string with the point it is anchored at."""
+    """A TEXT/MTEXT string with the point it is anchored at.
+
+    ``extent`` is the approximate box the string occupies, ``(x0, y0, x1,
+    y1)``. It is estimated from the character height, the string length and the
+    entity's own alignment, because no font metrics are available here — which
+    is accurate enough for its one job: telling whether a plan title sits
+    *under* a plan or merely *near* it. The insertion point alone cannot answer
+    that for left-aligned titles, whose insertion point is at their far end.
+    """
 
     id: str
     text: str
@@ -149,6 +157,10 @@ class Label:
     layer: str
     role: str = C.ROOM_LABEL
     rotation: float = 0.0
+    extent: Optional[Tuple[float, float, float, float]] = None
+    #: Where a justified string is really placed: its alignment point when it
+    #: has one, its insertion point otherwise.
+    anchor: Optional[XY] = None
 
 
 @dataclass
@@ -169,10 +181,40 @@ class BlockRef:
     layer: str
     role: str
     extents: Optional[Tuple[float, float, float, float]] = None
+    #: ATTRIB tag -> value. ``ROOM_NAME: MASTER BEDROOM`` is structured
+    #: metadata, stronger evidence than loose text inside a polygon.
+    attributes: Dict[str, str] = field(default_factory=dict)
+    #: The block this insert sits inside, when it is nested.
+    parent: Optional[str] = None
+    depth: int = 0
 
 
 @dataclass
-class Drawing:
+class HatchRef:
+    """A HATCH's own facts: pattern and boundary. Its boundary is also a prim."""
+
+    id: str
+    pattern: str
+    solid: bool
+    layer: str
+    boundary: List[XY] = field(default_factory=list)
+    block: Optional[str] = None
+
+
+@dataclass
+class DimRef:
+    """A DIMENSION as the drawing states it: measurement, printed text, place."""
+
+    id: str
+    measurement: float
+    text: str
+    position: XY
+    layer: str
+    kind: str = "linear"
+
+
+@dataclass
+class CadDrawing:
     """Everything read from one DXF, classified, in metres, origin-normalised."""
 
     source_path: str = ""
@@ -181,6 +223,16 @@ class Drawing:
     labels: List[Label] = field(default_factory=list)
     inserts: List[BlockRef] = field(default_factory=list)
     dimensions: List[float] = field(default_factory=list)
+    dimension_refs: List[DimRef] = field(default_factory=list)
+    hatches: List[HatchRef] = field(default_factory=list)
+    dxf_version: str = ""
+    #: Every layer in the DXF's layer table, ``name -> {"off", "frozen"}``,
+    #: including layers that hold only block references and so never appear
+    #: in ``layer_counts``.
+    layer_table: Dict[str, Dict[str, bool]] = field(default_factory=dict)
+    #: INSERTs per layer; kept apart from ``layer_counts``, which counts the
+    #: geometry wall detection weighs.
+    insert_counts: Dict[str, int] = field(default_factory=dict)
     units: Optional[UnitDecision] = None
     insunits: Optional[int] = None
     origin_offset: XY = (0.0, 0.0)
@@ -190,6 +242,11 @@ class Drawing:
     layer_survey: Dict[str, C.Classification] = field(default_factory=dict)
     layer_counts: Dict[str, int] = field(default_factory=dict)
     warnings: List[str] = field(default_factory=list)
+    #: Line work ``robust_bounds`` left outside the plan frame, when there is
+    #: enough of it to be worth telling the user about. ``None`` when the
+    #: drawing is a single coherent plan, which is the usual case. See
+    #: :func:`survey_outlying`.
+    outlying: Optional[Dict[str, object]] = None
     timings: Dict[str, float] = field(default_factory=dict)
 
     # -- selection helpers --------------------------------------------------
@@ -274,6 +331,146 @@ def _bulge_points(p1: XY, p2: XY, bulge: float) -> List[XY]:
         return []
 
 
+def _ocs(e):
+    """The entity's object coordinate system, or ``None`` when it is the WCS.
+
+    ARC, CIRCLE, LWPOLYLINE, 2D POLYLINE, TEXT, INSERT, SOLID and HATCH are
+    stored in an OCS defined by their extrusion vector. For a plan drawn the
+    normal way that is the world, but a *mirrored* block — the usual way a
+    drafter flips a door to swing the other way — writes its contents with
+    extrusion ``(0, 0, -1)``, and read raw their x coordinates are negated.
+    """
+    try:
+        ext = e.dxf.extrusion
+    except Exception:
+        return None
+    if ext is None:
+        return None
+    if abs(ext[0]) < 1e-9 and abs(ext[1]) < 1e-9 and ext[2] > 0:
+        return None
+    try:
+        return e.ocs()
+    except Exception:
+        return None
+
+
+def _to_wcs(ocs, pts: Sequence[XY], elevation: float = 0.0) -> List[XY]:
+    """OCS points at an elevation, in world plan coordinates."""
+    if ocs is None:
+        return list(pts)
+    out: List[XY] = []
+    for x, y in pts:
+        v = ocs.to_wcs((x, y, elevation))
+        out.append((float(v.x), float(v.y)))
+    return out
+
+
+def _mirrors(ocs) -> bool:
+    """Whether the OCS reverses handedness in plan, turning CCW arcs CW."""
+    o = ocs.to_wcs((0.0, 0.0, 0.0))
+    ux = ocs.to_wcs((1.0, 0.0, 0.0))
+    uy = ocs.to_wcs((0.0, 1.0, 0.0))
+    return ((ux.x - o.x) * (uy.y - o.y) - (ux.y - o.y) * (uy.x - o.x)) < 0
+
+
+#: Average advance of one character as a fraction of the text height. Plan
+#: lettering is mostly capitals in a simplex or sans face, which runs close to
+#: this; the estimate only has to place a title on the right side of a plan.
+_CHAR_ADVANCE = 0.8
+
+
+def _box_about(anchor: XY, dx0: float, dy0: float, dx1: float, dy1: float,
+               rotation_deg: float) -> Tuple[float, float, float, float]:
+    """Axis-aligned bounds of a box given relative to an anchor, rotated."""
+    r = math.radians(rotation_deg or 0.0)
+    c, s = math.cos(r), math.sin(r)
+    xs, ys = [], []
+    for px, py in ((dx0, dy0), (dx1, dy0), (dx1, dy1), (dx0, dy1)):
+        xs.append(anchor[0] + px * c - py * s)
+        ys.append(anchor[1] + px * s + py * c)
+    return (min(xs), min(ys), max(xs), max(ys))
+
+
+def _text_extent(e) -> Optional[Tuple[float, float, float, float]]:
+    """Approximate bounds of a TEXT or ATTRIB, honouring its alignment."""
+    try:
+        text = str(e.dxf.text or "")
+        h = float(e.dxf.height or 0.0)
+        if not text.strip() or h <= 0:
+            return None
+        wf = float(getattr(e.dxf, "width", 1.0) or 1.0)
+        halign = int(getattr(e.dxf, "halign", 0) or 0)
+        valign = int(getattr(e.dxf, "valign", 0) or 0)
+        rot = float(getattr(e.dxf, "rotation", 0.0) or 0.0)
+        ins = (e.dxf.insert.x, e.dxf.insert.y)
+        width = len(text.strip()) * h * _CHAR_ADVANCE * wf
+        anchor = ins
+        if halign or valign:
+            try:
+                ap = e.dxf.align_point
+                anchor = (ap.x, ap.y)
+            except Exception:
+                anchor = ins
+        if halign in (3, 5):            # aligned / fit: spans insert -> align
+            width = max(math.dist(ins, anchor), 1e-9)
+            anchor = ins
+            x0 = 0.0
+        elif halign in (1, 4):          # centre / middle
+            x0 = -width / 2.0
+        elif halign == 2:               # right
+            x0 = -width
+        else:
+            x0 = 0.0
+        y0 = {0: 0.0, 1: 0.0, 2: -h / 2.0, 3: -h}.get(valign, 0.0)
+        if halign == 4:
+            y0 = -h / 2.0
+        return _box_about(anchor, x0, y0, x0 + width, y0 + h, rot)
+    except Exception:
+        return None
+
+
+def _text_anchor(e) -> Optional[XY]:
+    """A TEXT's real position: the alignment point when it is justified.
+
+    A justified TEXT carries its placement in ``align_point``; some writers
+    leave ``insert`` at the origin for such text, which would detach the
+    label from the room it names.
+    """
+    try:
+        halign = int(getattr(e.dxf, "halign", 0) or 0)
+        valign = int(getattr(e.dxf, "valign", 0) or 0)
+        if halign or valign:
+            ap = e.dxf.align_point
+            return (float(ap.x), float(ap.y))
+        return (float(e.dxf.insert.x), float(e.dxf.insert.y))
+    except Exception:
+        return None
+
+
+def _mtext_extent(e, text: str) -> Optional[Tuple[float, float, float, float]]:
+    """Approximate bounds of an MTEXT from its attachment point and lines."""
+    try:
+        h = float(e.dxf.char_height or 0.0)
+        lines = [ln for ln in (text or "").splitlines() if ln.strip()] or [text or ""]
+        if h <= 0 or not any(ln.strip() for ln in lines):
+            return None
+        width = max(len(ln.strip()) for ln in lines) * h * _CHAR_ADVANCE
+        ref = float(getattr(e.dxf, "width", 0.0) or 0.0)
+        if ref > 0:
+            width = min(width, ref)
+        height = h * (1.0 + 0.66 * (len(lines) - 1))
+        ap = int(getattr(e.dxf, "attachment_point", 1) or 1)
+        col = (ap - 1) % 3            # 0 left, 1 centre, 2 right
+        row = (ap - 1) // 3           # 0 top, 1 middle, 2 bottom
+        x0 = (0.0, -width / 2.0, -width)[col]
+        y1 = (0.0, height / 2.0, height)[row]
+        return _box_about((e.dxf.insert.x, e.dxf.insert.y), x0, y1 - height,
+                          x0 + width, y1,
+                          float(getattr(e.dxf, "rotation", 0.0) or 0.0))
+    except Exception:
+        return None
+
+
 def _dedupe_points(pts: Sequence[XY], tol: float) -> List[XY]:
     out: List[XY] = []
     for p in pts:
@@ -301,7 +498,11 @@ class _Reader:
         self.labels: List[Label] = []
         self.inserts: List[BlockRef] = []
         self.dimensions: List[float] = []
+        self.dim_refs: List[DimRef] = []
+        self.hatches: List[HatchRef] = []
         self.warnings: List[str] = []
+        #: Entity types seen and not read — 3D solids, meshes, images.
+        self.unsupported: Dict[str, int] = {}
         self.layer_counts: Dict[str, int] = {}
         self._n = 0
         self._layer_state: Dict[str, Tuple[bool, bool]] = {}
@@ -370,6 +571,7 @@ class _Reader:
                 # that something was seen and ignored rather than silently
                 # vanishing.
                 self._count(e)
+                self.unsupported[t] = self.unsupported.get(t, 0) + 1
         except Exception as exc:  # one bad entity must not lose the drawing
             self.warnings.append("skipped %s on %r: %s" % (
                 t, getattr(e.dxf, "layer", "?"), exc))
@@ -395,7 +597,10 @@ class _Reader:
                 nxt = None
             if nxt is not None and abs(b) > 1e-9:
                 pts.extend(_bulge_points((x, y), (nxt[0], nxt[1]), b))
-        self._emit(e, pts, closed, block, depth)
+        # Vertices and bulges are in the polyline's own OCS; the arcs are
+        # interpolated there and the result carried to world coordinates.
+        elevation = float(getattr(e.dxf, "elevation", 0.0) or 0.0)
+        self._emit(e, _to_wcs(_ocs(e), pts, elevation), closed, block, depth)
 
     def _do_polyline(self, e, block, depth) -> None:
         try:
@@ -403,7 +608,10 @@ class _Reader:
         except Exception:
             mode = "AcDb2dPolyline"
         if mode in ("AcDb3dPolyline", "AcDb2dPolyline"):
-            pts = [(v.dxf.location.x, v.dxf.location.y) for v in e.vertices]
+            verts = list(e.vertices)
+            pts = [(v.dxf.location.x, v.dxf.location.y) for v in verts]
+            if mode == "AcDb2dPolyline" and verts:
+                pts = _to_wcs(_ocs(e), pts, float(verts[0].dxf.location.z))
             self._emit(e, pts, bool(e.is_closed), block, depth)
         else:
             # Mesh and polyface polylines are 3D shapes, never plan walls.
@@ -412,19 +620,34 @@ class _Reader:
     def _do_arc(self, e, block, depth) -> None:
         c = e.dxf.center
         cls = self._classify(e, block)
+        r = float(e.dxf.radius)
+        a0, a1 = float(e.dxf.start_angle), float(e.dxf.end_angle)
+        pts = _arc_points(c.x, c.y, r, a0, a1)
+        ocs = _ocs(e)
+        centre = (c.x, c.y)
+        if ocs is not None:
+            # The arc is defined in its own coordinate system. A mirrored
+            # door block gives its swing an extrusion of (0, 0, -1); read
+            # raw, the hinge lands on the wrong side of the plan.
+            centre = _to_wcs(ocs, [centre], c.z)[0]
+            pts = _to_wcs(ocs, pts, c.z)
+            sp, ep = pts[0], pts[-1]
+            if _mirrors(ocs):
+                sp, ep = ep, sp
+                pts = list(reversed(pts))
+            a0 = math.degrees(math.atan2(sp[1] - centre[1], sp[0] - centre[0]))
+            a1 = math.degrees(math.atan2(ep[1] - centre[1], ep[0] - centre[0]))
         self.arcs.append(Arc(
-            id=self._next_id("a"), centre=(c.x, c.y), radius=float(e.dxf.radius),
-            start_deg=float(e.dxf.start_angle), end_deg=float(e.dxf.end_angle),
+            id=self._next_id("a"), centre=centre, radius=r,
+            start_deg=a0, end_deg=a1,
             role=cls.role, layer=getattr(e.dxf, "layer", "0"), block=block,
         ))
-        self._emit(e, _arc_points(c.x, c.y, e.dxf.radius,
-                                  e.dxf.start_angle, e.dxf.end_angle),
-                   False, block, depth, cls)
+        self._emit(e, pts, False, block, depth, cls)
 
     def _do_circle(self, e, block, depth) -> None:
         c = e.dxf.center
-        self._emit(e, _arc_points(c.x, c.y, e.dxf.radius, 0.0, 360.0),
-                   True, block, depth)
+        pts = _arc_points(c.x, c.y, e.dxf.radius, 0.0, 360.0)
+        self._emit(e, _to_wcs(_ocs(e), pts, c.z), True, block, depth)
 
     def _do_ellipse(self, e, block, depth) -> None:
         try:
@@ -443,31 +666,64 @@ class _Reader:
 
     def _do_solid(self, e, block, depth) -> None:
         corners = []
+        z = 0.0
         for name in ("vtx0", "vtx1", "vtx3", "vtx2"):   # DXF SOLID winding
             try:
                 v = getattr(e.dxf, name)
                 corners.append((v.x, v.y))
+                z = v.z
             except Exception:
                 pass
-        self._emit(e, corners, True, block, depth)
+        self._emit(e, _to_wcs(_ocs(e), corners, z), True, block, depth)
 
     _do_trace = _do_solid
 
     def _do_hatch(self, e, block, depth) -> None:
         # Hatch *boundaries* can be the only closed outline of a wall poche on
         # drawings that hatch their walls. The fill itself is never geometry.
+        boundary: List[XY] = []
+        ocs = _ocs(e)
+        try:
+            elevation = float(e.dxf.elevation.z)
+        except Exception:
+            elevation = 0.0
         try:
             for path in e.paths:
                 pts = [(v[0], v[1]) for v in (getattr(path, "vertices", None) or [])]
+                pts = _to_wcs(ocs, pts, elevation)
                 if len(pts) >= 3:
                     self._emit(e, pts, True, block, depth)
+                    if not boundary:
+                        boundary = pts
         except Exception:
             pass
+        # The pattern is evidence of its own — ``AR-BRSTD`` is brick, a solid
+        # fill in a wall band is poche — and it is recorded once, here, so no
+        # later stage has to open the file to ask.
+        self.hatches.append(HatchRef(
+            id=self._next_id("h"),
+            pattern=str(getattr(e.dxf, "pattern_name", "") or ""),
+            solid=bool(getattr(e.dxf, "solid_fill", 0)),
+            layer=getattr(e.dxf, "layer", "0"), boundary=boundary, block=block,
+        ))
 
     def _do_text(self, e, block, depth) -> None:
-        self._label(e, (e.dxf.insert.x, e.dxf.insert.y), e.dxf.text,
-                    float(e.dxf.height or 0.0),
-                    float(getattr(e.dxf, "rotation", 0.0) or 0.0))
+        ocs = _ocs(e)
+        z = float(e.dxf.insert.z)
+        extent = _text_extent(e)
+        anchor = _text_anchor(e)
+        point = (e.dxf.insert.x, e.dxf.insert.y)
+        if ocs is not None:
+            point = _to_wcs(ocs, [point], z)[0]
+            anchor = _to_wcs(ocs, [anchor], z)[0] if anchor else None
+            if extent:
+                corners = _to_wcs(ocs, [(extent[0], extent[1]), (extent[2], extent[1]),
+                                        (extent[2], extent[3]), (extent[0], extent[3])], z)
+                extent = (min(c[0] for c in corners), min(c[1] for c in corners),
+                          max(c[0] for c in corners), max(c[1] for c in corners))
+        self._label(e, point, e.dxf.text, float(e.dxf.height or 0.0),
+                    float(getattr(e.dxf, "rotation", 0.0) or 0.0),
+                    extent=extent, anchor=anchor)
 
     def _do_mtext(self, e, block, depth) -> None:
         try:
@@ -476,37 +732,61 @@ class _Reader:
             txt = getattr(e, "text", "")
         self._label(e, (e.dxf.insert.x, e.dxf.insert.y), txt,
                     float(e.dxf.char_height or 0.0),
-                    float(getattr(e.dxf, "rotation", 0.0) or 0.0))
+                    float(getattr(e.dxf, "rotation", 0.0) or 0.0),
+                    extent=_mtext_extent(e, txt))
 
     def _do_attrib(self, e, block, depth) -> None:
         try:
             self._label(e, (e.dxf.insert.x, e.dxf.insert.y), e.dxf.text,
                         float(e.dxf.height or 0.0),
-                        float(getattr(e.dxf, "rotation", 0.0) or 0.0))
+                        float(getattr(e.dxf, "rotation", 0.0) or 0.0),
+                        extent=_text_extent(e), anchor=_text_anchor(e))
         except Exception:
             pass
 
     def _do_attdef(self, e, block, depth) -> None:
         pass   # a definition, not a value
 
-    def _label(self, e, point: XY, text: str, height: float, rot: float) -> None:
+    def _label(self, e, point: XY, text: str, height: float, rot: float,
+               extent: Optional[Tuple[float, float, float, float]] = None,
+               anchor: Optional[XY] = None) -> None:
         text = (text or "").strip()
         if not text:
             return
         layer = self._count(e)
         self.labels.append(Label(
             id=self._next_id("t"), text=text, point=point, height=height,
-            layer=layer, rotation=rot,
+            layer=layer, rotation=rot, extent=extent, anchor=anchor,
         ))
 
     def _do_dimension(self, e, block, depth) -> None:
         self._count(e)
+        m = 0.0
         try:
-            m = abs(float(e.get_measurement()))
-            if m > 0:
-                self.dimensions.append(m)
+            value = e.get_measurement()
+            if not isinstance(value, (tuple, list)):
+                m = abs(float(value))
+                if m > 0:
+                    self.dimensions.append(m)
         except Exception:
             pass
+        try:
+            dp = e.dxf.defpoint
+            position = (float(dp.x), float(dp.y))
+        except Exception:
+            position = (0.0, 0.0)
+        try:
+            code = int(e.dimtype) & 7
+        except Exception:
+            code = 0
+        printed = str(getattr(e.dxf, "text", "") or "").strip()
+        self.dim_refs.append(DimRef(
+            id=self._next_id("d"), measurement=m,
+            text="" if printed in ("<>", "") else printed,
+            position=position, layer=getattr(e.dxf, "layer", "0"),
+            kind={0: "linear", 1: "aligned", 2: "angular", 3: "diameter",
+                  4: "radial", 5: "angular", 6: "ordinate"}.get(code, "linear"),
+        ))
         # The dimension's geometry lives in an anonymous block (*D12). It is
         # never expanded: that block is exactly the 58-foot-wall trap.
 
@@ -521,12 +801,22 @@ class _Reader:
         name = str(e.dxf.name)
         cls = self._classify(e, name)
         ins = e.dxf.insert
+        attributes: Dict[str, str] = {}
+        try:
+            for attrib in e.attribs:
+                tag = str(attrib.dxf.tag).strip()
+                if tag:
+                    attributes[tag] = str(attrib.dxf.text or "").strip()
+        except Exception:
+            pass
+        point = _to_wcs(_ocs(e), [(ins.x, ins.y)], ins.z)[0]
         ref = BlockRef(
-            id=self._next_id("i"), name=name, point=(ins.x, ins.y),
+            id=self._next_id("i"), name=name, point=point,
             rotation=float(getattr(e.dxf, "rotation", 0.0) or 0.0),
             xscale=float(getattr(e.dxf, "xscale", 1.0) or 1.0),
             yscale=float(getattr(e.dxf, "yscale", 1.0) or 1.0),
             layer=getattr(e.dxf, "layer", "0"), role=cls.role,
+            attributes=attributes, parent=block, depth=depth,
         )
         self.inserts.append(ref)
         if depth >= MAX_BLOCK_DEPTH:
@@ -534,10 +824,20 @@ class _Reader:
                                  % (MAX_BLOCK_DEPTH, name))
             return
         before = len(self.prims)
+        insert_layer = getattr(e.dxf, "layer", "0")
         try:
             # virtual_entities applies the insert's full transform (scale,
             # rotation, OCS) to every nested entity, including nested INSERTs.
             for sub in e.virtual_entities():
+                # Block content drawn on layer 0 takes the layer of the INSERT
+                # that places it — AutoCAD's own rule, and the reason drafters
+                # build symbols on 0. Read as "0", a window block inserted on
+                # a window layer is geometry of no role at all.
+                if getattr(sub.dxf, "layer", "0") == "0" and insert_layer != "0":
+                    try:
+                        sub.dxf.layer = insert_layer
+                    except Exception:
+                        pass
                 self.entity(sub, block=name, depth=depth + 1)
         except Exception as exc:
             self.warnings.append("could not expand block %r: %s" % (name, exc))
@@ -565,8 +865,8 @@ class _Reader:
 # Entry point
 # ---------------------------------------------------------------------------
 
-def read(path: str, *, user_scale: Optional[float] = None) -> Drawing:
-    """Read a DXF into a classified, metric, origin-normalised :class:`Drawing`.
+def read(path: str, *, user_scale: Optional[float] = None) -> CadDrawing:
+    """Read a DXF into a classified, metric, origin-normalised :class:`CadDrawing`.
 
     ``user_scale`` overrides unit resolution entirely — the escape hatch for a
     drawing whose geometry is too unusual for the evidence to settle.
@@ -584,7 +884,12 @@ def read(path: str, *, user_scale: Optional[float] = None) -> Drawing:
         # Real-world DXFs are frequently slightly malformed. recover.readfile
         # repairs what it can; refusing them outright would fail on files every
         # CAD program opens without complaint.
-        doc, _auditor = recover.readfile(path)
+        try:
+            doc, _auditor = recover.readfile(path)
+        except Exception as exc:
+            raise ReconstructionError(
+                "the file is not a readable DXF: %s" % exc, stage="read",
+                failures=["the file is not a readable DXF (%s)" % type(exc).__name__])
         recovered = True
 
     reader = _Reader(doc)
@@ -596,14 +901,32 @@ def read(path: str, *, user_scale: Optional[float] = None) -> Drawing:
     t_read = time.perf_counter() - t0
 
     if not reader.prims:
+        failures = ["the drawing contains no line work at all (%d text, "
+                    "%d dimension entities)" % (len(reader.labels), len(reader.dim_refs))]
+        if reader.unsupported:
+            failures.append("it holds only entity types a plan is not read from: %s"
+                            % ", ".join("%d %s" % (n, t) for t, n in
+                                        sorted(reader.unsupported.items())))
+        if reader.warnings:
+            failures.append("%d entities could not be read" % len(reader.warnings))
         raise ReconstructionError(
             "the drawing contains no usable geometry", stage="read",
-            diagnostics={"warnings": reader.warnings})
+            diagnostics={"warnings": reader.warnings,
+                         "labels": len(reader.labels),
+                         "dimensions": len(reader.dim_refs),
+                         "unsupported": dict(reader.unsupported),
+                         "layers": reader.layer_counts},
+            failures=failures)
 
-    drawing = Drawing(
+    drawing = CadDrawing(
         source_path=os.path.abspath(path),
         prims=reader.prims, arcs=reader.arcs, labels=reader.labels,
         inserts=reader.inserts, dimensions=reader.dimensions,
+        dimension_refs=reader.dim_refs, hatches=reader.hatches,
+        dxf_version=str(getattr(doc, "dxfversion", "") or ""),
+        layer_table={name: {"off": off, "frozen": frozen}
+                     for name, (off, frozen) in reader._layer_state.items()},
+        insert_counts=_histogram_of(i.layer for i in reader.inserts if i.depth == 0),
         insunits=doc.header.get("$INSUNITS"),
         warnings=reader.warnings, layer_counts=reader.layer_counts,
     )
@@ -618,6 +941,13 @@ def read(path: str, *, user_scale: Optional[float] = None) -> Drawing:
         "units": round(time.perf_counter() - t1, 4),
     }
     return drawing
+
+
+def _histogram_of(values) -> Dict[str, int]:
+    out: Dict[str, int] = {}
+    for v in values:
+        out[v] = out.get(v, 0) + 1
+    return out
 
 
 def _north(doc) -> float:
@@ -643,7 +973,7 @@ _FRAME_ROLES = (C.WALL, C.FOOTPRINT, C.STRUCTURE_BELOW, C.OPENING,
 _FRAME_GROWTH = 0.35
 
 
-def frame_prims(drawing: Drawing) -> List[Prim]:
+def frame_prims(drawing: CadDrawing) -> List[Prim]:
     """The geometry that gets to say where the building is.
 
     Walls when there are enough of them, because walls are the building. A
@@ -720,7 +1050,97 @@ def robust_bounds(prims: Sequence[Prim]
     return (min(keep_x), min(keep_y), max(keep_x), max(keep_y))
 
 
-def _resolve_units(drawing: Drawing, doc, user_scale: Optional[float]) -> None:
+#: Line work outside the frame is only worth reporting when there is enough of
+#: it to be a drawing rather than a stray block. ``robust_bounds`` trims 2% at
+#: each end before growing back, so anything that survives that and still lies
+#: outside is deliberate geometry, not noise.
+_OUTLYING_MIN_FRACTION = 0.02
+
+#: ...and a second trigger by *count*, because length cannot see the case that
+#: matters most. A plan copied at 1/1000 carries a thousandth of the drawing's
+#: line length however many entities it has, so no length threshold will ever
+#: reach it - but it has as many segments as the plan it copies. A genuine
+#: stray (one door block inserted 23 km out) is a handful of entities among
+#: hundreds and stays well under this.
+_OUTLYING_MIN_COUNT_FRACTION = 0.10
+
+#: Below this many outlying segments there is nothing to describe, whatever
+#: the fractions say - it guards tiny drawings, where two segments are 10%.
+_OUTLYING_MIN_SEGMENTS = 8
+
+#: Below this ratio of diagonals the outlying cluster is not a detail drawn
+#: beside the plan, it is the same thing drawn at a different scale.
+_OUTLYING_SCALE_RATIO = 0.25
+
+
+def survey_outlying(prims: Sequence[Prim],
+                    frame: Tuple[float, float, float, float]
+                    ) -> Optional[Dict[str, object]]:
+    """Describe the line work ``robust_bounds`` excluded, if there is much.
+
+    The trimming itself is right - a plan copied at 1/1000 beside the real one
+    must not be allowed to decide how big the building is. What was wrong was
+    doing it in silence: the user saw a valid single-building reconstruction
+    and no hint that half their sheet had been set aside. This reports what was
+    left out and how big it was, so the caller can say so.
+
+    Returns ``None`` for the ordinary case of one coherent plan.
+    """
+    fx0, fy0, fx1, fy1 = frame
+    tol_x = max((fx1 - fx0) * 1e-3, 1e-9)
+    tol_y = max((fy1 - fy0) * 1e-3, 1e-9)
+
+    def outside(pt) -> bool:
+        x, y = pt
+        return (x < fx0 - tol_x or x > fx1 + tol_x
+                or y < fy0 - tol_y or y > fy1 + tol_y)
+
+    total = 0.0
+    out_len = 0.0
+    xs: List[float] = []
+    ys: List[float] = []
+    count = 0
+    seen = 0
+    for p in prims:
+        for a, b in p.segments:
+            length = math.dist(a, b)
+            total += length
+            seen += 1
+            # Both ends out, so a wall crossing the frame edge is not counted.
+            if outside(a) and outside(b):
+                out_len += length
+                count += 1
+                xs += [a[0], b[0]]
+                ys += [a[1], b[1]]
+
+    if total <= 0 or not xs or count < _OUTLYING_MIN_SEGMENTS:
+        return None
+    by_length = out_len / total >= _OUTLYING_MIN_FRACTION
+    by_count = seen > 0 and count / seen >= _OUTLYING_MIN_COUNT_FRACTION
+    if not (by_length or by_count):
+        return None
+
+    ox0, ox1 = min(xs), max(xs)
+    oy0, oy1 = min(ys), max(ys)
+    frame_diag = math.hypot(fx1 - fx0, fy1 - fy0)
+    out_diag = math.hypot(ox1 - ox0, oy1 - oy0)
+    ratio = (out_diag / frame_diag) if frame_diag > 0 else 0.0
+
+    return {
+        "segments": count,
+        "segment_fraction": round(count / seen, 4) if seen else 0.0,
+        "length_fraction": round(out_len / total, 4),
+        "bounds": (ox0, oy0, ox1, oy1),
+        "size": (ox1 - ox0, oy1 - oy0),
+        "frame_size": (fx1 - fx0, fy1 - fy0),
+        "diagonal_ratio": round(ratio, 4),
+        # A copy of the plan at a fraction of its size is a second scale; a
+        # cluster of comparable size beside it is another drawing on the sheet.
+        "different_scale": ratio < _OUTLYING_SCALE_RATIO,
+    }
+
+
+def _resolve_units(drawing: CadDrawing, doc, user_scale: Optional[float]) -> None:
     """Decide metres-per-unit and apply it to every coordinate.
 
     The evidence handed to the resolver is deliberately *only* geometry that
@@ -746,12 +1166,25 @@ def _resolve_units(drawing: Drawing, doc, user_scale: Optional[float]) -> None:
     if len(segs) < 4:
         segs = [s for p in candidates for s in p.segments]
 
+    # Door swings and room-name lettering carry scale independently of the
+    # walls. Only arcs that could be swings count — a quarter circle on a
+    # layer that is not furniture, fixtures, landscape or annotation.
+    not_swing = {C.FURNITURE, C.FIXTURE, C.CASEWORK, C.LANDSCAPE, C.ELECTRICAL,
+                 C.DIMENSION, C.ANNOTATION, C.STAIR, C.TITLE_BLOCK, C.GRID,
+                 C.HATCH, C.CONSTRUCTION}
+    swings = [a.radius for a in drawing.arcs
+              if a.role not in not_swing and 75.0 <= a.sweep_deg <= 105.0]
+    heights = [t.height for t in drawing.labels
+               if t.height > 0 and 2 <= len(t.text.strip()) <= 24]
+
     decision = U.resolve(
         segs,
         insunits=drawing.insunits,
         dimensions=drawing.dimensions,
         user_scale=user_scale,
         measurement=doc.header.get("$MEASUREMENT"),
+        swing_radii=swings,
+        text_heights=heights,
     )
     drawing.units = decision
     if decision.conflict:
@@ -768,6 +1201,14 @@ def _resolve_units(drawing: Drawing, doc, user_scale: Optional[float]) -> None:
     for t in drawing.labels:
         t.point = (t.point[0] * s, t.point[1] * s)
         t.height *= s
+        if t.extent:
+            t.extent = tuple(v * s for v in t.extent)
+        if t.anchor:
+            t.anchor = (t.anchor[0] * s, t.anchor[1] * s)
+    for h in drawing.hatches:
+        h.boundary = [(x * s, y * s) for x, y in h.boundary]
+    for dref in drawing.dimension_refs:
+        dref.position = (dref.position[0] * s, dref.position[1] * s)
     for i in drawing.inserts:
         i.point = (i.point[0] * s, i.point[1] * s)
         if i.extents:
@@ -775,7 +1216,7 @@ def _resolve_units(drawing: Drawing, doc, user_scale: Optional[float]) -> None:
     drawing.dimensions = [d * s for d in drawing.dimensions]
 
 
-def _normalise(drawing: Drawing) -> None:
+def _normalise(drawing: CadDrawing) -> None:
     """Translate so the building's minimum corner is the origin.
 
     Large CAD world coordinates are a genuine numerical hazard: this plan sits
@@ -784,7 +1225,9 @@ def _normalise(drawing: Drawing) -> None:
     stores — has spacing of tens of millimetres. Everything downstream works in
     the local frame; ``origin_offset`` converts back.
     """
-    ox, oy, mx, my = robust_bounds(frame_prims(drawing))
+    frame = robust_bounds(frame_prims(drawing))
+    drawing.outlying = survey_outlying(frame_prims(drawing), frame)
+    ox, oy, mx, my = frame
     drawing.origin_offset = (ox, oy)
 
     for p in drawing.prims:
@@ -793,6 +1236,15 @@ def _normalise(drawing: Drawing) -> None:
         a.centre = (a.centre[0] - ox, a.centre[1] - oy)
     for t in drawing.labels:
         t.point = (t.point[0] - ox, t.point[1] - oy)
+        if t.extent:
+            t.extent = (t.extent[0] - ox, t.extent[1] - oy,
+                        t.extent[2] - ox, t.extent[3] - oy)
+        if t.anchor:
+            t.anchor = (t.anchor[0] - ox, t.anchor[1] - oy)
+    for h in drawing.hatches:
+        h.boundary = [(x - ox, y - oy) for x, y in h.boundary]
+    for dref in drawing.dimension_refs:
+        dref.position = (dref.position[0] - ox, dref.position[1] - oy)
     for i in drawing.inserts:
         i.point = (i.point[0] - ox, i.point[1] - oy)
         if i.extents:

@@ -203,9 +203,9 @@ class TestExteriorLabelling:
 
 
 def _drawing(prims):
-    """A Drawing carrying just these primitives, with no usable layer survey."""
-    from modules.recon.read import Drawing
-    d = Drawing(source_path="test.dxf", prims=list(prims))
+    """A CadDrawing carrying just these primitives, with no usable layer survey."""
+    from modules.recon.read import CadDrawing
+    d = CadDrawing(source_path="test.dxf", prims=list(prims))
     d.layer_counts = {}
     for p in prims:
         d.layer_counts[p.layer] = d.layer_counts.get(p.layer, 0) + 1

@@ -1,0 +1,96 @@
+{
+ "f01_empty.dxf": {
+  "outcomes": [
+   "refused"
+  ],
+  "why": "no entities at all"
+ },
+ "f02_dimensions_only.dxf": {
+  "outcomes": [
+   "refused"
+  ],
+  "why": "dimension annotation only; a dimension's extension lines are not walls"
+ },
+ "f03_text_only.dxf": {
+  "outcomes": [
+   "refused"
+  ],
+  "why": "room names and a title with no geometry"
+ },
+ "f04_furniture_only.dxf": {
+  "outcomes": [
+   "refused",
+   "invalid"
+  ],
+  "why": "furniture and fixtures, no walls"
+ },
+ "f05_disconnected_lines.dxf": {
+  "outcomes": [
+   "refused",
+   "invalid"
+  ],
+  "why": "scattered unrelated strokes on layer 0"
+ },
+ "f06_corrupt.dxf": {
+  "outcomes": [
+   "refused"
+  ],
+  "why": "truncated file with binary garbage"
+ },
+ "f07_dwg_renamed.dxf": {
+  "outcomes": [
+   "refused"
+  ],
+  "why": "a binary DWG saved with a .dxf name"
+ },
+ "f08_unsupported_entities.dxf": {
+  "outcomes": [
+   "refused"
+  ],
+  "why": "3D faces, meshes and points only; nothing a plan reader can use"
+ },
+ "f09_inconsistent_units.dxf": {
+  "outcomes": [
+   "refused",
+   "invalid",
+   "resolved_metres"
+  ],
+  "why": "header says millimetres, geometry is metre-sized; must never build a 9 mm house"
+ },
+ "f10_mixed_scales.dxf": {
+  "outcomes": [
+   "refused",
+   "invalid",
+   "ambiguous",
+   "one_building"
+  ],
+  "why": "the same plan at two scales; the small copy must not become a building"
+ },
+ "f11_incomplete_walls.dxf": {
+  "outcomes": [
+   "refused",
+   "invalid"
+  ],
+  "why": "walls that enclose no space"
+ },
+ "f12_untitled_repeated_plans.dxf": {
+  "outcomes": [
+   "ambiguous"
+  ],
+  "why": "two identical plans, no titles: storeys or neighbours cannot be told apart"
+ },
+ "f13_superimposed_plans.dxf": {
+  "outcomes": [
+   "valid_one_level",
+   "ambiguous",
+   "invalid"
+  ],
+  "why": "overlaid partitions from another storey; must stay one level, never two buildings"
+ },
+ "f14_degenerate_geometry.dxf": {
+  "outcomes": [
+   "refused"
+  ],
+  "why": "zero-length lines and polylines"
+ }
+}

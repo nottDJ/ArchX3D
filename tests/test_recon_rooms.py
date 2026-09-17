@@ -11,7 +11,7 @@ import pytest
 
 from modules.recon import topology as T
 from modules.recon.ir import Wall
-from modules.recon.read import Drawing, Label
+from modules.recon.read import CadDrawing, Label
 
 
 def wall(i, a, b, t=0.15):
@@ -24,7 +24,7 @@ def box_walls(w=10.0, h=8.0, t=0.2):
 
 
 def drawing_with(labels):
-    d = Drawing(source_path="test.dxf")
+    d = CadDrawing(source_path="test.dxf")
     d.labels = [Label(id="t%d" % i, text=text, point=pt, height=0.22,
                       layer="A-ANNO-TEXT")
                 for i, (text, pt) in enumerate(labels)]

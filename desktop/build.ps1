@@ -50,7 +50,18 @@ if (Test-Path $vsInstaller) { $env:Path = "$vsInstaller;$env:Path" }
 $devShell = Get-ChildItem "C:\Program Files*\Microsoft Visual Studio\*\*\Common7\Tools\Launch-VsDevShell.ps1" `
     -ErrorAction SilentlyContinue | Select-Object -First 1
 if ($devShell) {
-    & $devShell.FullName -Arch amd64 -HostArch amd64 3>$null | Out-Null
+    # Enter-VsDevShell with -DevCmdArguments works on VS 2019 and 2022 alike;
+    # Launch-VsDevShell.ps1 only gained -Arch in VS 2022, and on 2019 the
+    # build stopped before it began.
+    $vsRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $devShell.FullName))
+    $devShellDll = Join-Path $vsRoot "Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+    if (Test-Path $devShellDll) {
+        Import-Module $devShellDll
+        Enter-VsDevShell -VsInstallPath $vsRoot -SkipAutomaticLocation `
+            -DevCmdArguments "-arch=x64 -host_arch=x64" 3>$null | Out-Null
+    } else {
+        & $devShell.FullName -Arch amd64 -HostArch amd64 3>$null | Out-Null
+    }
 } else {
     Write-Warning "Visual Studio developer shell not found; the Rust link step may fail."
 }

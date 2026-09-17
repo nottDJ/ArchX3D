@@ -2,10 +2,9 @@
 ArchX3D — Blender 3D Generator
 ================================
 Runs inside Blender's Python environment (bpy).
-Reads geometry.json + scene_graph.json + config.json and generates:
-  - 3D walls (extruded + solidified)
-  - Floor plane
-  - Ceiling plane (optional)
+Reads building.json + scene_graph.json + config.json and generates:
+  - every storey of every building in the validated architectural model:
+    walls with their openings cut, floors on the real footprint, ceilings
   - Materials from the observed room finishes
   - Procedural furniture and decor from the vision scene graph
   - Luminaires recovered from the reference imagery
@@ -55,13 +54,10 @@ BASE_DIR = (
 )
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
-GEOMETRY_PATH = os.path.join(DATA_DIR, 'geometry.json')
-# The validated 2D building model. When present it supersedes geometry.json
-# entirely: it carries walls with measured thicknesses, rooms as polygons and
-# openings as holes, so the shell is extruded from it rather than guessed at
-# again here. geometry.json remains for the vision and furnishing stages,
-# which index into it, and as the fallback for a reconstruction that predates
-# this format.
+# The validated architectural model, and the only geometry this script builds
+# from: walls with measured thicknesses, rooms as polygons, openings as holes,
+# storeys with their placement and elevation. geometry.json is a projection of
+# it for the 2D vision and furnishing stages and is not read here.
 BUILDING_PATH = os.path.join(DATA_DIR, 'building.json')
 STYLING_PATH = os.path.join(DATA_DIR, 'styling.json')
 SCENE_GRAPH_PATH = os.path.join(DATA_DIR, 'scene_graph.json')
@@ -206,35 +202,74 @@ def load_config():
     return DEFAULT_CONFIG.copy()
 
 
-def load_geometry():
-    """Load geometry.json — required."""
-    if not os.path.exists(GEOMETRY_PATH):
-        print(f"[ERROR] geometry.json not found at {GEOMETRY_PATH}")
-        sys.exit(1)
-    with open(GEOMETRY_PATH, 'r') as f:
-        return json.load(f)
-
-
 def load_building():
-    """Load the validated building model — optional but strongly preferred."""
+    """Load the validated architectural model — required.
+
+    There is no fallback. The generator this replaced would extrude
+    ``geometry.json``'s segments when no model was present, which is a second,
+    unvalidated reading of the drawing; a build with no model is refused, and
+    the fix is to run the reconstruction.
+    """
     if blender_build is None:
-        return None
+        print("[ERROR] blender_build is unavailable; cannot build the model")
+        sys.exit(1)
     building = blender_build.load_building(BUILDING_PATH)
     if building is None:
-        return None
-    s = building.get("summary", {})
+        print(f"[ERROR] {BUILDING_PATH} not found or not an architectural model. "
+              "Run the reconstruction (main.py or modules/recon/pipeline.py) first.")
+        sys.exit(1)
+    storeys = list(blender_build.iter_levels(building))
     units = (building.get("units") or {}).get("unit_name", "?")
-    print("[BUILDING] %s: %d walls, %d rooms, %d openings, units %s"
-          % (os.path.basename(BUILDING_PATH), len(building.get("walls", [])),
-             len(building.get("rooms", [])), len(building.get("openings", [])),
-             units))
-    if not (building.get("validation") or {}).get("ok", True):
-        # Should be unreachable: the pipeline refuses to write a building that
+    print("[BUILDING] %s: %d building(s), %d storey(s), %d walls, %d rooms, "
+          "%d openings, units %s, status %s"
+          % (os.path.basename(BUILDING_PATH),
+             len({b.get("id") for b, _ in storeys}), len(storeys),
+             sum(len(l.get("walls", [])) for _, l in storeys),
+             sum(len(l.get("rooms", [])) for _, l in storeys),
+             sum(len(l.get("openings", [])) for _, l in storeys),
+             units, (building.get("validation") or {}).get("status", "?")))
+    buildable, reason = blender_build.check_buildable(building)
+    if not buildable:
+        # Should be unreachable: the pipeline refuses to write a model that
         # failed. Refusing again here rather than building it anyway keeps that
         # guarantee true even if something wrote the file by another route.
-        print("[ERROR] building.json did not pass validation; refusing to build")
+        print(f"[ERROR] building.json is not buildable ({reason}); refusing to build")
         sys.exit(1)
+    for item in building.get("review") or []:
+        print("[REVIEW] %s: %s" % (item.get("code"), item.get("message")))
     return building
+
+
+def apply_storey_transforms(building, graph):
+    """Move everything placed in a room by the 2D stages onto that room's storey.
+
+    Furniture, luminaires and viewpoint cameras are positioned in plan metres
+    as the storey was drawn on the sheet. The shell was moved by the storey's
+    placement and raised by its elevation; this applies the same transform to
+    what stands in its rooms, so a bed drawn on the first-floor plan ends up
+    on the first floor. A single-storey model has nothing to move.
+    """
+    transforms = blender_build.room_transforms(building)
+    if not transforms or all(t == (0.0, 0.0, 0.0) for t in transforms.values()):
+        return 0
+    room_of = {}
+    if graph is not None:
+        room_of = {o.id: o.room_id for o in graph.objects if o.room_id}
+        room_of.update({lt.id: lt.room_id for lt in graph.lights if lt.room_id})
+    moved = 0
+    for obj in bpy.data.objects:
+        if obj.parent is not None or obj.get("archx3d_level"):
+            continue
+        room = obj.get("archx3d_room") or obj.get("archx3d_room_id") or \
+            room_of.get(obj.get("archx3d_id", ""))
+        t = transforms.get(room)
+        if not t or t == (0.0, 0.0, 0.0):
+            continue
+        obj.location = (obj.location[0] + t[0], obj.location[1] + t[1],
+                        obj.location[2] + t[2])
+        moved += 1
+    print(f"[BUILDING] moved {moved} room object(s) onto their storeys")
+    return moved
 
 
 def load_styling():
@@ -264,158 +299,6 @@ def load_scene_graph():
           f"{graph.room.room_type} ({graph.room.style}), "
           f"{len(graph.objects)} objects, {len(graph.lights)} lights")
     return graph
-
-
-# ---------------------------------------------------------------------------
-# Geometry Builders
-# ---------------------------------------------------------------------------
-
-def get_bounding_box(geometry):
-    """Extract or compute the bounding box from geometry data."""
-    meta = geometry.get("metadata", {})
-    bbox = meta.get("bounding_box")
-    if bbox:
-        return bbox["min"], bbox["max"]
-
-    # Compute from wall segments
-    walls = geometry.get("walls", [])
-    if not walls:
-        return [0, 0], [1, 1]
-
-    all_x = []
-    all_y = []
-    for w in walls:
-        all_x.extend([w["start"][0], w["end"][0]])
-        all_y.extend([w["start"][1], w["end"][1]])
-
-    return [min(all_x), min(all_y)], [max(all_x), max(all_y)]
-
-
-def create_walls(geometry, config, wall_material):
-    """Build 3D walls from 2D line segments.
-    
-    Process:
-    1. Create vertices at Z=0 for each unique point.
-    2. Create edges connecting start→end for each wall segment.
-    3. Remove duplicate vertices (within tolerance).
-    4. Extrude all edges upward by wall_height.
-    5. Apply Solidify modifier for wall thickness.
-    """
-    wall_height = config.get("wall_height", 3.0)
-    wall_thickness = config.get("wall_thickness", 0.15)
-
-    mesh = bpy.data.meshes.new("WallsMesh")
-    obj = bpy.data.objects.new("Walls", mesh)
-    bpy.context.collection.objects.link(obj)
-
-    bm = bmesh.new()
-    vert_map = {}
-
-    def get_vert(xy):
-        key = (round(xy[0], 4), round(xy[1], 4))
-        if key not in vert_map:
-            vert_map[key] = bm.verts.new((xy[0], xy[1], 0))
-        return vert_map[key]
-
-    for wall in geometry.get('walls', []):
-        v1 = get_vert(wall['start'])
-        v2 = get_vert(wall['end'])
-        if v1 != v2:
-            try:
-                bm.edges.new((v1, v2))
-            except ValueError:
-                pass  # Edge already exists
-
-    # Clean up near-coincident vertices
-    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.001)
-
-    if not bm.edges:
-        print("[WARN] No wall edges created!")
-        bm.free()
-        return obj
-
-    # Extrude edges upward
-    ret = bmesh.ops.extrude_edge_only(bm, edges=bm.edges)
-    geom_extrude = ret["geom"]
-    verts_extrude = [v for v in geom_extrude if isinstance(v, bmesh.types.BMVert)]
-    bmesh.ops.translate(bm, vec=(0, 0, wall_height), verts=verts_extrude)
-
-    bm.to_mesh(mesh)
-    bm.free()
-
-    # Apply Solidify modifier for wall thickness
-    solidify = obj.modifiers.new(name="Solidify", type='SOLIDIFY')
-    solidify.thickness = wall_thickness
-    solidify.offset = 0.0  # Center the thickness on the edge
-
-    # Apply the modifier so it bakes into the mesh (important for GLB export)
-    bpy.context.view_layer.objects.active = obj
-    bpy.ops.object.modifier_apply(modifier="Solidify")
-
-    # Assign material
-    if wall_material:
-        obj.data.materials.append(wall_material)
-
-    # Smooth shading for better visual quality
-    bpy.ops.object.shade_smooth()
-
-    print(f"[OK] Walls created: height={wall_height}m, thickness={wall_thickness}m, "
-          f"vertices={len(obj.data.vertices)}, faces={len(obj.data.polygons)}")
-
-    return obj
-
-
-def create_floor(geometry, floor_material):
-    """Create a floor plane matching the bounding box of the walls."""
-    bb_min, bb_max = get_bounding_box(geometry)
-
-    center_x = (bb_min[0] + bb_max[0]) / 2
-    center_y = (bb_min[1] + bb_max[1]) / 2
-    width = bb_max[0] - bb_min[0]
-    height = bb_max[1] - bb_min[1]
-
-    # Add a slight margin so floor extends under walls
-    margin = 0.01
-    bpy.ops.mesh.primitive_plane_add(
-        size=1,
-        location=(center_x, center_y, -margin)
-    )
-    floor = bpy.context.active_object
-    floor.name = "Floor"
-    floor.scale.x = width + margin * 2
-    floor.scale.y = height + margin * 2
-
-    if floor_material:
-        floor.data.materials.append(floor_material)
-
-    print(f"[OK] Floor created: {width:.1f}m × {height:.1f}m")
-    return floor, center_x, center_y, max(width, height)
-
-
-def create_ceiling(geometry, config, ceiling_material):
-    """Create a ceiling plane at wall_height."""
-    bb_min, bb_max = get_bounding_box(geometry)
-    wall_height = config.get("wall_height", 3.0)
-
-    center_x = (bb_min[0] + bb_max[0]) / 2
-    center_y = (bb_min[1] + bb_max[1]) / 2
-    width = bb_max[0] - bb_min[0]
-    height = bb_max[1] - bb_min[1]
-
-    bpy.ops.mesh.primitive_plane_add(
-        size=1,
-        location=(center_x, center_y, wall_height)
-    )
-    ceiling = bpy.context.active_object
-    ceiling.name = "Ceiling"
-    ceiling.scale.x = width
-    ceiling.scale.y = height
-
-    if ceiling_material:
-        ceiling.data.materials.append(ceiling_material)
-
-    print(f"[OK] Ceiling created at Z={wall_height}m")
-    return ceiling
 
 
 # ---------------------------------------------------------------------------
@@ -637,7 +520,7 @@ def _flattened_materials():
         yield count
 
 
-def export_scene(config, graph=None):
+def export_scene(config, graph=None, room_transforms=None):
     """Export the scene in configured formats.
 
     Before the GLB is written every object is tagged with what it *is* — roof,
@@ -646,12 +529,16 @@ def export_scene(config, graph=None):
     to a room; without it, it has to infer both from mesh names and bounding
     boxes. Tagging creates no geometry and changes no material, so a build with
     it and a build without it render identically.
+
+    ``room_transforms`` is passed straight through to the manifest so its room
+    bounds describe where each storey was built rather than where it was drawn;
+    see ``blender.metadata.scene_manifest``.
     """
     export_cfg = config.get("export", {})
 
     if VISION_AVAILABLE:
         try:
-            counts = bl_metadata.tag_scene(graph, config)
+            counts = bl_metadata.tag_scene(graph, config, room_transforms)
             print(f"[METADATA] Tagged {bl_metadata.summarise(counts)}")
         except Exception as e:  # noqa: BLE001 - never fail a build over metadata
             print(f"[WARN] Metadata tagging skipped: {e}")
@@ -838,101 +725,6 @@ def build_furniture(graph, library, include_uncertain=False):
     return built
 
 
-def build_openings(graph, library):
-    """Cut doors and windows out of the wall mesh with boolean modifiers."""
-    if not graph.openings:
-        return 0
-
-    walls = bpy.data.objects.get("Walls")
-    if walls is None:
-        return 0
-
-    cut = 0
-    for opening in graph.openings:
-        if opening.uncertain:
-            continue
-
-        wall = graph.wall_by_id(opening.wall_id)
-        rotation = wall.angle_deg if wall else 0.0
-
-        bpy.ops.mesh.primitive_cube_add(size=1, location=(
-            opening.position.x,
-            opening.position.y,
-            opening.sill_height + opening.height / 2.0,
-        ))
-        cutter = bpy.context.active_object
-        cutter.name = f"Cutter_{opening.id}"
-        # Over-deep on the wall normal so the boolean fully penetrates.
-        cutter.scale = (opening.width, 1.5, opening.height)
-        cutter.rotation_euler = (0.0, 0.0, math.radians(rotation))
-
-        modifier = walls.modifiers.new(name=f"Opening_{opening.id}", type='BOOLEAN')
-        modifier.operation = 'DIFFERENCE'
-        modifier.object = cutter
-
-        bpy.context.view_layer.objects.active = walls
-        try:
-            bpy.ops.object.modifier_apply(modifier=modifier.name)
-            cut += 1
-        except RuntimeError as exc:
-            print(f"[OPENINGS] ! {opening.id} boolean failed: {exc}")
-            walls.modifiers.remove(modifier)
-
-        bpy.data.objects.remove(cutter, do_unlink=True)
-        _fill_opening(opening, rotation, library)
-
-    print(f"[OPENINGS] Cut {cut}/{len(graph.openings)} openings into the walls")
-    return cut
-
-
-#: Thickness of a door leaf and of a glazing pane, in metres.
-DOOR_LEAF_M = 0.045
-GLAZING_M = 0.012
-#: Reveal between the opening edge and the leaf or pane it holds.
-FRAME_REVEAL_M = 0.06
-
-
-def _fill_opening(opening, rotation, library):
-    """Put a leaf or a pane back into the hole just cut.
-
-    A cut alone reads as a missing wall, not as a door — the eye needs
-    something in the gap to interpret it. Openings are filled with a single
-    thin slab rather than a modelled frame and mullions: at walkthrough
-    distance the silhouette and the material are what carry the reading, and a
-    slab costs two triangles where a modelled frame costs hundreds across the
-    thirty-odd openings a house has.
-
-    Doors are inset to sit in the reveal; glazing is centred in the wall.
-    """
-    if library is None:
-        return None
-
-    is_door = opening.kind == "door"
-    depth = DOOR_LEAF_M if is_door else GLAZING_M
-    inset = FRAME_REVEAL_M if is_door else 0.0
-
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(
-        opening.position.x,
-        opening.position.y,
-        opening.sill_height + opening.height / 2.0,
-    ))
-    panel = bpy.context.active_object
-    panel.name = f"{'Door' if is_door else 'Glazing'}_{opening.id}"
-    panel.scale = (
-        max(0.05, opening.width - inset),
-        depth,
-        max(0.05, opening.height - inset),
-    )
-    panel.rotation_euler = (0.0, 0.0, math.radians(rotation))
-
-    # Timber for a leaf, glass for a pane — the glass recipe carries the
-    # transmission that makes a window read as a window.
-    material = library.get("#8B6F47" if is_door else "#BFD4DC",
-                           "wood" if is_door else "glass")
-    panel.data.materials.append(material)
-    return panel
-
-
 def build_architecture(graph, library):
     """Build columns, beams, partitions and similar structural elements."""
     if not VISION_AVAILABLE or not graph.architecture:
@@ -1035,7 +827,6 @@ def main():
 
     # Load all data
     config = load_config()
-    geometry = load_geometry()
     building = load_building()
     graph = load_scene_graph()
     styling = load_styling() if graph is None else None
@@ -1050,40 +841,32 @@ def main():
     else:
         wall_mat, floor_mat, ceiling_mat = resolve_materials(styling)
 
-    # Build geometry. With a validated building model this is a direct
-    # extrusion of it — walls at their own measured thicknesses, floors on the
-    # real footprint, openings as actual holes. Without one, the legacy
-    # segment extrusion still runs so older projects keep working.
-    if building is not None:
-        materials = {"wall": wall_mat, "floor": floor_mat, "ceiling": ceiling_mat,
-                     "glass": create_material("Glass", "#BFD9E8", 0.05, 0.0),
-                     "door": create_material("DoorLeaf", "#8D6E63", 0.6, 0.0)}
-        blender_build.build(
-            building, materials,
-            wall_height=config.get("wall_height"),
-            generate_floor=config.get("generate_floor", True),
-            generate_ceiling=config.get("generate_ceiling", True),
-        )
-        x0, y0, x1, y1 = blender_build.bounds(building)
-        cx, cy = (x0 + x1) / 2.0, (y0 + y1) / 2.0
-        max_dim = max(x1 - x0, y1 - y0)
-    else:
-        walls_obj = create_walls(geometry, config, wall_mat)
+    # Build geometry: a direct extrusion of the validated architectural model
+    # — every storey of every building, walls at their own measured
+    # thicknesses, floors on the real footprint, openings as actual holes.
+    materials = {"wall": wall_mat, "floor": floor_mat, "ceiling": ceiling_mat,
+                 "glass": create_material("Glass", "#BFD9E8", 0.05, 0.0),
+                 "door": create_material("DoorLeaf", "#8D6E63", 0.6, 0.0)}
+    report = blender_build.build(
+        building, materials,
+        wall_height=config.get("wall_height"),
+        generate_floor=config.get("generate_floor", True),
+        generate_ceiling=config.get("generate_ceiling", True),
+    )
+    print("[BUILDING] built %d building(s), %d storey(s)"
+          % (report.get("buildings", 1), report.get("levels", 1)))
+    x0, y0, x1, y1 = blender_build.bounds(building)
+    cx, cy = (x0 + x1) / 2.0, (y0 + y1) / 2.0
+    max_dim = max(x1 - x0, y1 - y0)
 
-        if config.get("generate_floor", True):
-            floor_obj, cx, cy, max_dim = create_floor(geometry, floor_mat)
-        else:
-            bb_min, bb_max = get_bounding_box(geometry)
-            cx = (bb_min[0] + bb_max[0]) / 2
-            cy = (bb_min[1] + bb_max[1]) / 2
-            max_dim = max(bb_max[0] - bb_min[0], bb_max[1] - bb_min[1])
-
-        if config.get("generate_ceiling", True):
-            create_ceiling(geometry, config, ceiling_mat)
-
-    # Furniture, openings and structure from the vision scene graph
+    # Furniture and structure from the vision scene graph. Openings are not
+    # taken from it: the drawing's own doors and windows were cut from the
+    # model above, and a photograph that suggests another one in a wall the
+    # drawing shows as solid is not evidence enough to cut a hole.
     if graph is not None and library is not None:
-        build_openings(graph, library)
+        if graph.openings:
+            print(f"[OPENINGS] {len(graph.openings)} scene-graph opening(s) not cut; "
+                  "the architectural model's openings are authoritative")
         build_architecture(graph, library)
         build_furniture(graph, library, include_uncertain=include_uncertain)
         for line in library.log:
@@ -1100,9 +883,12 @@ def main():
 
     setup_render(config)
     setup_camera_and_animation(cx, cy, max_dim, config, graph)
+    apply_storey_transforms(building, graph)
 
-    # Export
-    export_scene(config, graph)
+    # Export. The same storey transforms that moved the shell and its contents
+    # also move the manifest's room bounds, so the viewer's minimap, walk spawn
+    # and room navigation agree with the geometry on a multi-storey model.
+    export_scene(config, graph, blender_build.room_transforms(building))
 
     # Evaluation previews — one deterministic low-resolution image per stored
     # viewpoint, for `vision.similarity` to score. Rendered here, in the

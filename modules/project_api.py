@@ -264,6 +264,53 @@ def delete_project(project_id: str) -> None:
     shutil.rmtree(project_dir(project_id), ignore_errors=True)
 
 
+def list_projects() -> Dict[str, Any]:
+    """Every project on disk, newest first — the authoritative project index.
+
+    The dashboard used to know about a project only if this browser had created
+    it and still remembered doing so (``localStorage``). Clearing the WebView's
+    data, or a renewed WebView2 profile, left every project folder intact on
+    disk and unreachable from the app. The projects directory is the truth; this
+    reads it.
+
+    A folder whose manifest cannot be read is reported under ``unreadable``
+    rather than dropped: a user whose project vanished from the list deserves to
+    know that its folder is still there and why it was not shown.
+    """
+    projects: List[Dict[str, Any]] = []
+    unreadable: List[Dict[str, str]] = []
+    if not os.path.isdir(PROJECTS_DIR):
+        return {"projects": projects, "unreadable": unreadable}
+
+    for entry in os.scandir(PROJECTS_DIR):
+        if not entry.is_dir():
+            continue
+        try:
+            project_id = _safe_project_id(entry.name)
+        except ValueError:
+            continue
+        manifest_path = os.path.join(entry.path, "manifest.json")
+        if not os.path.exists(manifest_path):
+            continue
+        try:
+            manifest = load_manifest(project_id)
+        except (OSError, ValueError) as exc:  # JSONDecodeError is a ValueError
+            unreadable.append({"project_id": project_id, "reason": str(exc)[:200]})
+            continue
+        if manifest.get("project_id") != project_id:
+            unreadable.append({"project_id": project_id,
+                               "reason": "manifest names a different project"})
+            continue
+        model = os.path.join(entry.path, "output", "model.glb")
+        manifest["has_model"] = os.path.isfile(model)
+        manifest["updated_at"] = time.strftime(
+            "%Y-%m-%dT%H:%M:%S", time.localtime(os.path.getmtime(manifest_path)))
+        projects.append(manifest)
+
+    projects.sort(key=lambda m: str(m.get("created_at") or ""), reverse=True)
+    return {"projects": projects, "unreadable": unreadable}
+
+
 # ---------------------------------------------------------------------------
 # Analysis
 # ---------------------------------------------------------------------------
@@ -307,7 +354,7 @@ def _run_analysis(job: Job, project_id: str, options: Dict[str, Any]) -> None:
         from recon.pipeline import reconstruct
 
         try:
-            building = reconstruct(
+            model = reconstruct(
                 dxf_path,
                 wall_height=float(options.get("wall_height", 2.7)),
                 user_scale=options.get("scale") or None,
@@ -322,16 +369,19 @@ def _run_analysis(job: Job, project_id: str, options: Dict[str, Any]) -> None:
             ) from exc
 
         os.makedirs(os.path.dirname(building_path), exist_ok=True)
-        building.to_json(building_path)
-        recon_compat.write_geometry_json(building, geometry_path)
+        model.to_json(building_path)
+        recon_compat.write_geometry_json(model, geometry_path)
 
+        summary = model.summary()
         job.emit("EXTRACTING_DXF",
-                 "Reconstructed %d walls, %d rooms and %d openings "
-                 "(%.1f x %.1f m, %s)."
-                 % (len(building.walls), len(building.rooms),
-                    len(building.openings), building.width, building.depth,
-                    building.units.unit_name if building.units else "unknown units"))
-        for warning in building.validation.get("warnings", [])[:3]:
+                 "Reconstructed %d building(s) with %d storey(s): %d walls, "
+                 "%d rooms and %d openings (%s)."
+                 % (summary["buildings"], summary["levels"], summary["walls"],
+                    summary["rooms"], summary["openings"],
+                    model.units.unit_name if model.units else "unknown units"))
+        for item in model.review[:3]:
+            job.emit("EXTRACTING_DXF", "Review: %s" % item.get("message"))
+        for warning in model.validation.get("warnings", [])[:3]:
             job.emit("EXTRACTING_DXF", "Note: %s" % warning)
 
         # --- 2. Vision analysis -------------------------------------------
@@ -339,7 +389,8 @@ def _run_analysis(job: Job, project_id: str, options: Dict[str, Any]) -> None:
         has_images = bool(manifest.get("images"))
 
         if not has_images:
-            job.emit("ANALYSING", "No reference images; building the unfurnished shell.")
+            job.emit("ANALYSING", "No reference images: deterministic CPU reconstruction, "
+                                  "rooms furnished from their drawn types. No AI or network.")
             _write_empty_review(graph_path, review_path, geometry_path, options)
         else:
             job.emit("ANALYSING",

@@ -1,0 +1,162 @@
+{
+ "truth_units": "metres",
+ "frame": "drawing",
+ "units": "m",
+ "openings": [
+  {
+   "kind": "window",
+   "centre": [
+    2.25,
+    0.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "window",
+   "centre": [
+    8.75,
+    0.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "window",
+   "centre": [
+    12.0,
+    3.6
+   ],
+   "width": 1.2000000000000002
+  },
+  {
+   "kind": "door",
+   "centre": [
+    6.2,
+    8.0
+   ],
+   "width": 1.5999999999999996
+  },
+  {
+   "kind": "door",
+   "centre": [
+    0.0,
+    4.55
+   ],
+   "width": 0.8999999999999999
+  },
+  {
+   "kind": "door",
+   "centre": [
+    2.45,
+    4.0
+   ],
+   "width": 0.8999999999999999
+  },
+  {
+   "kind": "door",
+   "centre": [
+    3.95,
+    4.0
+   ],
+   "width": 0.9000000000000004
+  },
+  {
+   "kind": "door",
+   "centre": [
+    8.45,
+    4.0
+   ],
+   "width": 0.9000000000000004
+  }
+ ],
+ "walls": [
+  {
+   "start": [
+    0.0,
+    0.0
+   ],
+   "end": [
+    12.0,
+    0.0
+   ],
+   "thickness": 0.2
+  },
+  {
+   "start": [
+    12.0,
+    0.0
+   ],
+   "end": [
+    12.0,
+    8.0
+   ],
+   "thickness": 0.2
+  },
+  {
+   "start": [
+    12.0,
+    8.0
+   ],
+   "end": [
+    0.0,
+    8.0
+   ],
+   "thickness": 0.2
+  },
+  {
+   "start": [
+    0.0,
+    8.0
+   ],
+   "end": [
+    0.0,
+    0.0
+   ],
+   "thickness": 0.2
+  },
+  {
+   "start": [
+    0.0,
+    4.0
+   ],
+   "end": [
+    12.0,
+    4.0
+   ],
+   "thickness": 0.12
+  },
+  {
+   "start": [
+    6.0,
+    0.0
+   ],
+   "end": [
+    6.0,
+    4.0
+   ],
+   "thickness": 0.12
+  }
+ ],
+ "labels": [
+  {
+   "text": "BEDROOM",
+   "point": [
+    2.5,
+    2.0
+   ]
+  },
+  {
+   "text": "KITCHEN",
+   "point": [
+    9.0,
+    2.0
+   ]
+  },
+  {
+   "text": "LIVING",
+   "point": [
+    6.0,
+    6.0
+   ]
+  }
+ ]
+}

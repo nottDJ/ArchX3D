@@ -163,6 +163,15 @@ def analyse(
         graph.diagnostics["furnishing"] = _furnish_empty_rooms(
             graph, config, "modern", log
         )
+        # What actually ran, for the review panel to state plainly. With no
+        # images nothing was sent anywhere; with images that all failed, the
+        # model was tried and the errors say why.
+        graph.diagnostics["analysis"] = {
+            "engine": "deterministic CPU reconstruction",
+            "ai": "disabled" if not images else "attempted, no usable result",
+            "network": "not required" if not images else "used",
+            "reference_images": len(images),
+        }
         return PipelineResult(graph=graph, ok=False, errors=errors)
 
     # ---- 4. Assign images to rooms ---------------------------------------
@@ -230,7 +239,10 @@ def analyse(
 
     # Openings the drawing states outrank openings a photograph suggested, and
     # they are the only complete set — one image sees one corner of one room.
-    all_openings = _merge_cad_openings(cad_document, walls, all_openings, log)
+    if room_seg.is_reconstruction(geometry):
+        all_openings = _merge_reconstruction_openings(geometry, all_openings, log)
+    else:
+        all_openings = _merge_cad_openings(cad_document, walls, all_openings, log)
 
     graph = _assemble(room_records, walls, all_objects, all_lights, all_openings,
                       all_architecture, all_relationships, regions, all_viewpoints)
@@ -308,8 +320,22 @@ def analyse(
 
 
 def _segment(geometry, config: PipelineConfig, log):
-    """Split the plan into rooms, or fall back to one whole-plan region."""
+    """The plan's rooms: the reconstruction's own, or — for a legacy geometry
+    file with no architectural model behind it — segmented from the walls."""
     wall_segments = geometry.get("walls") or []
+
+    if room_seg.is_reconstruction(geometry) and not config.single_room:
+        regions = room_seg.regions_from_reconstruction(geometry)
+        if regions:
+            log(f"[VISION] Using the reconstruction's {len(regions)} rooms: "
+                + ", ".join(f"{r.id} {r.area:.0f}m2" for r in regions[:6])
+                + (" ..." if len(regions) > 6 else ""))
+            return regions, {"mode": "reconstruction", "rooms_kept": len(regions),
+                             "total_area_m2": round(sum(r.area for r in regions), 2)}
+
+    if room_seg.is_reconstruction(geometry) is False and wall_segments:
+        log("[VISION] geometry.json carries no reconstruction; segmenting its "
+            "walls (legacy input)")
 
     if config.single_room:
         region = room_seg.fallback_region(wall_segments)
@@ -412,6 +438,46 @@ def _merge_cad_openings(document, walls, observed, log):
     log(f"[OPENINGS] {cad_openings.summarise(found)}"
         + (f"; {dropped} image-derived opening(s) superseded" if dropped else ""))
     return converted + kept
+
+
+def _merge_reconstruction_openings(geometry, observed, log):
+    """The architectural model's openings, with image duplicates dropped.
+
+    The reconstruction already matched every door and window onto its host
+    wall and cut it from the model. This stage takes those records as they
+    are — it does not look for openings in the drawing again — and keeps an
+    image-derived opening only where the drawing has none nearby.
+    """
+    index_of = {seg.get("wall_id"): "wall_%d" % n
+                for n, seg in enumerate(geometry.get("walls") or [])
+                if seg.get("wall_id")}
+    stated: List[Opening] = []
+    for item in geometry.get("openings") or []:
+        try:
+            x, y = float(item["position"][0]), float(item["position"][1])
+            width, height = float(item["width"]), float(item["height"])
+            sill = float(item.get("sill_height", 0.0))
+        except (KeyError, IndexError, TypeError, ValueError):
+            continue
+        kind = item.get("kind", "door")
+        stated.append(Opening(
+            id=str(item.get("id")),
+            kind="door" if kind in ("door", "garage", "cased") else kind,
+            wall_id=index_of.get(item.get("wall_id"), ""),
+            position=Vec3(x, y, sill + height / 2.0),
+            width=width, height=height, sill_height=sill,
+            confidence=float(item.get("confidence", 0.5)),
+            uncertain=False,
+        ))
+    kept = [
+        o for o in observed
+        if not any(_close(o.position.x, o.position.y, c.position.x, c.position.y, 0.5)
+                   for c in stated)
+    ]
+    dropped = len(observed) - len(kept)
+    log(f"[OPENINGS] {len(stated)} opening(s) from the architectural model"
+        + (f"; {dropped} image-derived opening(s) superseded" if dropped else ""))
+    return stated + kept
 
 
 def _nearest_wall_id(x: float, y: float, walls) -> str:
@@ -634,7 +700,11 @@ def _observe_images(images, profiles, regions, config: PipelineConfig, log):
     errors: List[str] = []
 
     if not images:
-        return [], {"reason": "no images supplied"}, ["no reference images supplied"]
+        # Not an error. A drawing on its own is a supported way to use the
+        # product: the geometry is deterministic CPU reconstruction and rooms
+        # are furnished from their drawn types. Reporting this as an error put
+        # "error: no reference images supplied" in front of every offline user.
+        return [], {"reason": "no images supplied"}, []
 
     cache = ResponseCache(config.cache_dir, enabled=config.use_cache)
 
@@ -1211,9 +1281,15 @@ def _build_walls(geometry, ceiling_height: float, thickness: float) -> List[Wall
             end = (float(segment["end"][0]), float(segment["end"][1]))
         except (KeyError, IndexError, TypeError, ValueError):
             continue
+        # The reconstruction measured each wall's thickness; the configured
+        # value is only for legacy input that has none.
+        try:
+            measured = float(segment.get("thickness") or thickness)
+        except (TypeError, ValueError):
+            measured = thickness
         walls.append(
             Wall(id=f"wall_{index}", start=start, end=end,
-                 height=ceiling_height, thickness=thickness)
+                 height=ceiling_height, thickness=measured)
         )
     return walls
 

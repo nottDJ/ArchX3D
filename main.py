@@ -157,6 +157,30 @@ def _log_scene_graph_summary(path):
                  f"{validation.get('uncorrected', 0)} unresolved")
 
 
+def engine_statement(*, offline: bool, vision: bool, styling: bool):
+    """What this build runs on, stated before it starts.
+
+    The geometry is always the deterministic CPU engine. AI is optional
+    enrichment on top of it, and whether it — and so the network — is used is
+    said outright, so a build is never silently AI-assisted.
+    """
+    ai = []
+    if vision:
+        ai.append("vision scene analysis")
+    if styling:
+        ai.append("text styling")
+    lines = ["Engine:   deterministic CPU reconstruction"]
+    if offline or not ai:
+        lines.append("AI:       disabled")
+        lines.append("Network:  not required")
+    else:
+        lines.append("AI:       enabled (%s)" % ", ".join(ai))
+        lines.append("Network:  required for %s only; geometry does not use it" % ", ".join(ai))
+    if offline:
+        lines.append("Mode:     OFFLINE")
+    return lines
+
+
 def run_step(command, description, critical=True):
     """Execute a pipeline step as a subprocess."""
     log.info(f"{'='*50}")
@@ -283,7 +307,9 @@ def main():
         "--layers",
         type=str,
         default=None,
-        help="Comma-separated layer names to extract (overrides config.json)"
+        help="DEPRECATED and ignored. The reconstruction classifies every "
+             "layer itself, from its name and its geometry. Accepted so "
+             "existing scripts keep running; it warns and changes nothing"
     )
     parser.add_argument(
         "--scale",
@@ -313,8 +339,12 @@ def main():
         # Explicit offline mode. The geometry engine never needed a key; this
         # switch is about being able to say so, and about not having a build
         # quietly reach for the network because a key happened to be present.
+        # The key is taken out of the environment every later step inherits,
+        # so nothing downstream can use it either.
         args.skip_vision = True
         args.skip_styling = True
+        os.environ.pop("GEMINI_API_KEY", None)
+        os.environ["ARCHX3D_OFFLINE"] = "1"
 
     input_dxf = os.path.abspath(args.input_dxf)
     if not os.path.exists(input_dxf):
@@ -356,13 +386,16 @@ def main():
                     "classifies layers from their names and the geometry. "
                     "Restricting to %r is no longer necessary.", args.layers)
 
+    skip_styling = args.skip_styling or config.get("skip_styling", False)
+    run_styling = (not run_vision and not args.use_scene_graph and not vision_key_missing
+                   and not skip_styling and bool(os.environ.get("GEMINI_API_KEY")))
+
     log.info("=" * 60)
     log.info("  ArchX3D Pipeline")
     log.info("=" * 60)
     log.info(f"  Input:    {input_dxf}")
-    log.info(f"  Engine:   deterministic CPU reconstruction (no API key needed)")
-    if args.offline:
-        log.info(f"  Mode:     OFFLINE — CPU only, no network, no AI")
+    for line in engine_statement(offline=args.offline, vision=run_vision, styling=run_styling):
+        log.info(f"  {line}")
     if args.scale:
         log.info(f"  Scale:    {args.scale} m/unit (overridden)")
     else:
@@ -395,11 +428,11 @@ def main():
     log.info("Step 1: DXF Reconstruction (CPU / offline)")
     log.info("-" * 60)
     from recon import compat as recon_compat          # noqa: E402
-    from recon.ir import ReconstructionError          # noqa: E402
-    from recon.pipeline import reconstruct            # noqa: E402
+    from recon.ir import AMBIGUOUS, ReconstructionError  # noqa: E402
+    from recon.pipeline import describe, reconstruct  # noqa: E402
 
     try:
-        building = reconstruct(
+        model = reconstruct(
             input_dxf,
             wall_height=config.get("wall_height", 2.7),
             user_scale=args.scale,
@@ -416,25 +449,24 @@ def main():
             log.error("  Diagnostics written to %s", diagnostics_dir)
         sys.exit(1)
 
-    building.to_json(building_json)
-    recon_compat.write_geometry_json(building, geometry_json)
+    model.to_json(building_json)
+    recon_compat.write_geometry_json(model, geometry_json)
 
-    units = building.units
-    log.info("  Units:     %s (%s, confidence %.2f)",
-             units.unit_name, units.method, units.confidence)
-    if units.conflict:
-        log.warning("  %s", units.conflict)
-    log.info("  Size:      %.2f x %.2f m", building.width, building.depth)
-    log.info("  Walls:     %d (%.1f m total)", len(building.walls),
-             building.total_wall_length)
-    log.info("  Rooms:     %d (%.1f m2 floor, %.1f m2 footprint)",
-             len(building.rooms), building.floor_area, building.footprint_area)
-    summary = building.summary()
-    log.info("  Openings:  %d doors, %d windows",
-             summary.get("doors", 0), summary.get("windows", 0))
-    for warning in building.validation.get("warnings", [])[:6]:
+    if model.units and model.units.conflict:
+        log.warning("  %s", model.units.conflict)
+    for line in describe(model):
+        log.info("  %s", line)
+    summary = model.summary()
+    log.info("  Totals:    %d walls, %d rooms (%.1f m2 floor), %d doors, %d windows",
+             summary["walls"], summary["rooms"], summary["floor_area_m2"],
+             summary["doors"], summary["windows"])
+    for warning in model.validation.get("warnings", [])[:6]:
         log.warning("  ! %s", warning)
-    named = [r.label for r in building.rooms if r.label]
+    if model.validation.get("status") == AMBIGUOUS:
+        log.warning("  REVIEW REQUIRED: %s. The model is built exactly as drawn; "
+                    "see review in %s.", model.level_structure.get("reason"),
+                    os.path.basename(building_json))
+    named = [r.label for r in model.rooms if r.label]
     if named:
         log.info("  Named:     %s", ", ".join(named[:12]) +
                  (" ..." if len(named) > 12 else ""))
@@ -490,8 +522,7 @@ def main():
         log.warning("GEMINI_API_KEY not set — skipping scene analysis.")
         log.warning("The model will be generated unfurnished.")
     else:
-        skip_styling = args.skip_styling or config.get("skip_styling", False)
-        if skip_styling or not os.environ.get("GEMINI_API_KEY"):
+        if not run_styling:
             log.info("Step 2: SKIPPED — no reference images and styling disabled")
         else:
             log.info("Step 2: No reference images; falling back to legacy text styling")

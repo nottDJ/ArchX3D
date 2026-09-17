@@ -14,7 +14,7 @@ import os
 
 import pytest
 
-from modules.blender_build import bounds, load_building, wall_pieces
+from modules.blender_build import bounds, load_building, room_floor_material, wall_pieces
 
 
 class TestWallPieces:
@@ -110,8 +110,9 @@ class TestLoading:
         b.to_json(path)
         loaded = load_building(path)
         assert loaded is not None
-        assert len(loaded["walls"]) == len(b.walls)
-        assert len(loaded["rooms"]) == len(b.rooms)
+        storeys = [l for bl in loaded["buildings"] for l in bl["levels"]]
+        assert sum(len(l["walls"]) for l in storeys) == len(b.walls)
+        assert sum(len(l["rooms"]) for l in storeys) == len(b.rooms)
 
 
 class TestAgainstTheRealPlan:
@@ -124,7 +125,10 @@ class TestAgainstTheRealPlan:
                             "fixtures", "plans", "residential_us.dxf")
         if not os.path.exists(path):
             pytest.skip("regression fixture missing")
-        return reconstruct(path).as_dict()
+        model = reconstruct(path).as_dict()
+        assert len(model["buildings"]) == 1
+        assert len(model["buildings"][0]["levels"]) == 1
+        return model["buildings"][0]["levels"][0]
 
     def test_every_wall_produces_geometry(self, building):
         by_wall = {}
@@ -162,3 +166,39 @@ class TestAgainstTheRealPlan:
                                for u0, u1, z0, z1 in wall_pieces(length, 2.7, spans))
         assert total_solid < total_full, "the walls must have holes in them"
         assert total_solid > total_full * 0.55, "but they must still be walls"
+
+
+class TestRoomFloorMaterial:
+    """A room floor must never be exported without a material.
+
+    It was, on every generated model: the generator passes no per-room-type
+    materials, the floor went out bare, and glTF's default material (white,
+    metalness 1, roughness 1) drew every room as grey metal in the viewer.
+    """
+
+    WOOD, TILE, CARPET = object(), object(), object()
+
+    def test_without_room_type_materials_it_takes_the_storey_floor(self):
+        assert room_floor_material({"room_type": "kitchen"}, None, self.WOOD) is self.WOOD
+        assert room_floor_material({"room_type": "kitchen"}, {}, self.WOOD) is self.WOOD
+
+    def test_a_material_for_the_room_type_wins(self):
+        by_type = {"bathroom": self.TILE, "default": self.CARPET}
+        assert room_floor_material({"room_type": "bathroom"}, by_type, self.WOOD) is self.TILE
+
+    def test_an_unlisted_type_takes_the_default_before_the_storey_floor(self):
+        by_type = {"bathroom": self.TILE, "default": self.CARPET}
+        assert room_floor_material({"room_type": "bedroom"}, by_type, self.WOOD) is self.CARPET
+
+    def test_an_unlisted_type_with_no_default_still_gets_the_storey_floor(self):
+        assert room_floor_material({"room_type": "bedroom"}, {"bathroom": self.TILE}, self.WOOD) is self.WOOD
+
+    def test_the_generator_passes_the_storey_floor_through(self):
+        # The fallback has to be wired where storeys are built, or the rule
+        # above never runs with a material to fall back on.
+        import inspect
+
+        from modules import blender_build
+        source = inspect.getsource(blender_build.build)
+        assert 'fallback=materials.get("floor")' in source
+

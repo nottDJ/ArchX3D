@@ -173,6 +173,68 @@ def test_manifest_counts_objects_per_room(preview_graph):
     assert total == placed
 
 
+def test_manifest_places_rooms_on_the_storey_they_were_built_on(preview_graph):
+    """An upper storey's rooms follow its registration onto the storey below.
+
+    A first floor drawn beside the ground floor on the same sheet is built over
+    it. The shell, the furniture and the luminaires are all moved by that
+    transform. If the manifest kept the drawn coordinates instead, the viewer
+    would put those rooms metres outside the building it is showing - which is
+    what spawned the walk camera into empty space and drew the minimap as two
+    plans side by side.
+    """
+    rooms = preview_graph.rooms
+    upper = rooms[0].id
+    transforms = {upper: (-17.0, 0.5, 3.0)}
+
+    drawn = metadata.scene_manifest(preview_graph)
+    built = metadata.scene_manifest(preview_graph, None, transforms)
+
+    moved = {r["id"]: r for r in built["rooms"]}[upper]
+    before = {r["id"]: r for r in drawn["rooms"]}[upper]
+
+    assert moved["bounds_min"][0] == pytest.approx(before["bounds_min"][0] - 17.0)
+    assert moved["bounds_min"][1] == pytest.approx(before["bounds_min"][1] + 0.5)
+    assert moved["bounds_max"][0] == pytest.approx(before["bounds_max"][0] - 17.0)
+    assert moved["bounds_max"][1] == pytest.approx(before["bounds_max"][1] + 0.5)
+    assert moved["elevation"] == pytest.approx(3.0)
+
+    for after, prior in zip(moved["polygon"], before["polygon"]):
+        assert after[0] == pytest.approx(prior[0] - 17.0)
+        assert after[1] == pytest.approx(prior[1] + 0.5)
+
+
+def test_manifest_leaves_untransformed_rooms_where_they_were(preview_graph):
+    """Only the storeys that were registered move; the reference one does not."""
+    rooms = preview_graph.rooms
+    assert len(rooms) > 1, "fixture needs two rooms to tell moved from unmoved"
+    transforms = {rooms[0].id: (-17.0, 0.0, 3.0)}
+
+    drawn = {r["id"]: r for r in metadata.scene_manifest(preview_graph)["rooms"]}
+    built = {r["id"]: r
+             for r in metadata.scene_manifest(preview_graph, None, transforms)["rooms"]}
+
+    for room in rooms[1:]:
+        assert built[room.id]["bounds_min"] == drawn[room.id]["bounds_min"]
+        assert built[room.id]["bounds_max"] == drawn[room.id]["bounds_max"]
+        assert built[room.id]["elevation"] == pytest.approx(0.0)
+
+
+def test_single_storey_manifest_is_unchanged_by_the_transform(preview_graph):
+    """No transforms, or all-identity ones, must produce the drawn geometry."""
+    plain = metadata.scene_manifest(preview_graph)
+    identity = metadata.scene_manifest(
+        preview_graph, None, {r.id: (0.0, 0.0, 0.0) for r in preview_graph.rooms})
+    assert plain == identity
+
+
+def test_every_room_reports_an_elevation(preview_graph):
+    """The viewer needs it to fly to a first-floor room without landing below."""
+    for room in metadata.scene_manifest(preview_graph)["rooms"]:
+        assert "elevation" in room
+        assert isinstance(room["elevation"], (int, float))
+
+
 def test_manifest_is_json_serialisable(preview_graph):
     """It travels as a JSON string in a Blender custom property.
 

@@ -49,7 +49,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 from . import classify as C
 from .ir import Node, Room, Wall
-from .read import Drawing, Label
+from .read import CadDrawing, Label
 
 XY = Tuple[float, float]
 
@@ -190,7 +190,7 @@ def _name_height_band(cands: Sequence[Label]) -> Tuple[float, float]:
     return (top * 0.88, top * 1.14)
 
 
-def gather_room_labels(drawing: Drawing) -> List[Label]:
+def gather_room_labels(drawing: CadDrawing) -> List[Label]:
     """Candidate room names: short strings, merged across their own lines."""
     cands = [t for t in drawing.labels
              if 0.0 < t.height <= MAX_LABEL_HEIGHT and _is_room_name(t.text)]
@@ -320,7 +320,7 @@ def _poly_xy(poly) -> List[XY]:
     return [(round(x, 4), round(y, 4)) for x, y in poly.exterior.coords[:-1]]
 
 
-def envelope_of(drawing: Drawing):
+def envelope_of(drawing: CadDrawing):
     """The building outline the drawing states, if it states one.
 
     A footprint layer is the drafter's own answer to "where does the building
@@ -349,7 +349,13 @@ def envelope_of(drawing: Drawing):
     return unary_union(polys)
 
 
-def extract(walls: Sequence[Wall], drawing: Optional[Drawing] = None, *,
+def _grown(bounds: Tuple[float, float, float, float], pad: float
+           ) -> Tuple[float, float, float, float]:
+    x0, y0, x1, y1 = bounds
+    return (x0 - pad, y0 - pad, x1 + pad, y1 + pad)
+
+
+def extract(walls: Sequence[Wall], drawing: Optional[CadDrawing] = None, *,
             min_area: float = MIN_ROOM_AREA,
             max_area: float = MAX_ROOM_AREA,
             envelope=None) -> RoomResult:
@@ -365,7 +371,18 @@ def extract(walls: Sequence[Wall], drawing: Optional[Drawing] = None, *,
         return RoomResult(rooms=[], nodes=nodes, footprint=[], footprint_holes=[],
                           stats={"faces": 0, "seconds": 0.0})
 
-    noded = unary_union(lines)
+    # Noded on a 10 micron grid. Exact floating-point noding misses a wall end
+    # that lies on another wall to fifteen digits but not sixteen, which is
+    # the ordinary case on any plan drawn off the axes; the grid is far below
+    # anything a drawing can mean.
+    # ``shapely.ops.unary_union`` takes no grid size in shapely 2.x — the call
+    # raised TypeError and this silently fell back to exact noding — so the
+    # grid is applied through ``shapely.union_all``.
+    try:
+        from shapely import union_all
+        noded = union_all(lines, grid_size=1e-5)
+    except (ImportError, TypeError):  # shapely < 2.0
+        noded = unary_union(lines)
     faces = [f for f in polygonize(noded) if f.is_valid and not f.is_empty]
     solids = wall_solids(walls, grow=0.004)
 
@@ -374,11 +391,26 @@ def extract(walls: Sequence[Wall], drawing: Optional[Drawing] = None, *,
     rooms: List[Room] = []
     dropped_small = dropped_large = 0
     n = 0
+    try:
+        from shapely import clip_by_rect
+    except ImportError:          # shapely < 2.0
+        clip_by_rect = None
     for face in faces:
         if face.area < min_area * 0.5:
             dropped_small += 1
             continue
-        interior = face.difference(solids) if solids is not None else face
+        if solids is None:
+            interior = face
+        else:
+            # Only the walls around this face can cut it; subtracting the
+            # whole building's wall solid from every face was most of this
+            # stage on a large plan.
+            try:
+                local = solids if clip_by_rect is None else clip_by_rect(
+                    solids, *_grown(face.bounds, 0.01))
+                interior = face.difference(local)
+            except Exception:    # a clipped solid can be invalid; use it whole
+                interior = face.difference(solids)
         parts = _as_polygons(interior)
         if not parts:
             dropped_small += 1
@@ -390,8 +422,11 @@ def extract(walls: Sequence[Wall], drawing: Optional[Drawing] = None, *,
             if part.area > max_area:
                 dropped_large += 1
                 continue
-            inside = [t for t in labels
-                      if part.buffer(-LABEL_INSET).covers(Point(*t.point))]
+            x0, y0, x1, y1 = part.bounds
+            nearby = [t for t in labels
+                      if x0 <= t.point[0] <= x1 and y0 <= t.point[1] <= y1]
+            inset = part.buffer(-LABEL_INSET) if nearby else None
+            inside = [t for t in nearby if inset.covers(Point(*t.point))]
             pieces = _split_open_plan(part, inside)
             for piece, text in pieces:
                 n += 1

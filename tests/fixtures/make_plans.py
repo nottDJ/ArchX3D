@@ -28,11 +28,14 @@ from __future__ import annotations
 
 import math
 import os
+import sys
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 import ezdxf
 
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "plans")
+
+TRUTH_ONLY = "--truth-only" in sys.argv
 
 XY = Tuple[float, float]
 
@@ -65,6 +68,10 @@ class Plan:
             if layer not in self.doc.layers:
                 self.doc.layers.add(layer, color=colour)
         self.openings: List[Tuple[XY, XY, float, str]] = []
+        #: Ground truth, in metres in the drawing's own frame: every opening
+        #: and wall as it was drawn, written beside the DXF so a test can
+        #: measure the reconstruction against what is actually there.
+        self.truth: Dict[str, list] = {"openings": [], "walls": [], "labels": []}
 
     # -- units ----------------------------------------------------------
 
@@ -94,6 +101,17 @@ class Plan:
         n = (-d[1], d[0])
 
         spans = sorted((self.u(s), self.u(e), k) for s, e, k in holes_m)
+        self.truth["walls"].append({
+            "start": [ax / self.per_metre, ay / self.per_metre],
+            "end": [bx / self.per_metre, by / self.per_metre],
+            "thickness": t / self.per_metre})
+        for s, e, k in spans:
+            mid = (s + e) / 2.0
+            self.truth["openings"].append({
+                "kind": k,
+                "centre": [(ax + d[0] * mid) / self.per_metre,
+                           (ay + d[1] * mid) / self.per_metre],
+                "width": (e - s) / self.per_metre})
         for side in (+1, -1):
             off = (n[0] * t / 2 * side, n[1] * t / 2 * side)
             cursor = 0.0
@@ -148,6 +166,7 @@ class Plan:
         self.msp.add_text(text, height=self.u(height_m),
                           dxfattribs={"layer": "A-ANNO-TEXT"}
                           ).set_placement(self.p(*at_m))
+        self.truth["labels"].append({"text": text, "point": list(at_m)})
 
     def dimension(self, a_m: XY, b_m: XY, offset_m: float = 1.0) -> None:
         """A real DIMENSION plus the extension lines that come with it."""
@@ -176,11 +195,26 @@ class Plan:
                            dxfattribs={"layer": layer})
         self.msp.add_blockref(name, self.p(*at_m), dxfattribs={"layer": layer})
 
-    def save(self) -> str:
-        os.makedirs(OUT_DIR, exist_ok=True)
-        path = os.path.join(OUT_DIR, self.name)
-        self.doc.saveas(path)
+    def save(self, out_dir: Optional[str] = None) -> str:
+        out_dir = out_dir or OUT_DIR
+        os.makedirs(out_dir, exist_ok=True)
+        path = os.path.join(out_dir, self.name)
+        # ``--truth-only`` rewrites the ground truth without touching the
+        # committed drawings, whose bytes would otherwise churn on every run.
+        if not TRUTH_ONLY:
+            self.doc.saveas(path)
+        self.write_truth(path)
         return path
+
+    def write_truth(self, path: str) -> None:
+        import json
+        # ``units`` is the unit the drawing is *drawn* in, whatever its header
+        # claims; the truth itself is always metres in the drawing's frame.
+        drawn = {1000.0: "mm", 100.0: "cm", 1.0: "m"}.get(
+            round(self.per_metre, 6), "in" if abs(self.per_metre - 1 / 0.0254) < 1e-6 else None)
+        with open(os.path.splitext(path)[0] + ".truth.json", "w", encoding="utf-8") as fh:
+            json.dump({"truth_units": "metres", "frame": "drawing", "units": drawn,
+                       **self.truth}, fh, indent=1)
 
 
 # ---------------------------------------------------------------------------
@@ -461,6 +495,17 @@ def build_rotated() -> str:
             e.transform(m)
         except Exception:
             pass
+
+    def rot(pt):
+        c, s = math.cos(angle), math.sin(angle)
+        return [pt[0] * c - pt[1] * s, pt[0] * s + pt[1] * c]
+
+    for o in p.truth["openings"]:
+        o["centre"] = rot(o["centre"])
+    for w in p.truth["walls"]:
+        w["start"], w["end"] = rot(w["start"]), rot(w["end"])
+    for t in p.truth["labels"]:
+        t["point"] = rot(t["point"])
     return p.save()
 
 

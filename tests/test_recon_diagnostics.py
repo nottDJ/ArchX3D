@@ -24,7 +24,7 @@ EXPECTED = ("entities.json", "units.json", "walls.json", "rooms.json",
             "doors.json", "windows.json", "validation.json", "building.json",
             "debug_raw.svg", "debug_normalized.svg", "debug_walls.svg",
             "debug_rooms.svg", "debug_openings.svg", "debug_topology.svg",
-            "reconstruction.svg")
+            "debug_structures.svg", "levels.json", "reconstruction.svg")
 
 
 @pytest.fixture(scope="module")

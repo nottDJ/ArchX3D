@@ -9,7 +9,7 @@ import pytest
 from modules.recon import classify as C
 from modules.recon import openings as O
 from modules.recon.ir import Wall
-from modules.recon.read import Arc, BlockRef, Drawing, Prim
+from modules.recon.read import Arc, BlockRef, CadDrawing, Prim
 
 
 def prim(points, role, *, closed=False, pid="p1", layer="A-WALL", dxftype="LWPOLYLINE"):
@@ -27,14 +27,14 @@ def band_prim(x0, x1, y, thickness, role=C.STRUCTURE_ABOVE, pid="p1",
 
 class TestEvidence:
     def test_a_header_band_is_an_opening(self):
-        d = Drawing(prims=[band_prim(3.0, 3.9, 0.0, 0.15)])
+        d = CadDrawing(prims=[band_prim(3.0, 3.9, 0.0, 0.15)])
         ev = O.collect_evidence(d)
         assert len(ev) == 1
         assert ev[0].width == pytest.approx(0.9)
         assert ev[0].band == pytest.approx(0.15)
 
     def test_a_room_sized_rectangle_is_not_an_opening(self):
-        d = Drawing(prims=[band_prim(0.0, 4.0, 0.0, 3.0)])
+        d = CadDrawing(prims=[band_prim(0.0, 4.0, 0.0, 3.0)])
         assert O.collect_evidence(d) == []
 
     def test_glazing_lines_cluster_into_one_window(self):
@@ -44,7 +44,7 @@ class TestEvidence:
                  layer="A-GLAZ", dxftype="LINE")
             for i, y in enumerate((-0.05, 0.0, 0.05))
         ]
-        ev = O.collect_evidence(Drawing(prims=prims))
+        ev = O.collect_evidence(CadDrawing(prims=prims))
         assert len(ev) == 1
         assert ev[0].width == pytest.approx(1.5)
         assert ev[0].kind == "window"
@@ -56,10 +56,10 @@ class TestEvidence:
                 prims.append(prim([(x0, y), (x0 + 1.2, y)], C.WINDOW,
                                   pid="g%d%d" % (k, i), layer="A-GLAZ",
                                   dxftype="LINE"))
-        assert len(O.collect_evidence(Drawing(prims=prims))) == 2
+        assert len(O.collect_evidence(CadDrawing(prims=prims))) == 2
 
     def test_a_swing_arc_is_a_door(self):
-        d = Drawing(arcs=[Arc(id="a1", centre=(2.0, 0.0), radius=0.9,
+        d = CadDrawing(arcs=[Arc(id="a1", centre=(2.0, 0.0), radius=0.9,
                               start_deg=0.0, end_deg=90.0, role=C.DOOR,
                               layer="A-DOOR")])
         ev = O.collect_evidence(d)
@@ -68,7 +68,7 @@ class TestEvidence:
 
     def test_a_swing_offers_both_readings_as_one_group(self):
         """Which chord is the doorway is unknowable without the walls."""
-        d = Drawing(arcs=[Arc(id="a1", centre=(2.0, 0.0), radius=0.9,
+        d = CadDrawing(arcs=[Arc(id="a1", centre=(2.0, 0.0), radius=0.9,
                               start_deg=0.0, end_deg=90.0, role=C.DOOR,
                               layer="A-DOOR")])
         ev = O.collect_evidence(d)
@@ -77,13 +77,13 @@ class TestEvidence:
 
     def test_evidence_in_different_places_is_not_merged(self):
         """Proximity alone once fused a window with a beam 2.5 m away."""
-        d = Drawing(prims=[band_prim(0.0, 1.83, 0.0, 0.15, pid="p1"),
+        d = CadDrawing(prims=[band_prim(0.0, 1.83, 0.0, 0.15, pid="p1"),
                            band_prim(4.0, 8.5, 0.0, 0.10, pid="p2")])
         ev = O.collect_evidence(d)
         assert len(ev) == 2
 
     def test_a_header_and_a_swing_at_one_doorway_are_one_opening(self):
-        d = Drawing(
+        d = CadDrawing(
             prims=[band_prim(2.0, 2.9, 0.0, 0.15, pid="p1")],
             arcs=[Arc(id="a1", centre=(2.0, 0.0), radius=0.9, start_deg=0.0,
                       end_deg=90.0, role=C.DOOR, layer="A-DOOR")],
@@ -98,7 +98,7 @@ class TestEvidence:
 class TestHosting:
     def test_an_opening_lands_on_its_wall(self):
         wall = Wall(id="w1", start=(0.0, 0.0), end=(10.0, 0.0), thickness=0.15)
-        d = Drawing(prims=[band_prim(3.0, 3.9, 0.0, 0.15)])
+        d = CadDrawing(prims=[band_prim(3.0, 3.9, 0.0, 0.15)])
         ops = O.assign(O.collect_evidence(d), [wall], d)
         assert len(ops) == 1
         assert ops[0].wall_id == "w1"
@@ -107,12 +107,12 @@ class TestHosting:
 
     def test_an_opening_nowhere_near_a_wall_is_dropped(self):
         wall = Wall(id="w1", start=(0.0, 0.0), end=(10.0, 0.0), thickness=0.15)
-        d = Drawing(prims=[band_prim(3.0, 3.9, 6.0, 0.15)])
+        d = CadDrawing(prims=[band_prim(3.0, 3.9, 6.0, 0.15)])
         assert O.assign(O.collect_evidence(d), [wall], d) == []
 
     def test_a_swing_picks_the_chord_that_lies_in_a_wall(self):
         wall = Wall(id="w1", start=(0.0, 0.0), end=(10.0, 0.0), thickness=0.15)
-        d = Drawing(arcs=[Arc(id="a1", centre=(2.0, 0.0), radius=0.9,
+        d = CadDrawing(arcs=[Arc(id="a1", centre=(2.0, 0.0), radius=0.9,
                               start_deg=0.0, end_deg=90.0, role=C.DOOR,
                               layer="A-DOOR")])
         ops = O.assign(O.collect_evidence(d), [wall], d)
@@ -121,13 +121,13 @@ class TestHosting:
 
     def test_an_opening_never_exceeds_its_wall(self):
         wall = Wall(id="w1", start=(0.0, 0.0), end=(2.0, 0.0), thickness=0.15)
-        d = Drawing(prims=[band_prim(-1.0, 3.0, 0.0, 0.15)])
+        d = CadDrawing(prims=[band_prim(-1.0, 3.0, 0.0, 0.15)])
         ops = O.assign(O.collect_evidence(d), [wall], d)
         assert ops[0].width <= wall.length + 1e-6
 
     def test_one_stretch_of_wall_holds_one_opening(self):
         wall = Wall(id="w1", start=(0.0, 0.0), end=(10.0, 0.0), thickness=0.15)
-        d = Drawing(prims=[band_prim(3.0, 3.9, 0.0, 0.15, pid="p1"),
+        d = CadDrawing(prims=[band_prim(3.0, 3.9, 0.0, 0.15, pid="p1"),
                            band_prim(3.1, 4.0, 0.0, 0.12, pid="p2",
                                      role=C.OPENING, layer="A-OPENING")])
         ops = O.assign(O.collect_evidence(d), [wall], d)
@@ -139,14 +139,14 @@ class TestKinds:
         """Width alone once put a roller door between the kitchen and dining."""
         wall = Wall(id="w1", start=(0.0, 0.0), end=(10.0, 0.0),
                     thickness=0.1, kind="interior")
-        d = Drawing(prims=[band_prim(3.0, 6.5, 0.0, 0.1)])
+        d = CadDrawing(prims=[band_prim(3.0, 6.5, 0.0, 0.1)])
         ops = O.assign(O.collect_evidence(d), [wall], d)
         assert ops[0].kind == "cased"
 
     def test_a_wide_hole_in_an_exterior_wall_is_a_garage_door(self):
         wall = Wall(id="w1", start=(0.0, 0.0), end=(10.0, 0.0),
                     thickness=0.15, kind="exterior")
-        d = Drawing(prims=[band_prim(3.0, 7.9, 0.0, 0.15)])
+        d = CadDrawing(prims=[band_prim(3.0, 7.9, 0.0, 0.15)])
         ops = O.assign(O.collect_evidence(d), [wall], d)
         assert ops[0].kind == "garage"
 
@@ -154,7 +154,7 @@ class TestKinds:
         """A header bears on the piers, so it always spans more than the hole."""
         wall = Wall(id="w1", start=(0.0, 0.0), end=(10.0, 0.0),
                     thickness=0.15, kind="exterior")
-        d = Drawing(prims=[
+        d = CadDrawing(prims=[
             band_prim(1.0, 8.0, 0.0, 0.15, pid="p1"),                 # beam
             band_prim(2.0, 6.9, 0.0, 0.15, pid="p2", role=C.OPENING,
                       layer="A-OPENING"),                              # the hole

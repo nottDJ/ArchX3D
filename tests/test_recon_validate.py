@@ -10,7 +10,7 @@ from __future__ import annotations
 import pytest
 
 from modules.recon import validate as V
-from modules.recon.ir import (Building, Node, Opening, ReconstructionError,
+from modules.recon.ir import (Level, Node, Opening, ReconstructionError,
                               Room, UnitDecision, Wall)
 
 
@@ -31,7 +31,7 @@ def good_building(**over):
         Node(id="n3", point=(10, 8), wall_ids=["w2", "w3"]),
         Node(id="n4", point=(0, 8), wall_ids=["w3", "w4"]),
     ]
-    b = Building(
+    b = Level(
         source_path="test.dxf", walls=walls, rooms=[room], nodes=nodes,
         footprint=[(0, 0), (10, 0), (10, 8), (0, 8)],
         bounds_min=(0.0, 0.0), bounds_max=(10.0, 8.0),

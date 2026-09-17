@@ -1,0 +1,221 @@
+{
+ "truth_units": "metres",
+ "frame": "drawing",
+ "units": "m",
+ "openings": [
+  {
+   "kind": "window",
+   "centre": [
+    3.75,
+    0.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "window",
+   "centre": [
+    7.25,
+    0.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "window",
+   "centre": [
+    10.0,
+    3.25
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "door",
+   "centre": [
+    5.5,
+    7.0
+   ],
+   "width": 1.0
+  },
+  {
+   "kind": "window",
+   "centre": [
+    0.0,
+    3.25
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "door",
+   "centre": [
+    4.0,
+    1.45
+   ],
+   "width": 0.8999999999999999
+  },
+  {
+   "kind": "door",
+   "centre": [
+    5.95,
+    4.0
+   ],
+   "width": 0.8999999999999999
+  },
+  {
+   "kind": "door",
+   "centre": [
+    17.0,
+    0.5
+   ],
+   "width": 4.800000000000001
+  },
+  {
+   "kind": "door",
+   "centre": [
+    17.55,
+    6.5
+   ],
+   "width": 0.8999999999999999
+  }
+ ],
+ "walls": [
+  {
+   "start": [
+    0.0,
+    0.0
+   ],
+   "end": [
+    10.0,
+    0.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    10.0,
+    0.0
+   ],
+   "end": [
+    10.0,
+    7.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    10.0,
+    7.0
+   ],
+   "end": [
+    0.0,
+    7.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    0.0,
+    7.0
+   ],
+   "end": [
+    0.0,
+    0.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    4.0,
+    0.0
+   ],
+   "end": [
+    4.0,
+    7.0
+   ],
+   "thickness": 0.1
+  },
+  {
+   "start": [
+    4.0,
+    4.0
+   ],
+   "end": [
+    10.0,
+    4.0
+   ],
+   "thickness": 0.1
+  },
+  {
+   "start": [
+    14.0,
+    0.5
+   ],
+   "end": [
+    20.0,
+    0.5
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    20.0,
+    0.5
+   ],
+   "end": [
+    20.0,
+    6.5
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    20.0,
+    6.5
+   ],
+   "end": [
+    14.0,
+    6.5
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    14.0,
+    6.5
+   ],
+   "end": [
+    14.0,
+    0.5
+   ],
+   "thickness": 0.15
+  }
+ ],
+ "labels": [
+  {
+   "text": "BEDROOM",
+   "point": [
+    1.4,
+    3.2
+   ]
+  },
+  {
+   "text": "LIVING",
+   "point": [
+    6.0,
+    1.6
+   ]
+  },
+  {
+   "text": "KITCHEN",
+   "point": [
+    6.0,
+    5.4
+   ]
+  },
+  {
+   "text": "GARAGE",
+   "point": [
+    16.4,
+    3.5
+   ]
+  }
+ ]
+}
