@@ -206,7 +206,7 @@ export function SettingsView() {
         {/* ---- Local index ---------------------------------------------- */}
         <Section
           title="Project index"
-          description="How this browser knows which projects exist."
+          description="Which projects this app lists, and what it remembers about them."
         >
           <Card elevation="flat">
             <div className="flex items-start gap-3 p-4">
@@ -215,7 +215,7 @@ export function SettingsView() {
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-sm text-primary">
-                  {pluralise(projects.length, "project")} indexed
+                  {pluralise(projects.length, "project")} listed
                 </p>
                 <p className="mt-0.5 text-xs text-tertiary">
                   {formatBytes(indexBytes)} of plans and images uploaded.
@@ -228,19 +228,19 @@ export function SettingsView() {
                 onClick={() => setConfirmClear(true)}
                 disabled={projects.length === 0}
               >
-                Clear index
+                Hide all
               </Button>
             </div>
 
             <div className="border-t border-line-subtle p-4">
-              <Alert tone="info" title="Why the list lives in your browser">
-                The ArchX3D API can create a project and return one by ID, but it has
-                no endpoint that lists them. Rather than invent data, this app records
-                the IDs it created locally and re-reads each one from the server.
+              <Alert tone="info" title="Where the list comes from">
+                Projects are read from the ArchX3D project folder on this computer, so
+                they stay listed even if this app&apos;s browser data is cleared. Only
+                preferences live here: custom names, pins and which projects you hid.
                 <br />
                 <br />
-                Clearing the index hides projects here but does not delete anything —
-                the files stay on the server, and a direct project link still works.
+                Hiding projects removes them from the list but does not delete anything —
+                the folders stay on disk, and a direct project link still works.
               </Alert>
             </div>
           </Card>
@@ -250,16 +250,16 @@ export function SettingsView() {
       <ConfirmDialog
         open={confirmClear}
         onOpenChange={setConfirmClear}
-        title="Clear the project index?"
-        description="This browser will forget every project. Nothing is deleted from the server, and direct links continue to work — but you will not be able to browse them here."
-        confirmLabel="Clear index"
+        title="Hide every project?"
+        description="Every project currently listed will be hidden from the list. Nothing is deleted: the folders stay on disk and direct links continue to work. Projects created afterwards are listed as usual."
+        confirmLabel="Hide all"
         onConfirm={() => {
           forgetAll();
           setConfirmClear(false);
           toast({
             tone: "info",
-            title: "Index cleared",
-            description: "Project files remain on the server.",
+            title: "Projects hidden",
+            description: "Project files remain on disk.",
           });
         }}
       />

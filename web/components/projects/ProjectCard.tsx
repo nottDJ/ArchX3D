@@ -227,7 +227,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         open={confirmRemove}
         onOpenChange={setConfirmRemove}
         title="Remove from list?"
-        description="This only removes the project from this browser's list. Nothing is deleted from the server, and a direct link still works."
+        description="This hides the project from this list. Nothing is deleted: its folder stays on disk, and a direct link still works."
         confirmLabel="Remove"
         onConfirm={() => {
           forget(project.id);

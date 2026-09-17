@@ -19,7 +19,9 @@
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
 import {
+  adopt,
   fetchManifest,
+  fetchProjectList,
   getServerSnapshot,
   getSnapshot,
   subscribe,
@@ -47,6 +49,23 @@ export function useProjects(): UseProjects {
   const [loading, setLoading] = useState(true);
   const [offline, setOffline] = useState(false);
   const [nonce, setNonce] = useState(0);
+
+  // Discover projects from disk. The backend's projects directory decides what
+  // exists; anything there this browser has no record of is adopted into the
+  // index, which re-renders through the store subscription and so feeds the
+  // per-project fetch below. Without this, clearing the WebView's storage made
+  // every project unreachable.
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchProjectList(controller.signal)
+      .then((manifests) => {
+        if (manifests) adopt(manifests);
+      })
+      .catch(() => {
+        // Unreachable backend: the per-project fetch reports `offline`.
+      });
+    return () => controller.abort();
+  }, [nonce]);
 
   // Depend on the id list rather than the records themselves: renaming or
   // pinning must not trigger a full re-fetch of every manifest.

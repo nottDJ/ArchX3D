@@ -614,6 +614,23 @@ describe("scene manifest", () => {
     assert.equal(parsed.name, "Living Room");
   });
 
+  it("reads a room's storey elevation", () => {
+    const parsed = parseRoom({ ...room, elevation: 3 });
+    assert.equal(parsed.elevation, 3);
+  });
+
+  it("reads a manifest 1.0 room, which has no elevation, as ground level", () => {
+    // Older GLBs carry no elevation at all. Reading it as anything but 0 would
+    // lift a single-storey model's rooms off its floor.
+    const parsed = parseRoom({ ...room, elevation: undefined });
+    assert.equal(parsed.elevation, 0);
+  });
+
+  it("ignores a non-numeric elevation rather than propagating NaN", () => {
+    assert.equal(parseRoom({ ...room, elevation: "first" }).elevation, 0);
+    assert.equal(parseRoom({ ...room, elevation: null }).elevation, 0);
+  });
+
   it("sorts rooms largest first", () => {
     const manifest = parseManifest({
       archx3d: {
@@ -768,5 +785,62 @@ describe("adaptive quality", () => {
     assert.equal(plan.shadows, true);
     assert.deepEqual(plan.dpr, [1, 2]);
     assert.equal(plan.reducedReason, null);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Offline: nothing the viewer needs to draw a building comes from the network
+// ---------------------------------------------------------------------------
+
+describe("environment maps ship with the app (offline viewer)", () => {
+  const fs = require("node:fs");
+  const path = require("node:path");
+  const {
+    ENVIRONMENT_DIRECTORY,
+    ENVIRONMENT_FILES,
+    environmentUrl,
+  } = require("../.test-build/viewer/lib/viewer/environment.js");
+  const { ENVIRONMENT_PRESETS } = require("../.test-build/viewer/types/viewer.js");
+
+  const WEB = path.join(__dirname, "..");
+
+  it("has an HDRI in public/ for every preset the settings panel offers, and each is a Radiance file", () => {
+    for (const preset of ENVIRONMENT_PRESETS) {
+      const file = ENVIRONMENT_FILES[preset];
+      assert.ok(file, `no file for preset ${preset}`);
+      const onDisk = path.join(WEB, "public", ENVIRONMENT_DIRECTORY, file);
+      assert.ok(fs.existsSync(onDisk), `${preset}: ${onDisk} is missing, so the viewer would need a network`);
+      const header = fs.readFileSync(onDisk).subarray(0, 10).toString("latin1");
+      assert.equal(header, "#?RADIANCE", `${preset}: ${file} is not a Radiance HDR`);
+    }
+  });
+
+  it("serves every preset from the app's own origin", () => {
+    for (const preset of ENVIRONMENT_PRESETS) {
+      const url = environmentUrl(preset);
+      assert.match(url, /^\/hdri\/[\w.-]+\.hdr$/, `${preset}: ${url}`);
+    }
+    assert.equal(environmentUrl("no-such-preset"), environmentUrl("studio"));
+  });
+
+  it("never asks drei for a CDN preset or names the CDN, anywhere in the app's code", () => {
+    // `<Environment preset=...>` is what fetched from raw.githack.com; with no
+    // network the viewer route failed and showed no building.
+    const offenders = [];
+    const walk = (dir) => {
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (/\.(ts|tsx)$/.test(entry.name)) {
+          // Code only: the modules that explain the old failure may name it.
+          const code = fs.readFileSync(full, "utf8").replace(/^\s*(\*|\/\*|\/\/).*$/gm, "");
+          if (/<Environment\b[^>]*\bpreset=/.test(code) || /raw\.githack|drei-assets/.test(code)) {
+            offenders.push(path.relative(WEB, full));
+          }
+        }
+      }
+    };
+    for (const dir of ["app", "components", "hooks", "lib"]) walk(path.join(WEB, dir));
+    assert.deepEqual(offenders, []);
   });
 });

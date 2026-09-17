@@ -89,6 +89,17 @@ function toBox(box3: THREE.Box3): Box {
   };
 }
 
+/** Ancestor `userData`, nearest first, to the same depth as `ancestorNames`. */
+function ancestorData(object: THREE.Object3D): Array<Record<string, unknown>> {
+  const data: Array<Record<string, unknown>> = [];
+  let parent = object.parent;
+  while (parent && data.length < 4) {
+    data.push((parent.userData ?? {}) as Record<string, unknown>);
+    parent = parent.parent;
+  }
+  return data;
+}
+
 function ancestorNames(object: THREE.Object3D): string[] {
   const names: string[] = [];
   let parent = object.parent;
@@ -150,6 +161,7 @@ export function buildIndex(scene: THREE.Group): ModelIndex {
         name: object.name,
         userData: object.userData ?? {},
         ancestors: ancestorNames(object),
+        ancestorData: ancestorData(object),
         isLight,
         // Only meshes can reach the geometric rung, and computing world bounds
         // for every mesh up front would cost more than the test saves.

@@ -304,7 +304,7 @@ function SegmentButton({
         disabled
           ? "cursor-not-allowed text-disabled"
           : active
-            ? "bg-white text-on-solid"
+            ? "bg-surface text-primary shadow-xs"
             : "text-secondary hover:text-primary",
       ].join(" ")}
     >

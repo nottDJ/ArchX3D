@@ -48,7 +48,9 @@ import {
   integrateVertical,
 } from "@/lib/viewer/movement";
 import { useViewerSettings } from "@/hooks/useViewerSettings";
+import type { Box } from "@/lib/viewer/bounds";
 import { getSettings } from "@/lib/viewer/settings";
+import { hasFallenOut } from "@/lib/viewer/spawn";
 
 /**
  * `pointerSpeed` of 1.0 in three's `PointerLockControls` is 0.002 radians per
@@ -56,6 +58,12 @@ import { getSettings } from "@/lib/viewer/settings";
  * radians per pixel, because that is a unit with meaning — into their scale.
  */
 const RADIANS_PER_PIXEL_AT_UNIT_SPEED = 0.002;
+
+/**
+ * The only elements whose click enters pointer lock. See the comment on
+ * `PointerLockControls` below, and the walk prompt in `Viewer.tsx`.
+ */
+export const WALK_LOCK_SELECTOR = "[data-walk-lock]";
 
 /** Keys the viewer consumes, so the page does not also scroll or search. */
 const CAPTURED_CODES = new Set([
@@ -77,6 +85,13 @@ export interface WalkControllerProps {
     pitch: number,
   ) => void;
   readonly controlsRef?: React.MutableRefObject<PointerLockControlsImpl | null>;
+  /** The model's bounds, for noticing that the camera has fallen out of it. */
+  readonly bounds?: Box | null;
+  /**
+   * Called when the camera has dropped well below the model. The owner decides
+   * where to put it back; this component only refuses to keep falling.
+   */
+  readonly onFellOut?: () => void;
 }
 
 export function WalkController({
@@ -85,6 +100,8 @@ export function WalkController({
   onLockChange,
   onSettled,
   controlsRef,
+  bounds = null,
+  onFellOut,
 }: WalkControllerProps) {
   const camera = useThree((state) => state.camera);
   const internal = useRef<PointerLockControlsImpl | null>(null);
@@ -237,11 +254,25 @@ export function WalkController({
       camera.position.addScaledVector(velocity.current, dt);
       grounded.current = false;
     }
+
+    // Gravity over a hole in the geometry runs forever, and every frame of it
+    // renders empty space - the G5 black screen. Stop, and hand back.
+    if (hasFallenOut(camera.position.y, bounds)) {
+      velocity.current.set(0, 0, 0);
+      grounded.current = false;
+      onFellOut?.();
+    }
   });
 
   return (
     <PointerLockControls
       ref={controls}
+      // Without a selector drei locks the pointer on a click *anywhere in the
+      // document*. In walk mode that made every toolbar button, the room list,
+      // the settings panel and the minimap grab the mouse the moment they were
+      // clicked, so none of them could be used. Only the viewer's own
+      // "Click to look around" prompt may take the pointer.
+      selector={WALK_LOCK_SELECTOR}
       enabled={enabled}
       makeDefault={enabled}
       pointerSpeed={settings.lookSensitivity / RADIANS_PER_PIXEL_AT_UNIT_SPEED}

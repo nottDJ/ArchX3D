@@ -83,7 +83,7 @@ export function ProjectsView() {
     <AppShell
       title="Projects"
       breadcrumbs={[{ label: "Projects" }]}
-      description={`${projects.length} indexed in this browser.`}
+      description={`${projects.length} on this computer.`}
       actions={
         <Button asChild variant="primary" size="sm" icon={<SparkIcon />}>
           <Link href="/new">New generation</Link>

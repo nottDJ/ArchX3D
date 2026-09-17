@@ -37,6 +37,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 
+import { toViewerLightUnits } from "@/lib/viewer/lights";
 import { parseManifest } from "@/lib/viewer/manifest";
 import type { LoadState, SceneManifest } from "@/types/viewer";
 
@@ -176,6 +177,10 @@ export function useGLTFModel(url: string | null): UseGLTFModel {
           return;
         }
         loaded = gltf.scene;
+
+        // The file's lamps are in candela; the viewer's rig is not. Converted
+        // once, here, so nothing downstream ever sees the file's scale.
+        toViewerLightUnits(gltf.scene);
 
         // Scene-level `extras` land on `userData`; older files simply have none.
         const manifest = parseManifest(gltf.scene.userData);

@@ -106,6 +106,9 @@ export function parseRoom(raw: unknown): RoomInfo | null {
     area_m2: num(input.area_m2),
     // A room with no stated height still needs one to stand in.
     ceiling_height: num(input.ceiling_height, 3),
+    // Manifest 1.0 had no elevation; every room in such a file is read as
+    // ground level, which is what a single-storey model means anyway.
+    elevation: num(input.elevation),
     bounds_min: boundsMin,
     bounds_max: boundsMax,
     polygon: polygon(input.polygon),
