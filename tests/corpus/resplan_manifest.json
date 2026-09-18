@@ -1,0 +1,342 @@
+[
+ {
+  "file": "residential/resplan_res_11676_A.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 11676,
+  "style": "A",
+  "units": "mm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_16706_B.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 16706,
+  "style": "B",
+  "units": "cm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_16893_C.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 16893,
+  "style": "C",
+  "units": "m",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_12307_D.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 12307,
+  "style": "D",
+  "units": "in",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_11068_A.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 11068,
+  "style": "A",
+  "units": "mm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_14392_B.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 14392,
+  "style": "B",
+  "units": "cm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_00421_C.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 421,
+  "style": "C",
+  "units": "m",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_15444_D.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 15444,
+  "style": "D",
+  "units": "in",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_11216_A.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 11216,
+  "style": "A",
+  "units": "mm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_17030_B.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 17030,
+  "style": "B",
+  "units": "cm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_16147_C.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 16147,
+  "style": "C",
+  "units": "m",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_16389_D.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 16389,
+  "style": "D",
+  "units": "in",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_12624_A.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 12624,
+  "style": "A",
+  "units": "mm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_13803_B.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 13803,
+  "style": "B",
+  "units": "cm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_01336_C.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 1336,
+  "style": "C",
+  "units": "m",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_00668_D.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 668,
+  "style": "D",
+  "units": "in",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_08577_A.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 8577,
+  "style": "A",
+  "units": "mm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_01873_B.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 1873,
+  "style": "B",
+  "units": "cm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_02830_C.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 2830,
+  "style": "C",
+  "units": "m",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_02139_D.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 2139,
+  "style": "D",
+  "units": "in",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_11399_A.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 11399,
+  "style": "A",
+  "units": "mm",
+  "native_cad": false
+ },
+ {
+  "file": "residential/resplan_res_10114_B.dxf",
+  "category": "residential",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 10114,
+  "style": "B",
+  "units": "cm",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_15795_A.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 15795,
+  "style": "A",
+  "units": "mm",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_01759_B.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 1759,
+  "style": "B",
+  "units": "cm",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_04806_C.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 4806,
+  "style": "C",
+  "units": "m",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_04390_D.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 4390,
+  "style": "D",
+  "units": "in",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_01931_A.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 1931,
+  "style": "A",
+  "units": "mm",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_08335_B.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 8335,
+  "style": "B",
+  "units": "cm",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_00749_C.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 749,
+  "style": "C",
+  "units": "m",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_04385_D.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 4385,
+  "style": "D",
+  "units": "in",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_05158_A.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 5158,
+  "style": "A",
+  "units": "mm",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_12319_B.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 12319,
+  "style": "B",
+  "units": "cm",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_16534_C.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 16534,
+  "style": "C",
+  "units": "m",
+  "native_cad": false
+ },
+ {
+  "file": "apartment/resplan_apa_09049_D.dxf",
+  "category": "apartment",
+  "source": "ResPlan",
+  "license": "CC BY 4.0",
+  "plan_id": 9049,
+  "style": "D",
+  "units": "in",
+  "native_cad": false
+ }
+]

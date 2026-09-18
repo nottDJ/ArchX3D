@@ -167,6 +167,16 @@ async def delete_image(project_id: str, filename: str):
         raise HTTPException(status_code=404, detail=str(exc))
 
 
+@app.get("/api/projects", tags=["Wizard"])
+async def list_projects():
+    """Every project in the projects directory, newest first.
+
+    The authoritative index: the dashboard discovers projects from here, so a
+    project survives the browser or WebView forgetting it ever existed.
+    """
+    return project_api.list_projects()
+
+
 @app.get("/api/projects/{project_id}", tags=["Wizard"])
 async def get_project(project_id: str):
     try:

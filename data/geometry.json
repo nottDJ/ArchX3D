@@ -1,294 +1,1851 @@
 {
   "metadata": {
-    "source": "C:\\Users\\lenovo\\Documents\\GitHub\\ArchX3D\\test_floorplan.dxf",
+    "source": "C:\\Users\\ASUS\\Documents\\GitHub\\ArchX3D\\tests\\fixtures\\plans\\residential_us.dxf",
     "layers_used": [
-      "WALLS"
+      "xref-Bishop-Overland-08$0$A-WALL"
     ],
-    "scale_factor": 1.0,
-    "segment_count": 5,
+    "scale_factor": 0.0254,
+    "segment_count": 32,
     "bounding_box": {
       "min": [
-        -5.0,
-        -3.0
+        0.0,
+        0.0
       ],
       "max": [
-        5.0,
-        3.0
+        20.2184,
+        14.3256
       ]
     },
     "units": "meters",
     "origin_normalized": true,
     "unit_detection": {
-      "scale_to_m": 1.0,
-      "unit_name": "metres",
-      "insunits": 6,
-      "method": "header",
-      "confidence": 0.97,
-      "reason": "$INSUNITS=6 declares metres"
+      "scale_to_m": 0.0254,
+      "unit_name": "inches",
+      "method": "evidence",
+      "confidence": 0.98,
+      "reason": "$INSUNITS=4 declares millimetres, but the drawing's own geometry says inches (scores: inches 9.79 vs millimetres -1.00) \u2014 82% of parallel-pair distances are plausible wall thicknesses; modal 0.152 m x232, 0.102 m x198, 0.305 m x114; 94% of dimension measurements are whole numbers, consistent with an integer drawing unit; plan would be 20.4 m across",
+      "insunits": 4,
+      "conflict": "$INSUNITS=4 declares millimetres, but the drawing's own geometry says inches (scores: inches 9.79 vs millimetres -1.00)",
+      "candidates": [
+        {
+          "unit": "inches",
+          "scale_to_m": 0.0254,
+          "score": 9.791,
+          "reasons": [
+            "82% of parallel-pair distances are plausible wall thicknesses; modal 0.152 m x232, 0.102 m x198, 0.305 m x114",
+            "94% of dimension measurements are whole numbers, consistent with an integer drawing unit",
+            "plan would be 20.4 m across"
+          ]
+        },
+        {
+          "unit": "centimetres",
+          "scale_to_m": 0.01,
+          "score": 7.397,
+          "reasons": [
+            "51% of parallel-pair distances are plausible wall thicknesses; modal 0.060 m x169, 0.120 m x114, 0.080 m x109",
+            "94% of dimension measurements are whole numbers, consistent with an integer drawing unit",
+            "plan would be 8.0 m across"
+          ]
+        },
+        {
+          "unit": "feet",
+          "scale_to_m": 0.3048,
+          "score": 2.069,
+          "reasons": [
+            "6% of parallel-pair distances are plausible wall thicknesses; modal 0.457 m x23, 0.419 m x21, 0.305 m x18",
+            "plan would be 244.8 m across"
+          ]
+        },
+        {
+          "unit": "millimetres",
+          "scale_to_m": 0.001,
+          "score": -1.0,
+          "reasons": [
+            "rejected: plan would be 0.80 m across, outside the plausible 3-400 m",
+            "$INSUNITS=4 declares millimetres (+1.50)"
+          ],
+          "declared": true
+        },
+        {
+          "unit": "metres",
+          "scale_to_m": 1.0,
+          "score": -1.0,
+          "reasons": [
+            "rejected: plan would be 803.00 m across, outside the plausible 3-400 m"
+          ]
+        }
+      ]
     },
     "north": {
       "heading_deg": 270.0,
       "source": "cad_metadata",
-      "confidence": 0.95,
-      "reason": "$NORTHDIRECTION=0.0000 rad"
+      "confidence": 0.9,
+      "reason": "$NORTHDIRECTION"
     },
-    "extractor": "cad.reader v1.0"
+    "extractor": "recon.pipeline archx3d.ir/2.0",
+    "wall_height": 3.0,
+    "validation": {
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "$INSUNITS=4 declares millimetres, but the drawing's own geometry says inches (scores: inches 9.79 vs millimetres -1.00)",
+        "the walls form 2 disconnected groups (139, 4 m); this is normal for a sheet carrying more than one structure"
+      ],
+      "checks": {
+        "size_m": [
+          20.218,
+          14.326
+        ],
+        "wall_count": 32,
+        "wall_length_m": 143.41,
+        "thickness_profile": {
+          "exterior": 0.1524,
+          "interior": 0.1016
+        },
+        "wall_islands": 2,
+        "island_lengths_m": [
+          139.1,
+          4.3
+        ],
+        "wall_length_enclosing_nothing_m": 0.0,
+        "room_count": 22,
+        "floor_area_m2": 176.05,
+        "footprint_area_m2": 210.08,
+        "room_overlaps": 0,
+        "rooms_outside_envelope": 0,
+        "area_coverage": 0.838,
+        "openings": {
+          "door": 10,
+          "garage": 1,
+          "cased": 10,
+          "window": 7
+        },
+        "openings_out_of_bounds": 0,
+        "annotation_suspects": 0,
+        "annotation_suspect_length_m": 0
+      }
+    }
   },
   "walls": [
     {
       "start": [
-        -5.0,
-        -3.0
+        0.0762,
+        14.2494
       ],
       "end": [
-        5.0,
-        -3.0
+        17.6022,
+        14.2494
       ],
-      "source_entity": "LINE",
-      "layer": "WALLS"
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "exterior",
+      "wall_id": "w1"
     },
     {
       "start": [
-        5.0,
-        -3.0
+        17.6022,
+        0.0762
       ],
       "end": [
-        5.0,
-        3.0
+        17.6022,
+        14.2494
       ],
-      "source_entity": "LINE",
-      "layer": "WALLS"
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "exterior",
+      "wall_id": "w2"
     },
     {
       "start": [
-        5.0,
-        3.0
+        0.0762,
+        5.2578
       ],
       "end": [
-        -5.0,
-        3.0
+        0.0762,
+        14.2494
       ],
-      "source_entity": "LINE",
-      "layer": "WALLS"
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "exterior",
+      "wall_id": "w3"
     },
     {
       "start": [
-        -5.0,
-        3.0
+        8.6445,
+        6.5786
       ],
       "end": [
-        -5.0,
-        -3.0
+        17.6022,
+        6.5786
       ],
-      "source_entity": "LINE",
-      "layer": "WALLS"
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "interior",
+      "wall_id": "w4"
     },
     {
       "start": [
-        1.0,
-        -3.0
+        0.0762,
+        8.7376
       ],
       "end": [
-        1.0,
-        3.0
+        8.636,
+        8.7376
       ],
-      "source_entity": "LINE",
-      "layer": "WALLS"
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w5"
+    },
+    {
+      "start": [
+        11.0236,
+        8.7376
+      ],
+      "end": [
+        14.1478,
+        8.7376
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w6"
+    },
+    {
+      "start": [
+        10.9982,
+        0.0762
+      ],
+      "end": [
+        17.6022,
+        0.0762
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "exterior",
+      "wall_id": "w7"
+    },
+    {
+      "start": [
+        10.9982,
+        0.0762
+      ],
+      "end": [
+        11.0109,
+        6.5786
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "exterior",
+      "wall_id": "w8"
+    },
+    {
+      "start": [
+        0.0762,
+        9.8552
+      ],
+      "end": [
+        4.572,
+        9.8552
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w9"
+    },
+    {
+      "start": [
+        6.4008,
+        9.8552
+      ],
+      "end": [
+        8.2296,
+        9.8552
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w10"
+    },
+    {
+      "start": [
+        20.1676,
+        9.0805
+      ],
+      "end": [
+        20.1676,
+        13.3731
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w11"
+    },
+    {
+      "start": [
+        8.2296,
+        9.8552
+      ],
+      "end": [
+        8.2296,
+        14.2494
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w12"
+    },
+    {
+      "start": [
+        6.604,
+        8.7376
+      ],
+      "end": [
+        6.604,
+        14.2494
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w13"
+    },
+    {
+      "start": [
+        4.3124,
+        4.6482
+      ],
+      "end": [
+        4.3349,
+        14.2494
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w14"
+    },
+    {
+      "start": [
+        0.0762,
+        5.2578
+      ],
+      "end": [
+        4.3201,
+        5.2578
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "exterior",
+      "wall_id": "w15"
+    },
+    {
+      "start": [
+        7.9502,
+        5.2578
+      ],
+      "end": [
+        8.6614,
+        5.2578
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "exterior",
+      "wall_id": "w16"
+    },
+    {
+      "start": [
+        4.3349,
+        12.4206
+      ],
+      "end": [
+        8.2296,
+        12.4206
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w17"
+    },
+    {
+      "start": [
+        4.3124,
+        4.6482
+      ],
+      "end": [
+        8.6692,
+        4.6482
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "exterior",
+      "wall_id": "w18"
+    },
+    {
+      "start": [
+        4.3349,
+        10.5156
+      ],
+      "end": [
+        8.2296,
+        10.5156
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w19"
+    },
+    {
+      "start": [
+        14.1478,
+        6.5786
+      ],
+      "end": [
+        14.1478,
+        8.7376
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w20"
+    },
+    {
+      "start": [
+        12.446,
+        6.5786
+      ],
+      "end": [
+        12.446,
+        8.7376
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w21"
+    },
+    {
+      "start": [
+        11.0109,
+        6.5786
+      ],
+      "end": [
+        11.0236,
+        8.7376
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w22"
+    },
+    {
+      "start": [
+        8.6445,
+        6.5786
+      ],
+      "end": [
+        8.636,
+        8.7376
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w23"
+    },
+    {
+      "start": [
+        8.0308,
+        12.4206
+      ],
+      "end": [
+        9.8596,
+        14.2494
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w24"
+    },
+    {
+      "start": [
+        13.5128,
+        8.7376
+      ],
+      "end": [
+        13.5128,
+        10.2616
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w25"
+    },
+    {
+      "start": [
+        8.6692,
+        4.6482
+      ],
+      "end": [
+        8.6445,
+        6.5786
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "interior",
+      "wall_id": "w26"
+    },
+    {
+      "start": [
+        7.9248,
+        7.62
+      ],
+      "end": [
+        7.9248,
+        10.5156
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w27"
+    },
+    {
+      "start": [
+        3.2766,
+        8.7376
+      ],
+      "end": [
+        3.2766,
+        9.8552
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w28"
+    },
+    {
+      "start": [
+        2.667,
+        8.7376
+      ],
+      "end": [
+        2.667,
+        9.8552
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w29"
+    },
+    {
+      "start": [
+        7.9248,
+        7.8232
+      ],
+      "end": [
+        8.6396,
+        7.8232
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1016,
+      "kind": "interior",
+      "wall_id": "w30"
+    },
+    {
+      "start": [
+        7.9502,
+        4.6482
+      ],
+      "end": [
+        7.9502,
+        5.2578
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "exterior",
+      "wall_id": "w31"
+    },
+    {
+      "start": [
+        4.3124,
+        4.6482
+      ],
+      "end": [
+        4.3201,
+        5.2578
+      ],
+      "source_entity": "WALL",
+      "layer": "xref-Bishop-Overland-08$0$A-WALL",
+      "thickness": 0.1524,
+      "kind": "exterior",
+      "wall_id": "w32"
     }
   ],
-  "cad": {
-    "schema_version": "1.0",
-    "source_path": "C:\\Users\\lenovo\\Documents\\GitHub\\ArchX3D\\test_floorplan.dxf",
-    "dxf_version": "AC1024",
-    "units": {
-      "scale_to_m": 1.0,
-      "unit_name": "metres",
-      "insunits": 6,
-      "method": "header",
-      "confidence": 0.97,
-      "reason": "$INSUNITS=6 declares metres"
+  "rooms": [
+    {
+      "id": "r1",
+      "label": "MASTER BEDROOM",
+      "room_type": "bedroom",
+      "area": 17.542,
+      "centroid": [
+        2.2157,
+        12.0405
+      ],
+      "polygon": [
+        [
+          0.1564,
+          14.1692
+        ],
+        [
+          4.2799,
+          14.1692
+        ],
+        [
+          4.2699,
+          9.91
+        ],
+        [
+          0.1564,
+          9.91
+        ]
+      ],
+      "is_exterior": false
     },
-    "north": {
-      "heading_deg": 270.0,
-      "source": "cad_metadata",
-      "confidence": 0.95,
-      "reason": "$NORTHDIRECTION=0.0000 rad"
+    {
+      "id": "r2",
+      "label": "W.I.C.",
+      "room_type": "closet",
+      "area": 2.475,
+      "centroid": [
+        1.3843,
+        9.2964
+      ],
+      "polygon": [
+        [
+          2.6122,
+          8.7924
+        ],
+        [
+          0.1564,
+          8.7924
+        ],
+        [
+          0.1564,
+          9.8004
+        ],
+        [
+          2.6122,
+          9.8004
+        ]
+      ],
+      "is_exterior": false
     },
-    "layers": [
-      {
-        "name": "WALLS",
-        "color": 7,
-        "linetype": "Continuous",
-        "frozen": false,
-        "off": false,
-        "locked": false,
-        "entity_count": 5,
-        "role": "wall",
-        "confidence": 0.85,
-        "reason": "layer name contains 'WALLS'",
-        "convention": "keyword"
-      },
-      {
-        "name": "0",
-        "color": 7,
-        "linetype": "Continuous",
-        "frozen": false,
-        "off": false,
-        "locked": false,
-        "entity_count": 0,
-        "role": "unknown",
-        "confidence": 0.0,
-        "reason": "default layer '0' carries no semantic intent",
-        "convention": "none"
-      },
-      {
-        "name": "Defpoints",
-        "color": 7,
-        "linetype": "Continuous",
-        "frozen": false,
-        "off": false,
-        "locked": false,
-        "entity_count": 0,
-        "role": "construction",
-        "confidence": 0.85,
-        "reason": "layer name contains 'DEFPOINTS'",
-        "convention": "keyword"
-      }
-    ],
-    "segments": [
-      {
-        "uid": "seg_09e19071aa",
-        "dxftype": "LINE",
-        "layer": "WALLS",
-        "source": "cad_layer",
-        "confidence": 1.0,
-        "reason": "",
-        "start": [
-          -5.0,
-          -3.0
+    {
+      "id": "r3",
+      "label": "MSTR. BATH",
+      "room_type": "bathroom",
+      "area": 3.661,
+      "centroid": [
+        5.4684,
+        13.322
+      ],
+      "polygon": [
+        [
+          4.3895,
+          14.1692
         ],
-        "end": [
-          5.0,
-          -3.0
+        [
+          6.5492,
+          14.1692
         ],
-        "role": "wall",
-        "tessellated": false
-      },
-      {
-        "uid": "seg_a334d57af4",
-        "dxftype": "LINE",
-        "layer": "WALLS",
-        "source": "cad_layer",
-        "confidence": 1.0,
-        "reason": "",
-        "start": [
-          5.0,
-          -3.0
+        [
+          6.5492,
+          12.4754
         ],
-        "end": [
-          5.0,
-          3.0
-        ],
-        "role": "wall",
-        "tessellated": false
-      },
-      {
-        "uid": "seg_042a8e968f",
-        "dxftype": "LINE",
-        "layer": "WALLS",
-        "source": "cad_layer",
-        "confidence": 1.0,
-        "reason": "",
-        "start": [
-          5.0,
-          3.0
-        ],
-        "end": [
-          -5.0,
-          3.0
-        ],
-        "role": "wall",
-        "tessellated": false
-      },
-      {
-        "uid": "seg_108e3909fb",
-        "dxftype": "LINE",
-        "layer": "WALLS",
-        "source": "cad_layer",
-        "confidence": 1.0,
-        "reason": "",
-        "start": [
-          -5.0,
-          3.0
-        ],
-        "end": [
-          -5.0,
-          -3.0
-        ],
-        "role": "wall",
-        "tessellated": false
-      },
-      {
-        "uid": "seg_6b898cfbcd",
-        "dxftype": "LINE",
-        "layer": "WALLS",
-        "source": "cad_layer",
-        "confidence": 1.0,
-        "reason": "",
-        "start": [
-          1.0,
-          -3.0
-        ],
-        "end": [
-          1.0,
-          3.0
-        ],
-        "role": "wall",
-        "tessellated": false
-      }
-    ],
-    "polylines": [],
-    "blocks": [],
-    "texts": [],
-    "dimensions": [],
-    "hatches": [],
-    "origin_offset": [
-      5.0,
-      3.0
-    ],
-    "bounds_min": [
-      -5.0,
-      -3.0
-    ],
-    "bounds_max": [
-      5.0,
-      3.0
-    ],
-    "stats": {
-      "elapsed_s": 0.01,
-      "layers": 3,
-      "layer_roles": {
-        "construction": 1,
-        "unknown": 1,
-        "wall": 1
-      },
-      "segments": 5,
-      "wall_segments": 5,
-      "segments_dropped_tiny": 0,
-      "polylines": 0,
-      "closed_polylines": 0,
-      "blocks": 0,
-      "block_categories": {},
-      "texts": 0,
-      "room_labels": 0,
-      "text_roles": {},
-      "dimensions": 0,
-      "hatches": 0,
-      "entity_types": {
-        "LINE": 5
-      },
-      "skipped_types": {}
+        [
+          4.3856,
+          12.4754
+        ]
+      ],
+      "is_exterior": false
     },
-    "warnings": []
-  }
+    {
+      "id": "r4",
+      "label": null,
+      "room_type": "unknown",
+      "area": 3.572,
+      "centroid": [
+        5.4652,
+        9.6232
+      ],
+      "polygon": [
+        [
+          6.5492,
+          8.7924
+        ],
+        [
+          4.3769,
+          8.7924
+        ],
+        [
+          4.3793,
+          9.8004
+        ],
+        [
+          4.6228,
+          9.8004
+        ],
+        [
+          4.6228,
+          9.91
+        ],
+        [
+          4.3795,
+          9.91
+        ],
+        [
+          4.3808,
+          10.4608
+        ],
+        [
+          6.5492,
+          10.4608
+        ],
+        [
+          6.5492,
+          9.91
+        ],
+        [
+          6.35,
+          9.91
+        ],
+        [
+          6.35,
+          9.8004
+        ],
+        [
+          6.5492,
+          9.8004
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r5",
+      "label": "W.I.C.",
+      "room_type": "closet",
+      "area": 3.889,
+      "centroid": [
+        5.4662,
+        11.4678
+      ],
+      "polygon": [
+        [
+          6.5492,
+          10.5704
+        ],
+        [
+          4.3811,
+          10.5704
+        ],
+        [
+          4.3853,
+          12.3658
+        ],
+        [
+          6.5492,
+          12.3658
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r6",
+      "label": "TOIL.",
+      "room_type": "bathroom",
+      "area": 2.554,
+      "centroid": [
+        7.413,
+        13.3266
+      ],
+      "polygon": [
+        [
+          6.6588,
+          14.1692
+        ],
+        [
+          8.1748,
+          14.1692
+        ],
+        [
+          8.1748,
+          12.6421
+        ],
+        [
+          8.0081,
+          12.4754
+        ],
+        [
+          6.6588,
+          12.4754
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r7",
+      "label": null,
+      "room_type": "unknown",
+      "area": 1.005,
+      "centroid": [
+        8.7569,
+        13.6967
+      ],
+      "polygon": [
+        [
+          8.2844,
+          14.1692
+        ],
+        [
+          9.7019,
+          14.1692
+        ],
+        [
+          8.2844,
+          12.7517
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r8",
+      "label": "GREAT ROOM",
+      "room_type": "living",
+      "area": 18.036,
+      "centroid": [
+        10.6605,
+        11.7883
+      ],
+      "polygon": [
+        [
+          12.9656,
+          10.4744
+        ],
+        [
+          12.1861,
+          9.2862
+        ],
+        [
+          8.2844,
+          10.2557
+        ],
+        [
+          8.2844,
+          12.5967
+        ],
+        [
+          9.8569,
+          14.1692
+        ],
+        [
+          12.2989,
+          14.1692
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r9",
+      "label": "ENTRY",
+      "room_type": "circulation",
+      "area": 8.977,
+      "centroid": [
+        9.8099,
+        8.4608
+      ],
+      "polygon": [
+        [
+          12.1861,
+          9.2862
+        ],
+        [
+          12.2364,
+          8.7924
+        ],
+        [
+          10.9728,
+          8.7924
+        ],
+        [
+          10.9728,
+          8.7887
+        ],
+        [
+          10.9691,
+          8.7887
+        ],
+        [
+          10.9566,
+          6.6588
+        ],
+        [
+          8.699,
+          6.6588
+        ],
+        [
+          8.6906,
+          8.7886
+        ],
+        [
+          8.6868,
+          8.7886
+        ],
+        [
+          8.6868,
+          8.7924
+        ],
+        [
+          7.9796,
+          8.7924
+        ],
+        [
+          7.9796,
+          9.8004
+        ],
+        [
+          8.2804,
+          9.8004
+        ],
+        [
+          8.2804,
+          9.8044
+        ],
+        [
+          8.2844,
+          9.8044
+        ],
+        [
+          8.2844,
+          10.2557
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r10",
+      "label": "KITCHEN",
+      "room_type": "kitchen",
+      "area": 15.834,
+      "centroid": [
+        15.422,
+        8.7924
+      ],
+      "polygon": [
+        [
+          12.1861,
+          9.2862
+        ],
+        [
+          12.9656,
+          10.4744
+        ],
+        [
+          17.522,
+          10.6584
+        ],
+        [
+          17.522,
+          6.6588
+        ],
+        [
+          14.2026,
+          6.6588
+        ],
+        [
+          14.2026,
+          8.7884
+        ],
+        [
+          14.1986,
+          8.7884
+        ],
+        [
+          14.1986,
+          8.7924
+        ],
+        [
+          13.5676,
+          8.7924
+        ],
+        [
+          13.5676,
+          10.3124
+        ],
+        [
+          13.458,
+          10.3124
+        ],
+        [
+          13.458,
+          8.7924
+        ],
+        [
+          12.2364,
+          8.7924
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r11",
+      "label": "DINING ROOM",
+      "room_type": "dining",
+      "area": 17.647,
+      "centroid": [
+        15.0513,
+        12.4072
+      ],
+      "polygon": [
+        [
+          12.9656,
+          10.4744
+        ],
+        [
+          12.2989,
+          14.1692
+        ],
+        [
+          17.522,
+          14.1692
+        ],
+        [
+          17.522,
+          10.6584
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r12",
+      "label": "UTIL.",
+      "room_type": "utility",
+      "area": 3.223,
+      "centroid": [
+        13.2969,
+        7.6708
+      ],
+      "polygon": [
+        [
+          12.5008,
+          6.6588
+        ],
+        [
+          12.5008,
+          8.6828
+        ],
+        [
+          14.093,
+          8.6828
+        ],
+        [
+          14.093,
+          6.6588
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r13",
+      "label": "2 CAR GARAGE",
+      "room_type": "garage",
+      "area": 40.825,
+      "centroid": [
+        14.3034,
+        3.3264
+      ],
+      "polygon": [
+        [
+          17.522,
+          0.1564
+        ],
+        [
+          11.0786,
+          0.1564
+        ],
+        [
+          11.0909,
+          6.4984
+        ],
+        [
+          17.522,
+          6.4984
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r14",
+      "label": "BEDROOM 2",
+      "room_type": "bedroom",
+      "area": 13.736,
+      "centroid": [
+        2.2098,
+        7.0109
+      ],
+      "polygon": [
+        [
+          4.2592,
+          5.338
+        ],
+        [
+          0.1564,
+          5.338
+        ],
+        [
+          0.1564,
+          8.6828
+        ],
+        [
+          4.267,
+          8.6828
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r15",
+      "label": "Pantry",
+      "room_type": "pantry",
+      "area": 2.67,
+      "centroid": [
+        11.7317,
+        7.6693
+      ],
+      "polygon": [
+        [
+          11.0662,
+          6.6588
+        ],
+        [
+          11.0781,
+          8.6828
+        ],
+        [
+          12.3912,
+          8.6828
+        ],
+        [
+          12.3912,
+          6.6588
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r16",
+      "label": null,
+      "room_type": "unknown",
+      "area": 0.945,
+      "centroid": [
+        3.7999,
+        9.2966
+      ],
+      "polygon": [
+        [
+          3.3314,
+          8.7924
+        ],
+        [
+          3.3314,
+          9.8004
+        ],
+        [
+          4.2697,
+          9.8004
+        ],
+        [
+          4.2673,
+          8.7924
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r17",
+      "label": "BEDROOM 3",
+      "room_type": "bedroom",
+      "area": 10.465,
+      "centroid": [
+        5.7097,
+        6.8065
+      ],
+      "polygon": [
+        [
+          6.6245,
+          4.7284
+        ],
+        [
+          4.3936,
+          4.7284
+        ],
+        [
+          4.4013,
+          5.333
+        ],
+        [
+          4.3963,
+          5.333
+        ],
+        [
+          4.3963,
+          5.338
+        ],
+        [
+          4.3688,
+          5.338
+        ],
+        [
+          4.3766,
+          8.6828
+        ],
+        [
+          7.4212,
+          8.6828
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r18",
+      "label": "CLOSET",
+      "room_type": "closet",
+      "area": 5.051,
+      "centroid": [
+        7.689,
+        6.4456
+      ],
+      "polygon": [
+        [
+          7.4212,
+          8.6828
+        ],
+        [
+          7.87,
+          8.6828
+        ],
+        [
+          7.87,
+          7.5692
+        ],
+        [
+          7.9796,
+          7.5692
+        ],
+        [
+          7.9796,
+          7.7684
+        ],
+        [
+          8.585,
+          7.7684
+        ],
+        [
+          8.5894,
+          6.6588
+        ],
+        [
+          8.5683,
+          6.6588
+        ],
+        [
+          8.5683,
+          6.6538
+        ],
+        [
+          8.5633,
+          6.6538
+        ],
+        [
+          8.5802,
+          5.338
+        ],
+        [
+          7.874,
+          5.338
+        ],
+        [
+          7.874,
+          5.334
+        ],
+        [
+          7.87,
+          5.334
+        ],
+        [
+          7.87,
+          4.7284
+        ],
+        [
+          6.6245,
+          4.7284
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r19",
+      "label": "HALL",
+      "room_type": "circulation",
+      "area": 1.221,
+      "centroid": [
+        7.2644,
+        9.2964
+      ],
+      "polygon": [
+        [
+          7.87,
+          8.7924
+        ],
+        [
+          6.6588,
+          8.7924
+        ],
+        [
+          6.6588,
+          9.8004
+        ],
+        [
+          7.87,
+          9.8004
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r20",
+      "label": "BATH",
+      "room_type": "bathroom",
+      "area": 2.721,
+      "centroid": [
+        7.4167,
+        11.468
+      ],
+      "polygon": [
+        [
+          8.1748,
+          12.3658
+        ],
+        [
+          8.1748,
+          10.5704
+        ],
+        [
+          6.6588,
+          10.5704
+        ],
+        [
+          6.6588,
+          12.3658
+        ],
+        [
+          8.0137,
+          12.3658
+        ],
+        [
+          8.0336,
+          12.3459
+        ],
+        [
+          8.0535,
+          12.3658
+        ]
+      ],
+      "is_exterior": false
+    },
+    {
+      "id": "r21",
+      "label": "COVERED PORCH",
+      "room_type": "porch",
+      "area": 2.9,
+      "centroid": [
+        9.8351,
+        5.8357
+      ],
+      "polygon": [
+        [
+          10.922,
+          5.1816
+        ],
+        [
+          8.7426,
+          5.1816
+        ],
+        [
+          8.7257,
+          6.4984
+        ],
+        [
+          10.9305,
+          6.4984
+        ],
+        [
+          10.922,
+          2.1243
+        ]
+      ],
+      "is_exterior": true
+    },
+    {
+      "id": "r22",
+      "label": "COVERED DECK",
+      "room_type": "deck",
+      "area": 10.618,
+      "centroid": [
+        18.8976,
+        11.2268
+      ],
+      "polygon": [
+        [
+          20.1128,
+          13.4112
+        ],
+        [
+          20.1128,
+          9.0424
+        ],
+        [
+          17.6824,
+          9.0424
+        ],
+        [
+          17.6824,
+          13.4112
+        ]
+      ],
+      "is_exterior": true
+    }
+  ],
+  "openings": [
+    {
+      "id": "o1",
+      "kind": "door",
+      "wall_id": "w4",
+      "position": [
+        14.7701,
+        6.5786
+      ],
+      "width": 0.9144,
+      "height": 2.032,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o2",
+      "kind": "door",
+      "wall_id": "w4",
+      "position": [
+        10.2108,
+        6.5786
+      ],
+      "width": 0.9144,
+      "height": 2.032,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o3",
+      "kind": "door",
+      "wall_id": "w20",
+      "position": [
+        14.1478,
+        8.2169
+      ],
+      "width": 0.762,
+      "height": 2.032,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o4",
+      "kind": "door",
+      "wall_id": "w5",
+      "position": [
+        4.8387,
+        8.7376
+      ],
+      "width": 0.762,
+      "height": 2.032,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o5",
+      "kind": "door",
+      "wall_id": "w5",
+      "position": [
+        3.7973,
+        8.7376
+      ],
+      "width": 0.762,
+      "height": 2.032,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o6",
+      "kind": "door",
+      "wall_id": "w5",
+      "position": [
+        1.397,
+        8.7376
+      ],
+      "width": 0.762,
+      "height": 2.032,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o7",
+      "kind": "door",
+      "wall_id": "w9",
+      "position": [
+        3.8481,
+        9.8552
+      ],
+      "width": 0.762,
+      "height": 2.032,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o8",
+      "kind": "door",
+      "wall_id": "w17",
+      "position": [
+        5.4864,
+        12.4206
+      ],
+      "width": 0.762,
+      "height": 2.032,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o9",
+      "kind": "door",
+      "wall_id": "w10",
+      "position": [
+        7.7597,
+        9.8552
+      ],
+      "width": 0.7112,
+      "height": 2.032,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o10",
+      "kind": "door",
+      "wall_id": "w23",
+      "position": [
+        8.6378,
+        8.2802
+      ],
+      "width": 0.6096,
+      "height": 2.032,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o11",
+      "kind": "garage",
+      "wall_id": "w7",
+      "position": [
+        14.3002,
+        0.0762
+      ],
+      "width": 4.8768,
+      "height": 2.134,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o12",
+      "kind": "cased",
+      "wall_id": "w2",
+      "position": [
+        17.6022,
+        12.1412
+      ],
+      "width": 1.8288,
+      "height": 2.134,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o13",
+      "kind": "cased",
+      "wall_id": "w1",
+      "position": [
+        2.2352,
+        14.2494
+      ],
+      "width": 1.8288,
+      "height": 2.134,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o14",
+      "kind": "window",
+      "wall_id": "w1",
+      "position": [
+        11.7856,
+        14.2494
+      ],
+      "width": 1.8288,
+      "height": 1.118,
+      "sill_height": 0.914
+    },
+    {
+      "id": "o15",
+      "kind": "window",
+      "wall_id": "w15",
+      "position": [
+        2.2098,
+        5.2578
+      ],
+      "width": 1.524,
+      "height": 1.118,
+      "sill_height": 0.914
+    },
+    {
+      "id": "o16",
+      "kind": "window",
+      "wall_id": "w18",
+      "position": [
+        6.1214,
+        4.6482
+      ],
+      "width": 1.524,
+      "height": 1.118,
+      "sill_height": 0.914
+    },
+    {
+      "id": "o17",
+      "kind": "window",
+      "wall_id": "w1",
+      "position": [
+        7.4168,
+        14.2494
+      ],
+      "width": 1.2192,
+      "height": 1.118,
+      "sill_height": 0.914
+    },
+    {
+      "id": "o18",
+      "kind": "window",
+      "wall_id": "w2",
+      "position": [
+        17.6022,
+        8.3058
+      ],
+      "width": 0.9144,
+      "height": 1.118,
+      "sill_height": 0.914
+    },
+    {
+      "id": "o19",
+      "kind": "cased",
+      "wall_id": "w21",
+      "position": [
+        12.446,
+        7.8359
+      ],
+      "width": 0.7621,
+      "height": 2.134,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o20",
+      "kind": "cased",
+      "wall_id": "w13",
+      "position": [
+        6.604,
+        13.3223
+      ],
+      "width": 0.7621,
+      "height": 2.134,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o21",
+      "kind": "window",
+      "wall_id": "w1",
+      "position": [
+        17.018,
+        14.2494
+      ],
+      "width": 0.6096,
+      "height": 1.118,
+      "sill_height": 0.914
+    },
+    {
+      "id": "o22",
+      "kind": "window",
+      "wall_id": "w1",
+      "position": [
+        14.3764,
+        14.2494
+      ],
+      "width": 0.6096,
+      "height": 1.118,
+      "sill_height": 0.914
+    },
+    {
+      "id": "o23",
+      "kind": "cased",
+      "wall_id": "w11",
+      "position": [
+        20.1676,
+        11.2268
+      ],
+      "width": 4.2926,
+      "height": 2.134,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o24",
+      "kind": "cased",
+      "wall_id": "w14",
+      "position": [
+        4.3319,
+        12.9414
+      ],
+      "width": 0.762,
+      "height": 2.134,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o25",
+      "kind": "cased",
+      "wall_id": "w14",
+      "position": [
+        4.3233,
+        9.2964
+      ],
+      "width": 1.1176,
+      "height": 2.134,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o26",
+      "kind": "cased",
+      "wall_id": "w13",
+      "position": [
+        6.604,
+        9.2964
+      ],
+      "width": 1.1176,
+      "height": 2.134,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o27",
+      "kind": "cased",
+      "wall_id": "w19",
+      "position": [
+        7.3829,
+        10.5156
+      ],
+      "width": 1.6256,
+      "height": 2.134,
+      "sill_height": 0.0
+    },
+    {
+      "id": "o28",
+      "kind": "cased",
+      "wall_id": "w27",
+      "position": [
+        7.9248,
+        9.2964
+      ],
+      "width": 1.1176,
+      "height": 2.134,
+      "sill_height": 0.0
+    }
+  ],
+  "footprint": [
+    [
+      17.6784,
+      0.0
+    ],
+    [
+      10.922,
+      0.0
+    ],
+    [
+      10.922,
+      5.1816
+    ],
+    [
+      8.0264,
+      5.1816
+    ],
+    [
+      8.0264,
+      4.572
+    ],
+    [
+      4.2164,
+      4.572
+    ],
+    [
+      4.2164,
+      5.1816
+    ],
+    [
+      0.0,
+      5.1816
+    ],
+    [
+      0.0,
+      14.3256
+    ],
+    [
+      17.6784,
+      14.3256
+    ],
+    [
+      17.6784,
+      13.4112
+    ],
+    [
+      20.2184,
+      13.4112
+    ],
+    [
+      20.2184,
+      9.0424
+    ],
+    [
+      17.6784,
+      9.0424
+    ]
+  ]
 }

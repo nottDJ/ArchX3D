@@ -198,9 +198,23 @@ const CAMERA_KEY_PREFIX = "archx3d.viewer.camera.v1:";
  * Resuming the position from a *different* building would drop you inside a
  * wall, or in empty space a hundred metres away. Keying on the model URL means
  * every project remembers its own vantage point.
+ *
+ * Keyed on the path and query, not the origin. The desktop app starts its
+ * backend on whatever port is free, so the same project's model is
+ * `127.0.0.1:50814/...` in one session and `127.0.0.1:64077/...` in the next;
+ * keying on the whole URL meant a saved pose could never be found again.
  */
 export function cameraStorageKey(modelUrl: string): string {
-  return CAMERA_KEY_PREFIX + modelUrl;
+  let identity = modelUrl;
+  try {
+    const url = new URL(modelUrl);
+    if (url.protocol === "http:" || url.protocol === "https:") {
+      identity = url.pathname + url.search;
+    }
+  } catch {
+    // A relative or unparseable URL is already origin-free.
+  }
+  return CAMERA_KEY_PREFIX + identity;
 }
 
 /** `localStorage` access that survives private mode, quota errors and SSR. */

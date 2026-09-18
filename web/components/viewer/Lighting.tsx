@@ -36,12 +36,36 @@
 
 import { Environment } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
-import { useEffect, useMemo } from "react";
+import { Component, Suspense, useEffect, useMemo, type ReactNode } from "react";
 import * as THREE from "three";
 
 import type { Box } from "@/lib/viewer/bounds";
 import { boxCenter, boxRadius } from "@/lib/viewer/bounds";
+import { environmentUrl } from "@/lib/viewer/environment";
 import type { EnvironmentPreset } from "@/types/viewer";
+
+/**
+ * Contains a failure of something the scene can do without.
+ *
+ * The environment map is reflections and a little fill; the building is the
+ * point. An HDRI that cannot be read must cost the reflections, not the whole
+ * viewer route — which is what an uncaught loader error inside the canvas did.
+ */
+class Optional extends Component<{ readonly what: string; readonly children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    console.warn(`[viewer] ${this.props.what} unavailable; continuing without it`, error);
+  }
+
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
 export interface LightingProps {
   readonly bounds: Box | null;
@@ -125,8 +149,22 @@ export function Lighting({
         `background={false}` keeps the HDRI as reflections only. Showing it
         would put a photographic sky behind an architectural model, which reads
         as a render of a render.
+
+        Loaded from the app's own files, never a CDN (see
+        lib/viewer/environment.ts), and behind its own Suspense and boundary so
+        neither a slow read nor a failed one holds back the model. The `key`
+        resets the boundary when the preset changes, so choosing another
+        environment retries.
       */}
-      <Environment preset={preset} background={false} environmentIntensity={ambientIntensity} />
+      <Optional key={preset} what={`environment "${preset}"`}>
+        <Suspense fallback={null}>
+          <Environment
+            files={environmentUrl(preset)}
+            background={false}
+            environmentIntensity={ambientIntensity}
+          />
+        </Suspense>
+      </Optional>
 
       {/* A little omnidirectional fill so interiors are never pitch black when
           the model carries no luminaires — a DXF-only build has none. */}

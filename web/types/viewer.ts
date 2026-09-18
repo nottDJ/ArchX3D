@@ -304,6 +304,15 @@ export interface RoomInfo {
   readonly style?: string;
   readonly area_m2: number;
   readonly ceiling_height: number;
+  /**
+   * Height of this room's floor above the model datum, in metres.
+   *
+   * Manifest 1.1 and later. A first floor drawn beside the ground floor is
+   * built above it, and `bounds_min`/`bounds_max` record only the ground
+   * plane; without this a room on an upper storey is indistinguishable from
+   * one below it. Older files have no such field and read as 0.
+   */
+  readonly elevation: number;
   readonly bounds_min: readonly [number, number];
   readonly bounds_max: readonly [number, number];
   readonly polygon: ReadonlyArray<readonly [number, number]>;

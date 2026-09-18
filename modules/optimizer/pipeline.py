@@ -122,10 +122,14 @@ class PipelineExecutor:
         """Create the working tree and copy in what generation needs."""
         for relative in ("data", "output"):
             os.makedirs(os.path.join(self.work_dir, relative), exist_ok=True)
-        source = os.path.join(self.base_dir, "data", "geometry.json")
-        target = os.path.join(self.work_dir, "data", "geometry.json")
-        if os.path.exists(source) and not os.path.exists(target):
-            shutil.copy2(source, target)
+        # building.json is the model the shell is extruded from; without it in
+        # the working tree a rebuild has no architecture to build, and the
+        # generator refuses rather than guessing walls from geometry.json.
+        for name in ("geometry.json", "building.json"):
+            source = os.path.join(self.base_dir, "data", name)
+            target = os.path.join(self.work_dir, "data", name)
+            if os.path.exists(source) and not os.path.exists(target):
+                shutil.copy2(source, target)
 
     # -- the cycle ----------------------------------------------------------
 

@@ -1,36 +1,38 @@
 /**
- * ArchX3D — local project registry
- * ================================
- * The index of projects this browser has created.
+ * ArchX3D — project registry
+ * ==========================
+ * The projects the dashboard lists, and the preferences a person set on them.
  *
- * Why this exists
- * ---------------
- * The backend has no list endpoint. It can create a project, and it can return
- * one by id (`GET /api/projects/{id}`), but there is no `GET /api/projects` —
- * so there is no server-side answer to "what have I made?". A dashboard needs
- * one.
+ * Where the truth lives
+ * ---------------------
+ * Which projects exist is the backend's to say: `GET /api/projects` reads the
+ * projects directory on disk. This module keeps, per browser, only what the
+ * server does not know — a custom name, a pin, when a project was last opened,
+ * and which projects the user asked to hide — and adopts any project found on
+ * disk that it has no record of (see `lib/projectIndex.ts`).
  *
- * The honest options were: change the backend (out of scope), invent plausible
- * data (never), or record locally what the client already knows. This is the
- * third. Every id here was returned by the server to this browser, and every
- * field beyond the id is re-fetched from the server rather than trusted from
- * cache — so the dashboard shows real state, not a local guess at it.
+ * This used to be the *only* index: the backend had no list endpoint, so a
+ * project was discoverable only if this browser remembered creating it.
+ * Clearing site data, or a renewed WebView2 profile in the desktop app, left
+ * every project folder on disk and none of them reachable. Now losing this
+ * browser's data costs pins and custom names, never projects.
  *
- * What that costs, stated plainly
- * -------------------------------
- * The index is per-browser. Clearing site data loses it; a second machine does
- * not see it; a colleague does not see it. The UI says so rather than
- * pretending otherwise, and `docs/FRONTEND_ARCHITECTURE.md` records the single
- * endpoint that would make it server-side.
- *
- * Nothing is lost when the index is: the projects still exist on the server
- * and a direct link still works. Only discovery is local.
+ * Every field beyond the id is still re-fetched from the server rather than
+ * trusted from cache, so the dashboard shows real state, not a local guess.
  */
 
 import { API_BASE_URL } from "./api";
+import {
+  adoptServerProjects,
+  defaultName,
+  summarise,
+  type ManifestSummary,
+} from "./projectIndex";
 import type { ProjectManifest } from "./wizard";
 
 const STORAGE_KEY = "archx3d.projects.v1";
+/** Ids the user removed from the list. Their folders are still on disk. */
+const HIDDEN_KEY = "archx3d.projects.hidden.v1";
 
 /** What the client records at creation time and the server does not know. */
 export interface ProjectRecord {
@@ -84,6 +86,25 @@ function write(records: readonly ProjectRecord[]): void {
     // reload, which is a degradation rather than a failure.
   }
   notify();
+}
+
+function readHidden(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const parsed: unknown = JSON.parse(window.localStorage.getItem(HIDDEN_KEY) ?? "[]");
+    return new Set(Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === "string") : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function writeHidden(hidden: ReadonlySet<string>): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(HIDDEN_KEY, JSON.stringify([...hidden]));
+  } catch {
+    // Same degradation as the index itself.
+  }
 }
 
 /** Untrusted input — this survives across versions and is user-editable. */
@@ -179,8 +200,26 @@ export function register(
     ...summarise(manifest),
   };
 
+  // Creating (or re-uploading into) a project the user once hid brings it back.
+  const hidden = readHidden();
+  if (hidden.delete(record.id)) writeHidden(hidden);
+
   write([record, ...records.filter((r) => r.id !== record.id)]);
   return record;
+}
+
+/**
+ * Add every project the server has on disk that this browser does not know.
+ *
+ * Writes only when something was actually adopted, so calling it on every
+ * dashboard load does not churn storage or re-render subscribers.
+ */
+export function adopt(manifests: readonly ManifestSummary[]): number {
+  const records = read();
+  const merged = adoptServerProjects(records, manifests, readHidden(), new Date().toISOString());
+  if (merged === records) return 0;
+  write(merged as ProjectRecord[]);
+  return merged.length - records.length;
 }
 
 /** Refresh the cached summary from a manifest the caller already has. */
@@ -212,18 +251,25 @@ export function setPinned(id: string, pinned: boolean): void {
 }
 
 /**
- * Remove from the local index.
+ * Hide a project from this list.
  *
- * Deliberately not called "delete": the project still exists on the server,
- * and there is no endpoint to remove it. Presenting this as deletion would be
- * a lie the user only discovers when their disk fills up. The UI says
- * "Remove from list" and explains where the files remain.
+ * Deliberately not called "delete": the project's folder stays on disk.
+ * Presenting this as deletion would be a lie the user only discovers when
+ * their disk fills up. Because the list is now rebuilt from what is on disk,
+ * the id is remembered as hidden — otherwise the project would reappear on the
+ * next load.
  */
 export function forget(id: string): void {
+  const hidden = readHidden();
+  hidden.add(id);
+  writeHidden(hidden);
   write(read().filter((record) => record.id !== id));
 }
 
 export function forgetAll(): void {
+  const hidden = readHidden();
+  for (const record of read()) hidden.add(record.id);
+  writeHidden(hidden);
   write([]);
 }
 
@@ -239,29 +285,8 @@ function update(id: string, patch: Partial<ProjectRecord>): void {
 /* Derivation                                                                 */
 /* -------------------------------------------------------------------------- */
 
-function summarise(manifest: ProjectManifest): Partial<ProjectRecord> {
-  const images = manifest.images ?? [];
-  return {
-    stage: manifest.stage,
-    dxfName: manifest.dxf?.filename,
-    imageCount: images.length,
-    bytes:
-      (manifest.dxf?.bytes ?? 0) +
-      images.reduce((total, image) => total + (image.bytes ?? 0), 0),
-  };
-}
-
-/**
- * A name a person would recognise.
- *
- * The DXF filename minus its extension: it is what the user called the file,
- * so it is what they think the project is. A hex id is not a name.
- */
-function defaultName(manifest: ProjectManifest): string {
-  const filename = manifest.dxf?.filename;
-  if (!filename) return "Untitled project";
-  return filename.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").trim() || "Untitled project";
-}
+// `summarise` and `defaultName` live in `lib/projectIndex.ts`, shared with the
+// on-disk adoption so a rediscovered project is named exactly as a new one is.
 
 /* -------------------------------------------------------------------------- */
 /* Server join                                                                */
@@ -286,6 +311,25 @@ export async function fetchManifest(
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`Could not load project ${id}`);
   return (await response.json()) as ProjectManifest;
+}
+
+/**
+ * Every project the backend has on disk.
+ *
+ * Returns `null` when the backend predates the list endpoint (404/405), so an
+ * older server degrades to the browser's own index rather than an empty list.
+ */
+export async function fetchProjectList(
+  signal?: AbortSignal,
+): Promise<ProjectManifest[] | null> {
+  const response = await fetch(`${API_BASE_URL}/api/projects`, {
+    signal,
+    headers: { Accept: "application/json" },
+  });
+  if (response.status === 404 || response.status === 405) return null;
+  if (!response.ok) throw new Error("Could not list projects");
+  const body = (await response.json()) as { projects?: ProjectManifest[] };
+  return Array.isArray(body.projects) ? body.projects : [];
 }
 
 /* -------------------------------------------------------------------------- */

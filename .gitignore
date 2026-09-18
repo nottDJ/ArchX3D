@@ -21,6 +21,10 @@ output/refinement/
 # Walkthrough frames: ~120 PNGs per build, regenerated every run.
 output/frames/
 output/sequence/
+# Per-run reconstruction evidence. Written on every build, and on every
+# refusal, from the DXF that produced it — a record of one run, not an input
+# to the next (see docs/RECONSTRUCTION.md).
+output/diagnostics/
 
 # Environment
 .env

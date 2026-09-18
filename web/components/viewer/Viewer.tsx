@@ -396,6 +396,8 @@ export function Viewer({
       {showWalkPrompt && (
         <button
           type="button"
+          // The one control allowed to take the pointer; see WALK_LOCK_SELECTOR.
+          data-walk-lock=""
           onClick={requestLock}
           className="absolute inset-0 z-20 flex cursor-pointer items-center justify-center bg-canvas/45 backdrop-blur-[2px] focus-visible:outline-none"
         >

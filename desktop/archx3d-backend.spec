@@ -23,12 +23,21 @@ MODULES = os.path.join(ROOT, "modules")
 PIPELINE_PACKAGES = [
     "cad", "vision", "semantic", "registration", "furnish",
     "evaluation", "optimizer", "planner", "render", "blender",
+    # The deterministic reconstruction engine. Imported by main.py and
+    # project_api.py rather than dispatched as a child, so PyInstaller only
+    # sees it through this list; without it a frozen build starts, accepts a
+    # DXF, and fails at the first stage of every generation.
+    "recon",
 ]
 
 hiddenimports = [
     # Top-level pipeline stages dispatched by --child.
     "dxf_extractor", "scene_analyzer", "style_generator", "video_stitcher",
     "project_api", "child_process", "app_paths", "server", "main",
+    # Checks an exported GLB against the architectural model it came from.
+    "glb_validate",
+    # Runs inside Blender's interpreter as a module import from modules/.
+    "blender_build",
     # uvicorn resolves its implementation classes by string name at runtime.
     "uvicorn.logging", "uvicorn.loops", "uvicorn.loops.auto",
     "uvicorn.protocols", "uvicorn.protocols.http", "uvicorn.protocols.http.auto",

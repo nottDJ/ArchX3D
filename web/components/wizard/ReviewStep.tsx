@@ -278,6 +278,24 @@ export function ReviewStep({ projectId, review, busy, onApply, onGenerate }: Rev
 
   return (
     <div className="space-y-6">
+      {/* ---- How this was analysed ------------------------------------ */}
+      {review.analysis && (
+        <section
+          aria-label="How this was analysed"
+          className="flex flex-wrap gap-x-5 gap-y-1 rounded-xl border border-line bg-surface px-4 py-3 text-[13px] text-secondary"
+        >
+          <span>Engine: <span className="text-primary">{review.analysis.engine}</span></span>
+          <span>AI: <span className="text-primary">{review.analysis.ai}</span></span>
+          <span>Network: <span className="text-primary">{review.analysis.network}</span></span>
+          <span>
+            Reference images:{" "}
+            <span className="text-primary">
+              {review.analysis.reference_images > 0 ? review.analysis.reference_images : "none (optional)"}
+            </span>
+          </span>
+        </section>
+      )}
+
       {/* ---- Summary ------------------------------------------------- */}
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="Rooms" value={`${review.totals.rooms_with_imagery}/${review.totals.rooms}`}

@@ -1,0 +1,30 @@
+{
+ "truth_units": "metres",
+ "frame": "drawing",
+ "units": "m",
+ "openings": [],
+ "walls": [],
+ "labels": [
+  {
+   "text": "BEDROOM",
+   "point": [
+    1.4,
+    3.2
+   ]
+  },
+  {
+   "text": "LIVING",
+   "point": [
+    6.4,
+    1.6
+   ]
+  },
+  {
+   "text": "KITCHEN",
+   "point": [
+    6.4,
+    5.4
+   ]
+  }
+ ]
+}

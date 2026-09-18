@@ -264,6 +264,53 @@ def delete_project(project_id: str) -> None:
     shutil.rmtree(project_dir(project_id), ignore_errors=True)
 
 
+def list_projects() -> Dict[str, Any]:
+    """Every project on disk, newest first — the authoritative project index.
+
+    The dashboard used to know about a project only if this browser had created
+    it and still remembered doing so (``localStorage``). Clearing the WebView's
+    data, or a renewed WebView2 profile, left every project folder intact on
+    disk and unreachable from the app. The projects directory is the truth; this
+    reads it.
+
+    A folder whose manifest cannot be read is reported under ``unreadable``
+    rather than dropped: a user whose project vanished from the list deserves to
+    know that its folder is still there and why it was not shown.
+    """
+    projects: List[Dict[str, Any]] = []
+    unreadable: List[Dict[str, str]] = []
+    if not os.path.isdir(PROJECTS_DIR):
+        return {"projects": projects, "unreadable": unreadable}
+
+    for entry in os.scandir(PROJECTS_DIR):
+        if not entry.is_dir():
+            continue
+        try:
+            project_id = _safe_project_id(entry.name)
+        except ValueError:
+            continue
+        manifest_path = os.path.join(entry.path, "manifest.json")
+        if not os.path.exists(manifest_path):
+            continue
+        try:
+            manifest = load_manifest(project_id)
+        except (OSError, ValueError) as exc:  # JSONDecodeError is a ValueError
+            unreadable.append({"project_id": project_id, "reason": str(exc)[:200]})
+            continue
+        if manifest.get("project_id") != project_id:
+            unreadable.append({"project_id": project_id,
+                               "reason": "manifest names a different project"})
+            continue
+        model = os.path.join(entry.path, "output", "model.glb")
+        manifest["has_model"] = os.path.isfile(model)
+        manifest["updated_at"] = time.strftime(
+            "%Y-%m-%dT%H:%M:%S", time.localtime(os.path.getmtime(manifest_path)))
+        projects.append(manifest)
+
+    projects.sort(key=lambda m: str(m.get("created_at") or ""), reverse=True)
+    return {"projects": projects, "unreadable": unreadable}
+
+
 # ---------------------------------------------------------------------------
 # Analysis
 # ---------------------------------------------------------------------------
@@ -288,34 +335,62 @@ def _run_analysis(job: Job, project_id: str, options: Dict[str, Any]) -> None:
     manifest = load_manifest(project_id)
 
     geometry_path = os.path.join(root, "data", "geometry.json")
+    building_path = os.path.join(root, "data", "building.json")
     graph_path = os.path.join(root, "data", "scene_graph.json")
     review_path = os.path.join(root, "data", "review.json")
     dxf_path = os.path.join(root, manifest["dxf"]["filename"])
 
     try:
-        # --- 1. DXF extraction --------------------------------------------
-        job.emit("EXTRACTING_DXF", "Parsing DXF layers and geometry...")
-        extract = subprocess.run(
-            child_command(
-                os.path.join(MODULES_DIR, "dxf_extractor.py"),
-                [dxf_path, geometry_path,
-                 options.get("layers", "WALLS"), str(options.get("scale", 1.0)), "16"],
-            ),
-            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=300,
-        )
-        if extract.returncode != 0 or not os.path.exists(geometry_path):
-            raise RuntimeError(f"DXF extraction failed: {_tail(extract.stderr)}")
+        # --- 1. DXF reconstruction ----------------------------------------
+        #
+        # In-process and deterministic. It must be the *same* reconstruction
+        # the build step uses: running one reader here and another in main.py
+        # would let the two disagree about the drawing's unit, and every
+        # furniture position the user then reviews would be in a frame the
+        # built model does not share.
+        job.emit("EXTRACTING_DXF", "Reading the CAD drawing (CPU, no API key)...")
+        from recon import compat as recon_compat
+        from recon.ir import ReconstructionError
+        from recon.pipeline import reconstruct
 
-        with open(geometry_path, "r", encoding="utf-8") as fh:
-            segments = len(json.load(fh).get("walls", []))
-        job.emit("EXTRACTING_DXF", f"Extracted {segments} wall segments.")
+        try:
+            model = reconstruct(
+                dxf_path,
+                wall_height=float(options.get("wall_height", 2.7)),
+                user_scale=options.get("scale") or None,
+                diagnostics_dir=os.path.join(root, "output", "diagnostics"),
+            )
+        except ReconstructionError as exc:
+            detail = "; ".join(exc.failures[:3]) or str(exc)
+            raise RuntimeError(
+                "The drawing could not be reconstructed into a building "
+                "(%s): %s. Diagnostics are in output/diagnostics."
+                % (exc.stage, detail)
+            ) from exc
+
+        os.makedirs(os.path.dirname(building_path), exist_ok=True)
+        model.to_json(building_path)
+        recon_compat.write_geometry_json(model, geometry_path)
+
+        summary = model.summary()
+        job.emit("EXTRACTING_DXF",
+                 "Reconstructed %d building(s) with %d storey(s): %d walls, "
+                 "%d rooms and %d openings (%s)."
+                 % (summary["buildings"], summary["levels"], summary["walls"],
+                    summary["rooms"], summary["openings"],
+                    model.units.unit_name if model.units else "unknown units"))
+        for item in model.review[:3]:
+            job.emit("EXTRACTING_DXF", "Review: %s" % item.get("message"))
+        for warning in model.validation.get("warnings", [])[:3]:
+            job.emit("EXTRACTING_DXF", "Note: %s" % warning)
 
         # --- 2. Vision analysis -------------------------------------------
         images_dir = os.path.join(root, "images")
         has_images = bool(manifest.get("images"))
 
         if not has_images:
-            job.emit("ANALYSING", "No reference images; building the unfurnished shell.")
+            job.emit("ANALYSING", "No reference images: deterministic CPU reconstruction, "
+                                  "rooms furnished from their drawn types. No AI or network.")
             _write_empty_review(graph_path, review_path, geometry_path, options)
         else:
             job.emit("ANALYSING",
@@ -543,7 +618,7 @@ def _run_generation(job: Job, project_id: str, options: Dict[str, Any]) -> None:
                 if os.path.exists(stale):
                     os.remove(stale)
 
-            for name in ("geometry.json", "scene_graph.json"):
+            for name in ("geometry.json", "building.json", "scene_graph.json"):
                 source = os.path.join(root, "data", name)
                 if os.path.exists(source):
                     shutil.copy2(source, os.path.join(repo_data, name))

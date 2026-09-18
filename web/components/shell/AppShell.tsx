@@ -328,7 +328,7 @@ function Sidebar({
 
         <div className="shrink-0 border-t border-line-subtle p-3">
           <p className="text-2xs leading-relaxed text-disabled">
-            Projects are indexed in this browser.{" "}
+            Projects are read from this computer&apos;s project folder.{" "}
             <Link href="/settings" className="underline underline-offset-2 hover:text-tertiary">
               Learn more
             </Link>

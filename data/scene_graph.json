@@ -1,0 +1,6803 @@
+{
+  "schema_version": "2.0",
+  "rooms": [
+    {
+      "id": "r13",
+      "room_type": "living_room",
+      "style": "unknown",
+      "polygon": [
+        [
+          20.7264,
+          10.1277
+        ],
+        [
+          23.1375,
+          10.0708
+        ],
+        [
+          23.1377,
+          10.0774
+        ],
+        [
+          23.1443,
+          10.0774
+        ],
+        [
+          23.1443,
+          13.0262
+        ],
+        [
+          28.7751,
+          13.0262
+        ],
+        [
+          28.7751,
+          10.0774
+        ],
+        [
+          28.7804,
+          10.0774
+        ],
+        [
+          28.7805,
+          10.0722
+        ],
+        [
+          30.7182,
+          10.0939
+        ],
+        [
+          30.7182,
+          8.633
+        ],
+        [
+          29.0117,
+          8.6425
+        ],
+        [
+          29.0117,
+          8.6963
+        ],
+        [
+          28.7751,
+          8.6963
+        ],
+        [
+          28.7751,
+          5.2618
+        ],
+        [
+          22.6831,
+          5.2618
+        ],
+        [
+          22.6831,
+          5.2618
+        ],
+        [
+          20.7808,
+          5.2618
+        ]
+      ],
+      "bounds_min": [
+        20.7264,
+        5.2618
+      ],
+      "bounds_max": [
+        30.7182,
+        13.0262
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.415,
+      "area": 54.728,
+      "connected_to": [
+        "r7",
+        "r5",
+        "r6",
+        "r19"
+      ],
+      "wall_ids": [
+        "wall_38",
+        "wall_39",
+        "wall_40",
+        "wall_41",
+        "wall_42",
+        "wall_44",
+        "wall_45",
+        "wall_46",
+        "wall_47",
+        "wall_48",
+        "wall_49",
+        "wall_51",
+        "wall_34",
+        "wall_53",
+        "wall_54",
+        "wall_55",
+        "wall_35"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "54.7 m2 floor area",
+        "against: 7 door(s)",
+        "2 window(s)",
+        "39 entities on a furniture layer",
+        "near the entrance (depth 0.00)",
+        "1.3:1 proportions are room-like"
+      ],
+      "type_decided_by": "",
+      "type_conflicts": [
+        "a plan usually has one living room; r11 is the stronger candidate (90% vs 41%)"
+      ],
+      "specific_type": "",
+      "runner_up_type": "hallway",
+      "runner_up_confidence": 0.195
+    },
+    {
+      "id": "r11",
+      "room_type": "living_room",
+      "style": "unknown",
+      "polygon": [
+        [
+          5.6428,
+          0.2326
+        ],
+        [
+          5.6428,
+          5.0252
+        ],
+        [
+          11.7029,
+          5.0252
+        ],
+        [
+          11.7301,
+          0.2326
+        ]
+      ],
+      "bounds_min": [
+        5.6428,
+        0.2326
+      ],
+      "bounds_max": [
+        11.7301,
+        5.0252
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.904,
+      "area": 29.109,
+      "connected_to": [
+        "r10"
+      ],
+      "wall_ids": [
+        "wall_10",
+        "wall_17",
+        "wall_19",
+        "wall_1",
+        "wall_3"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"LIVING 20'0\" X 15'9\"\" inside the room",
+        "29.1 m2 floor area",
+        "adjacent to hallway",
+        "3 window(s)",
+        "1.3:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "studio",
+      "runner_up_confidence": 0.034
+    },
+    {
+      "id": "r3",
+      "room_type": "bedroom",
+      "style": "unknown",
+      "polygon": [
+        [
+          16.8362,
+          10.2897
+        ],
+        [
+          11.9674,
+          10.2352
+        ],
+        [
+          11.9674,
+          13.1838
+        ],
+        [
+          11.9674,
+          15.0836
+        ],
+        [
+          16.8362,
+          15.0836
+        ]
+      ],
+      "bounds_min": [
+        11.9674,
+        10.2352
+      ],
+      "bounds_max": [
+        16.8362,
+        15.0836
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.889,
+      "area": 23.473,
+      "connected_to": [
+        "r16"
+      ],
+      "wall_ids": [
+        "wall_0",
+        "wall_4",
+        "wall_8",
+        "wall_11",
+        "wall_12",
+        "wall_20",
+        "wall_23",
+        "wall_24",
+        "wall_2"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"BED ROOM 16'0\" X 15'9\"\" inside the room",
+        "23.5 m2 floor area",
+        "2 window(s)",
+        "1.0:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "living_room",
+      "runner_up_confidence": 0.024
+    },
+    {
+      "id": "r7",
+      "room_type": "bedroom",
+      "style": "unknown",
+      "polygon": [
+        [
+          33.8805,
+          15.1598
+        ],
+        [
+          33.8805,
+          10.3659
+        ],
+        [
+          29.0117,
+          10.3114
+        ],
+        [
+          29.0117,
+          15.1598
+        ]
+      ],
+      "bounds_min": [
+        29.0117,
+        10.3114
+      ],
+      "bounds_max": [
+        33.8805,
+        15.1598
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.845,
+      "area": 23.473,
+      "connected_to": [
+        "r13",
+        "r9"
+      ],
+      "wall_ids": [
+        "wall_39",
+        "wall_40",
+        "wall_32",
+        "wall_47",
+        "wall_33",
+        "wall_49"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"BED ROOM 16'0\" X 15'9\"\" inside the room",
+        "23.5 m2 floor area",
+        "against: 3 door(s)",
+        "2 window(s)",
+        "8 entities on a furniture layer",
+        "1.0:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "hallway",
+      "runner_up_confidence": 0.053
+    },
+    {
+      "id": "r5",
+      "room_type": "bedroom",
+      "style": "unknown",
+      "polygon": [
+        [
+          33.8805,
+          5.2618
+        ],
+        [
+          29.0117,
+          5.2618
+        ],
+        [
+          29.0117,
+          8.5202
+        ],
+        [
+          33.8805,
+          8.493
+        ]
+      ],
+      "bounds_min": [
+        29.0117,
+        5.2618
+      ],
+      "bounds_max": [
+        33.8805,
+        8.5202
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.836,
+      "area": 15.798,
+      "connected_to": [
+        "r13",
+        "r14"
+      ],
+      "wall_ids": [
+        "wall_38",
+        "wall_44",
+        "wall_32",
+        "wall_49",
+        "wall_50",
+        "wall_35"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"BED ROOM 16'0\" X 10'0\"\" inside the room",
+        "15.8 m2 floor area",
+        "against: 4 door(s)",
+        "adjacent to bathroom, adjacent to living_room",
+        "1 window(s)",
+        "1.5:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "hallway",
+      "runner_up_confidence": 0.08
+    },
+    {
+      "id": "r12",
+      "room_type": "bedroom",
+      "style": "unknown",
+      "polygon": [
+        [
+          16.8362,
+          8.3018
+        ],
+        [
+          16.8362,
+          5.2618
+        ],
+        [
+          11.8806,
+          5.2618
+        ],
+        [
+          11.8591,
+          7.6922
+        ],
+        [
+          11.9132,
+          7.6922
+        ],
+        [
+          11.9132,
+          7.9288
+        ],
+        [
+          11.857,
+          7.9288
+        ],
+        [
+          11.8536,
+          8.3018
+        ]
+      ],
+      "bounds_min": [
+        11.8536,
+        5.2618
+      ],
+      "bounds_max": [
+        16.8362,
+        8.3018
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.871,
+      "area": 15.093,
+      "connected_to": [
+        "r17"
+      ],
+      "wall_ids": [
+        "wall_5",
+        "wall_10",
+        "wall_18",
+        "wall_1",
+        "wall_23",
+        "wall_24",
+        "wall_27",
+        "wall_2"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"BED ROOM 16'0\" X 10'0\"\" inside the room",
+        "15.1 m2 floor area",
+        "against: 4 door(s)",
+        "adjacent to bathroom",
+        "1 window(s)",
+        "1.6:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "hallway",
+      "runner_up_confidence": 0.049
+    },
+    {
+      "id": "r10",
+      "room_type": "hallway",
+      "style": "unknown",
+      "polygon": [
+        [
+          2.5186,
+          2.8234
+        ],
+        [
+          2.5186,
+          5.0252
+        ],
+        [
+          5.4062,
+          5.0252
+        ],
+        [
+          5.4062,
+          2.8234
+        ]
+      ],
+      "bounds_min": [
+        2.5186,
+        2.8234
+      ],
+      "bounds_max": [
+        5.4062,
+        5.0252
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.73,
+      "area": 6.358,
+      "connected_to": [
+        "r11"
+      ],
+      "wall_ids": [
+        "wall_14",
+        "wall_17",
+        "wall_19",
+        "wall_1"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"FOYER\" inside the room",
+        "6.4 m2 floor area",
+        "adjacent to living_room",
+        "against: 2 window(s)",
+        "1.3:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [
+        "room_label says 'hallway' but room_label says 'balcony'"
+      ],
+      "specific_type": "",
+      "runner_up_type": "balcony",
+      "runner_up_confidence": 0.231
+    },
+    {
+      "id": "r8",
+      "room_type": "bathroom",
+      "style": "unknown",
+      "polygon": [
+        [
+          23.1443,
+          13.1485
+        ],
+        [
+          23.1443,
+          15.1598
+        ],
+        [
+          26.1843,
+          15.1598
+        ],
+        [
+          26.1843,
+          13.1485
+        ]
+      ],
+      "bounds_min": [
+        23.1443,
+        13.1485
+      ],
+      "bounds_max": [
+        26.1843,
+        15.1598
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.888,
+      "area": 6.114,
+      "connected_to": [
+        "r9"
+      ],
+      "wall_ids": [
+        "wall_40",
+        "wall_41",
+        "wall_33",
+        "wall_48"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"TOILET 10'0\" X 6'6\"\" inside the room",
+        "6.1 m2 floor area",
+        "deep in the plan (depth 1.00)",
+        "against: 1 window(s)",
+        "1.5:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "office",
+      "runner_up_confidence": 0.025
+    },
+    {
+      "id": "r1",
+      "room_type": "store",
+      "style": "unknown",
+      "polygon": [
+        [
+          6.0969,
+          15.0836
+        ],
+        [
+          9.0638,
+          15.0836
+        ],
+        [
+          9.0638,
+          13.1866
+        ],
+        [
+          6.046,
+          13.1866
+        ]
+      ],
+      "bounds_min": [
+        6.046,
+        13.1866
+      ],
+      "bounds_max": [
+        9.0638,
+        15.0836
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.722,
+      "area": 5.676,
+      "connected_to": [],
+      "wall_ids": [
+        "wall_0",
+        "wall_4",
+        "wall_9",
+        "wall_22"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"STORE 9'6\" X 6'3\"\" inside the room",
+        "5.7 m2 floor area",
+        "against: 1 window(s)",
+        "1.6:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [
+        "room_label says 'store' but room_label says 'bathroom'"
+      ],
+      "specific_type": "",
+      "runner_up_type": "bathroom",
+      "runner_up_confidence": 0.242
+    },
+    {
+      "id": "r16",
+      "room_type": "unknown",
+      "style": "unknown",
+      "polygon": [
+        [
+          11.7308,
+          12.9524
+        ],
+        [
+          11.7308,
+          10.7863
+        ],
+        [
+          9.3004,
+          10.7863
+        ],
+        [
+          9.3004,
+          12.9524
+        ]
+      ],
+      "bounds_min": [
+        9.3004,
+        10.7863
+      ],
+      "bounds_max": [
+        11.7308,
+        12.9524
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.0,
+      "area": 5.265,
+      "connected_to": [
+        "r2",
+        "r3"
+      ],
+      "wall_ids": [
+        "wall_4",
+        "wall_9",
+        "wall_11",
+        "wall_12",
+        "wall_20",
+        "wall_26"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [],
+      "type_decided_by": "",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "bathroom",
+      "runner_up_confidence": 0.212
+    },
+    {
+      "id": "r9",
+      "room_type": "unknown",
+      "style": "unknown",
+      "polygon": [
+        [
+          26.3066,
+          13.1485
+        ],
+        [
+          26.3066,
+          15.1598
+        ],
+        [
+          28.7751,
+          15.1598
+        ],
+        [
+          28.7751,
+          13.1485
+        ]
+      ],
+      "bounds_min": [
+        26.3066,
+        13.1485
+      ],
+      "bounds_max": [
+        28.7751,
+        15.1598
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.0,
+      "area": 4.965,
+      "connected_to": [
+        "r7",
+        "r8"
+      ],
+      "wall_ids": [
+        "wall_39",
+        "wall_40",
+        "wall_33",
+        "wall_48"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [],
+      "type_decided_by": "",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "hallway",
+      "runner_up_confidence": 0.199
+    },
+    {
+      "id": "r2",
+      "room_type": "unknown",
+      "style": "unknown",
+      "polygon": [
+        [
+          9.3004,
+          15.0836
+        ],
+        [
+          11.7308,
+          15.0836
+        ],
+        [
+          11.7308,
+          13.1866
+        ],
+        [
+          9.3004,
+          13.1866
+        ]
+      ],
+      "bounds_min": [
+        9.3004,
+        13.1866
+      ],
+      "bounds_max": [
+        11.7308,
+        15.0836
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.0,
+      "area": 4.611,
+      "connected_to": [
+        "r16"
+      ],
+      "wall_ids": [
+        "wall_0",
+        "wall_4",
+        "wall_9",
+        "wall_11",
+        "wall_12"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [],
+      "type_decided_by": "",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "kitchen",
+      "runner_up_confidence": 0.153
+    },
+    {
+      "id": "r6",
+      "room_type": "bathroom",
+      "style": "unknown",
+      "polygon": [
+        [
+          30.8405,
+          10.0952
+        ],
+        [
+          33.8805,
+          10.1293
+        ],
+        [
+          33.8805,
+          8.6153
+        ],
+        [
+          30.8405,
+          8.6323
+        ]
+      ],
+      "bounds_min": [
+        30.8405,
+        8.6153
+      ],
+      "bounds_max": [
+        33.8805,
+        10.1293
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.863,
+      "area": 4.525,
+      "connected_to": [
+        "r13"
+      ],
+      "wall_ids": [
+        "wall_44",
+        "wall_32",
+        "wall_47",
+        "wall_49"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"TOILET 10'0\" X 5'0\"\" inside the room",
+        "4.5 m2 floor area",
+        "1 door(s)",
+        "against: 1 window(s)",
+        "2.0:1 proportions are room-like",
+        "against: near the entrance (depth 0.33)"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "balcony",
+      "runner_up_confidence": 0.035
+    },
+    {
+      "id": "r4",
+      "room_type": "unknown",
+      "style": "unknown",
+      "polygon": [
+        [
+          33.8805,
+          3.5092
+        ],
+        [
+          31.4501,
+          3.5092
+        ],
+        [
+          31.4501,
+          5.0252
+        ],
+        [
+          33.8805,
+          5.0252
+        ]
+      ],
+      "bounds_min": [
+        31.4501,
+        3.5092
+      ],
+      "bounds_max": [
+        33.8805,
+        5.0252
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.0,
+      "area": 3.684,
+      "connected_to": [
+        "r14"
+      ],
+      "wall_ids": [
+        "wall_43",
+        "wall_32",
+        "wall_50",
+        "wall_35"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [],
+      "type_decided_by": "",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "bathroom",
+      "runner_up_confidence": 0.171
+    },
+    {
+      "id": "r14",
+      "room_type": "bathroom",
+      "style": "unknown",
+      "polygon": [
+        [
+          31.3278,
+          3.5092
+        ],
+        [
+          29.0117,
+          3.5092
+        ],
+        [
+          29.0117,
+          5.0252
+        ],
+        [
+          31.3278,
+          5.0252
+        ]
+      ],
+      "bounds_min": [
+        29.0117,
+        3.5092
+      ],
+      "bounds_max": [
+        31.3278,
+        5.0252
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.894,
+      "area": 3.511,
+      "connected_to": [
+        "r4",
+        "r5"
+      ],
+      "wall_ids": [
+        "wall_38",
+        "wall_43",
+        "wall_50",
+        "wall_35"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"TOILET 8'0\" X 5'0\"\" inside the room",
+        "3.5 m2 floor area",
+        "adjacent to bedroom",
+        "no windows",
+        "deep in the plan (depth 0.67)",
+        "1.5:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "store",
+      "runner_up_confidence": 0.032
+    },
+    {
+      "id": "r15",
+      "room_type": "unknown",
+      "style": "unknown",
+      "polygon": [
+        [
+          14.863,
+          8.4241
+        ],
+        [
+          14.863,
+          10.031
+        ],
+        [
+          16.8362,
+          10.0531
+        ],
+        [
+          16.8362,
+          8.4241
+        ]
+      ],
+      "bounds_min": [
+        14.863,
+        8.4241
+      ],
+      "bounds_max": [
+        16.8362,
+        10.0531
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.0,
+      "area": 3.192,
+      "connected_to": [
+        "r17"
+      ],
+      "wall_ids": [
+        "wall_5",
+        "wall_8",
+        "wall_24",
+        "wall_2"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [],
+      "type_decided_by": "",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "hallway",
+      "runner_up_confidence": 0.191
+    },
+    {
+      "id": "r17",
+      "room_type": "bathroom",
+      "style": "unknown",
+      "polygon": [
+        [
+          13.2247,
+          8.4241
+        ],
+        [
+          13.2247,
+          10.0126
+        ],
+        [
+          14.7407,
+          10.0296
+        ],
+        [
+          14.7407,
+          8.4241
+        ]
+      ],
+      "bounds_min": [
+        13.2247,
+        8.4241
+      ],
+      "bounds_max": [
+        14.7407,
+        10.0296
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.897,
+      "area": 2.421,
+      "connected_to": [
+        "r15",
+        "r12"
+      ],
+      "wall_ids": [
+        "wall_5",
+        "wall_8",
+        "wall_23",
+        "wall_24"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"TOILET 6'6\" X 5'6\"\" inside the room",
+        "2.4 m2 floor area",
+        "adjacent to bedroom",
+        "no windows",
+        "1.1:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "store",
+      "runner_up_confidence": 0.028
+    },
+    {
+      "id": "r18",
+      "room_type": "unknown",
+      "style": "unknown",
+      "polygon": [
+        [
+          9.0638,
+          11.5022
+        ],
+        [
+          9.0638,
+          10.291
+        ],
+        [
+          7.5478,
+          10.291
+        ],
+        [
+          7.5478,
+          11.5022
+        ]
+      ],
+      "bounds_min": [
+        7.5478,
+        10.291
+      ],
+      "bounds_max": [
+        9.0638,
+        11.5022
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.0,
+      "area": 1.836,
+      "connected_to": [],
+      "wall_ids": [
+        "wall_7",
+        "wall_9",
+        "wall_20",
+        "wall_26",
+        "wall_28"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [],
+      "type_decided_by": "",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "store",
+      "runner_up_confidence": 0.223
+    },
+    {
+      "id": "r19",
+      "room_type": "hallway",
+      "style": "unknown",
+      "polygon": [
+        [
+          26.1081,
+          11.5784
+        ],
+        [
+          26.1081,
+          10.3672
+        ],
+        [
+          24.5921,
+          10.3672
+        ],
+        [
+          24.5921,
+          11.5784
+        ]
+      ],
+      "bounds_min": [
+        24.5921,
+        10.3672
+      ],
+      "bounds_max": [
+        26.1081,
+        11.5784
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.301,
+      "area": 1.836,
+      "connected_to": [
+        "r13"
+      ],
+      "wall_ids": [
+        "wall_46",
+        "wall_51",
+        "wall_54",
+        "wall_55"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "1.8 m2 floor area",
+        "no windows",
+        "adjacent to living_room",
+        "near the entrance (depth 0.33)",
+        "1.3:1 proportions are room-like"
+      ],
+      "type_decided_by": "",
+      "type_conflicts": [
+        "'hallway' (30%) and 'shaft' (25%) are too close to separate"
+      ],
+      "specific_type": "",
+      "runner_up_type": "shaft",
+      "runner_up_confidence": 0.248
+    },
+    {
+      "id": "r20",
+      "room_type": "bathroom",
+      "style": "unknown",
+      "polygon": [
+        [
+          0.1248,
+          13.1866
+        ],
+        [
+          0.1186,
+          14.7026
+        ],
+        [
+          1.1782,
+          14.7026
+        ],
+        [
+          1.2046,
+          13.1866
+        ]
+      ],
+      "bounds_min": [
+        0.1186,
+        13.1866
+      ],
+      "bounds_max": [
+        1.2046,
+        14.7026
+      ],
+      "ceiling_height": 3.0,
+      "confidence": 0.832,
+      "area": 1.622,
+      "connected_to": [],
+      "wall_ids": [
+        "wall_16",
+        "wall_25",
+        "wall_29",
+        "wall_30"
+      ],
+      "source_images": [],
+      "ceiling_type": "plain",
+      "style_confidence": 0.0,
+      "type_reasons": [
+        "text label \"TOILET 4'0\" X 5'0\"\" inside the room",
+        "no windows",
+        "against: 1.6 m2 floor area",
+        "1.4:1 proportions are room-like"
+      ],
+      "type_decided_by": "room_label",
+      "type_conflicts": [],
+      "specific_type": "",
+      "runner_up_type": "shaft",
+      "runner_up_confidence": 0.052
+    }
+  ],
+  "room": {
+    "id": "r13",
+    "room_type": "living_room",
+    "style": "unknown",
+    "polygon": [
+      [
+        20.7264,
+        10.1277
+      ],
+      [
+        23.1375,
+        10.0708
+      ],
+      [
+        23.1377,
+        10.0774
+      ],
+      [
+        23.1443,
+        10.0774
+      ],
+      [
+        23.1443,
+        13.0262
+      ],
+      [
+        28.7751,
+        13.0262
+      ],
+      [
+        28.7751,
+        10.0774
+      ],
+      [
+        28.7804,
+        10.0774
+      ],
+      [
+        28.7805,
+        10.0722
+      ],
+      [
+        30.7182,
+        10.0939
+      ],
+      [
+        30.7182,
+        8.633
+      ],
+      [
+        29.0117,
+        8.6425
+      ],
+      [
+        29.0117,
+        8.6963
+      ],
+      [
+        28.7751,
+        8.6963
+      ],
+      [
+        28.7751,
+        5.2618
+      ],
+      [
+        22.6831,
+        5.2618
+      ],
+      [
+        22.6831,
+        5.2618
+      ],
+      [
+        20.7808,
+        5.2618
+      ]
+    ],
+    "bounds_min": [
+      20.7264,
+      5.2618
+    ],
+    "bounds_max": [
+      30.7182,
+      13.0262
+    ],
+    "ceiling_height": 3.0,
+    "confidence": 0.415,
+    "area": 54.728,
+    "connected_to": [
+      "r7",
+      "r5",
+      "r6",
+      "r19"
+    ],
+    "wall_ids": [
+      "wall_38",
+      "wall_39",
+      "wall_40",
+      "wall_41",
+      "wall_42",
+      "wall_44",
+      "wall_45",
+      "wall_46",
+      "wall_47",
+      "wall_48",
+      "wall_49",
+      "wall_51",
+      "wall_34",
+      "wall_53",
+      "wall_54",
+      "wall_55",
+      "wall_35"
+    ],
+    "source_images": [],
+    "ceiling_type": "plain",
+    "style_confidence": 0.0,
+    "type_reasons": [
+      "54.7 m2 floor area",
+      "against: 7 door(s)",
+      "2 window(s)",
+      "39 entities on a furniture layer",
+      "near the entrance (depth 0.00)",
+      "1.3:1 proportions are room-like"
+    ],
+    "type_decided_by": "",
+    "type_conflicts": [
+      "a plan usually has one living room; r11 is the stronger candidate (90% vs 41%)"
+    ],
+    "specific_type": "",
+    "runner_up_type": "hallway",
+    "runner_up_confidence": 0.195
+  },
+  "walls": [
+    {
+      "id": "wall_0",
+      "start": [
+        2.4003,
+        15.2019
+      ],
+      "end": [
+        16.9545,
+        15.2019
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_1",
+      "start": [
+        2.4003,
+        5.1435
+      ],
+      "end": [
+        16.9545,
+        5.1435
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_2",
+      "start": [
+        16.9545,
+        5.1435
+      ],
+      "end": [
+        16.9545,
+        15.2019
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_3",
+      "start": [
+        5.5245,
+        0.1143
+      ],
+      "end": [
+        11.8491,
+        0.1143
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_4",
+      "start": [
+        5.9246,
+        13.0695
+      ],
+      "end": [
+        11.8491,
+        13.0695
+      ],
+      "height": 3.0,
+      "thickness": 0.2262,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_5",
+      "start": [
+        11.7919,
+        8.363
+      ],
+      "end": [
+        16.9565,
+        8.363
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_6",
+      "start": [
+        2.3427,
+        10.1346
+      ],
+      "end": [
+        3.3909,
+        10.1727
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_7",
+      "start": [
+        7.4295,
+        10.1727
+      ],
+      "end": [
+        9.1821,
+        10.1727
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_8",
+      "start": [
+        11.8491,
+        10.1156
+      ],
+      "end": [
+        16.9565,
+        10.1727
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_9",
+      "start": [
+        9.1821,
+        10.1727
+      ],
+      "end": [
+        9.1821,
+        15.2039
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_10",
+      "start": [
+        11.8491,
+        0.1143
+      ],
+      "end": [
+        11.8205,
+        5.1455
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_11",
+      "start": [
+        11.8491,
+        10.1156
+      ],
+      "end": [
+        11.8491,
+        13.0695
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_12",
+      "start": [
+        11.8491,
+        13.0695
+      ],
+      "end": [
+        11.8491,
+        15.2039
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_13",
+      "start": [
+        0.1143,
+        5.2578
+      ],
+      "end": [
+        0.0762,
+        10.1155
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_14",
+      "start": [
+        2.4003,
+        2.7051
+      ],
+      "end": [
+        2.4003,
+        5.1435
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_15",
+      "start": [
+        2.3427,
+        10.1346
+      ],
+      "end": [
+        2.4003,
+        15.2019
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_16",
+      "start": [
+        0.0762,
+        10.1155
+      ],
+      "end": [
+        0.0571,
+        14.7638
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_17",
+      "start": [
+        5.5245,
+        0.1143
+      ],
+      "end": [
+        5.5245,
+        5.1455
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_18",
+      "start": [
+        11.8205,
+        5.1415
+      ],
+      "end": [
+        11.7919,
+        8.363
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_19",
+      "start": [
+        2.4003,
+        2.7051
+      ],
+      "end": [
+        5.5265,
+        2.7051
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_20",
+      "start": [
+        9.1801,
+        10.7252
+      ],
+      "end": [
+        11.8511,
+        10.7252
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_21",
+      "start": [
+        3.3909,
+        7.6962
+      ],
+      "end": [
+        3.3909,
+        10.1727
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_22",
+      "start": [
+        5.9246,
+        13.0695
+      ],
+      "end": [
+        5.9818,
+        15.2039
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_23",
+      "start": [
+        13.1635,
+        8.361
+      ],
+      "end": [
+        13.1635,
+        10.1323
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_24",
+      "start": [
+        14.8018,
+        8.361
+      ],
+      "end": [
+        14.8018,
+        10.1506
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_25",
+      "start": [
+        1.2668,
+        13.1254
+      ],
+      "end": [
+        1.2383,
+        14.7638
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_26",
+      "start": [
+        7.4295,
+        11.6205
+      ],
+      "end": [
+        9.1841,
+        11.6205
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_27",
+      "start": [
+        10.2108,
+        7.8105
+      ],
+      "end": [
+        11.7989,
+        7.8105
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_28",
+      "start": [
+        7.4295,
+        10.1727
+      ],
+      "end": [
+        7.4295,
+        11.6205
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_29",
+      "start": [
+        0.0619,
+        13.1254
+      ],
+      "end": [
+        1.2668,
+        13.1254
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_30",
+      "start": [
+        0.0571,
+        14.7638
+      ],
+      "end": [
+        1.2383,
+        14.7638
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_31",
+      "start": [
+        0.0762,
+        10.1155
+      ],
+      "end": [
+        2.3427,
+        10.1346
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_32",
+      "start": [
+        33.9988,
+        3.3909
+      ],
+      "end": [
+        33.9988,
+        15.2781
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_33",
+      "start": [
+        23.026,
+        15.2781
+      ],
+      "end": [
+        33.9988,
+        15.2781
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_34",
+      "start": [
+        20.6638,
+        5.1435
+      ],
+      "end": [
+        22.5688,
+        5.1435
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_35",
+      "start": [
+        22.5688,
+        5.1435
+      ],
+      "end": [
+        34.0008,
+        5.1435
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_36",
+      "start": [
+        22.5688,
+        0.1143
+      ],
+      "end": [
+        28.8934,
+        0.1143
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_37",
+      "start": [
+        28.8934,
+        0.1143
+      ],
+      "end": [
+        28.8934,
+        0.4961
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_38",
+      "start": [
+        28.8934,
+        2.7167
+      ],
+      "end": [
+        28.8934,
+        8.582
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_39",
+      "start": [
+        28.8934,
+        10.1917
+      ],
+      "end": [
+        28.8934,
+        15.2801
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_40",
+      "start": [
+        23.024,
+        13.0874
+      ],
+      "end": [
+        28.8954,
+        13.0874
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_41",
+      "start": [
+        23.026,
+        10.1917
+      ],
+      "end": [
+        23.026,
+        15.2781
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_42",
+      "start": [
+        20.6638,
+        5.1435
+      ],
+      "end": [
+        20.6067,
+        10.2489
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_43",
+      "start": [
+        28.8914,
+        3.3909
+      ],
+      "end": [
+        33.9988,
+        3.3909
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_44",
+      "start": [
+        28.8934,
+        8.582
+      ],
+      "end": [
+        34.0008,
+        8.5534
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_45",
+      "start": [
+        20.6067,
+        10.2489
+      ],
+      "end": [
+        23.026,
+        10.1917
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_46",
+      "start": [
+        24.4738,
+        10.2489
+      ],
+      "end": [
+        26.2264,
+        10.2489
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_47",
+      "start": [
+        28.8934,
+        10.1917
+      ],
+      "end": [
+        34.0008,
+        10.2489
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_48",
+      "start": [
+        26.2455,
+        13.0854
+      ],
+      "end": [
+        26.2455,
+        15.2801
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_49",
+      "start": [
+        30.7794,
+        8.5695
+      ],
+      "end": [
+        30.7794,
+        10.2149
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_50",
+      "start": [
+        31.389,
+        3.3889
+      ],
+      "end": [
+        31.389,
+        5.1455
+      ],
+      "height": 3.0,
+      "thickness": 0.1143,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_51",
+      "start": [
+        24.4738,
+        11.6967
+      ],
+      "end": [
+        26.2264,
+        11.6967
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_52",
+      "start": [
+        22.5688,
+        0.1143
+      ],
+      "end": [
+        22.5688,
+        0.4961
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_53",
+      "start": [
+        22.5688,
+        3.6203
+      ],
+      "end": [
+        22.5688,
+        5.1435
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_54",
+      "start": [
+        24.4738,
+        10.2489
+      ],
+      "end": [
+        24.4738,
+        11.6967
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    },
+    {
+      "id": "wall_55",
+      "start": [
+        26.2264,
+        10.2489
+      ],
+      "end": [
+        26.2264,
+        11.6967
+      ],
+      "height": 3.0,
+      "thickness": 0.2286,
+      "finish": {
+        "material": "unknown",
+        "color_hex": "#CCCCCC",
+        "roughness": 0.7,
+        "metallic": 0.0,
+        "finish": "matte",
+        "description": "",
+        "confidence": 0.0
+      },
+      "observed": false
+    }
+  ],
+  "floor": {
+    "material": "wood",
+    "color_hex": "#C08E5C",
+    "roughness": 0.7,
+    "metallic": 0.0,
+    "finish": "matte",
+    "description": "",
+    "confidence": 0.0
+  },
+  "ceiling": {
+    "material": "paint_matte",
+    "color_hex": "#F6F5F2",
+    "roughness": 0.7,
+    "metallic": 0.0,
+    "finish": "matte",
+    "description": "",
+    "confidence": 0.0
+  },
+  "ceiling_type": "plain",
+  "openings": [],
+  "architecture": [],
+  "lights": [
+    {
+      "id": "r13__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r13",
+      "position": {
+        "x": 22.4703,
+        "y": 9.0189,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r13__proc_ceiling_light_1",
+      "kind": "ceiling_light",
+      "room_id": "r13",
+      "position": {
+        "x": 24.0965,
+        "y": 9.0189,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r13__proc_ceiling_light_2",
+      "kind": "ceiling_light",
+      "room_id": "r13",
+      "position": {
+        "x": 25.7227,
+        "y": 9.0189,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r13__proc_floor_lamp_0",
+      "kind": "floor_lamp",
+      "room_id": "r13",
+      "position": {
+        "x": 26.1829,
+        "y": 9.0189,
+        "z": 1.55
+      },
+      "mounting": "floor",
+      "color_temperature_k": 2700.0,
+      "power_w": 35.0,
+      "size": 0.28,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r13__proc_floor_lamp_1",
+      "kind": "floor_lamp",
+      "room_id": "r13",
+      "position": {
+        "x": 26.1829,
+        "y": 9.0189,
+        "z": 1.55
+      },
+      "mounting": "floor",
+      "color_temperature_k": 2700.0,
+      "power_w": 35.0,
+      "size": 0.28,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r11__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r11",
+      "position": {
+        "x": 7.2117,
+        "y": 2.6288,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r11__proc_ceiling_light_1",
+      "kind": "ceiling_light",
+      "room_id": "r11",
+      "position": {
+        "x": 8.6864,
+        "y": 2.6288,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r11__proc_floor_lamp_0",
+      "kind": "floor_lamp",
+      "room_id": "r11",
+      "position": {
+        "x": 8.6797,
+        "y": 2.6288,
+        "z": 1.55
+      },
+      "mounting": "floor",
+      "color_temperature_k": 2700.0,
+      "power_w": 35.0,
+      "size": 0.28,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r3__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r3",
+      "position": {
+        "x": 13.6085,
+        "y": 12.7716,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r3__proc_ceiling_light_1",
+      "kind": "ceiling_light",
+      "room_id": "r3",
+      "position": {
+        "x": 15.1767,
+        "y": 12.7716,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r3__proc_table_lamp_0",
+      "kind": "table_lamp",
+      "room_id": "r3",
+      "position": {
+        "x": 13.9314,
+        "y": 12.7716,
+        "z": 0.45
+      },
+      "mounting": "table",
+      "color_temperature_k": 2700.0,
+      "power_w": 18.0,
+      "size": 0.2,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r3__proc_table_lamp_1",
+      "kind": "table_lamp",
+      "room_id": "r3",
+      "position": {
+        "x": 13.9314,
+        "y": 12.7716,
+        "z": 0.45
+      },
+      "mounting": "table",
+      "color_temperature_k": 2700.0,
+      "power_w": 18.0,
+      "size": 0.2,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r7__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r7",
+      "position": {
+        "x": 30.6627,
+        "y": 12.7492,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r7__proc_ceiling_light_1",
+      "kind": "ceiling_light",
+      "room_id": "r7",
+      "position": {
+        "x": 32.229,
+        "y": 12.7492,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r7__proc_table_lamp_0",
+      "kind": "table_lamp",
+      "room_id": "r7",
+      "position": {
+        "x": 31.4459,
+        "y": 12.7492,
+        "z": 0.45
+      },
+      "mounting": "table",
+      "color_temperature_k": 2700.0,
+      "power_w": 18.0,
+      "size": 0.2,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r7__proc_table_lamp_1",
+      "kind": "table_lamp",
+      "room_id": "r7",
+      "position": {
+        "x": 31.4459,
+        "y": 12.7492,
+        "z": 0.45
+      },
+      "mounting": "table",
+      "color_temperature_k": 2700.0,
+      "power_w": 18.0,
+      "size": 0.2,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r5__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r5",
+      "position": {
+        "x": 31.446,
+        "y": 6.8842,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r5__proc_table_lamp_0",
+      "kind": "table_lamp",
+      "room_id": "r5",
+      "position": {
+        "x": 31.446,
+        "y": 6.8842,
+        "z": 0.45
+      },
+      "mounting": "table",
+      "color_temperature_k": 2700.0,
+      "power_w": 18.0,
+      "size": 0.2,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r5__proc_table_lamp_1",
+      "kind": "table_lamp",
+      "room_id": "r5",
+      "position": {
+        "x": 31.446,
+        "y": 6.8842,
+        "z": 0.45
+      },
+      "mounting": "table",
+      "color_temperature_k": 2700.0,
+      "power_w": 18.0,
+      "size": 0.2,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r12__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r12",
+      "position": {
+        "x": 13.1658,
+        "y": 7.28,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r12__proc_table_lamp_0",
+      "kind": "table_lamp",
+      "room_id": "r12",
+      "position": {
+        "x": 13.1658,
+        "y": 7.28,
+        "z": 0.45
+      },
+      "mounting": "table",
+      "color_temperature_k": 2700.0,
+      "power_w": 18.0,
+      "size": 0.2,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r12__proc_table_lamp_1",
+      "kind": "table_lamp",
+      "room_id": "r12",
+      "position": {
+        "x": 13.1658,
+        "y": 7.28,
+        "z": 0.45
+      },
+      "mounting": "table",
+      "color_temperature_k": 2700.0,
+      "power_w": 18.0,
+      "size": 0.2,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r10__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r10",
+      "position": {
+        "x": 3.9624,
+        "y": 3.9243,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r8__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r8",
+      "position": {
+        "x": 24.191,
+        "y": 14.1542,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r8__proc_wall_light_0",
+      "kind": "wall_light",
+      "room_id": "r8",
+      "position": {
+        "x": 24.6643,
+        "y": 14.9936,
+        "z": 1.95
+      },
+      "mounting": "wall",
+      "color_temperature_k": 2700.0,
+      "power_w": 20.0,
+      "size": 0.14,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r1__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r1",
+      "position": {
+        "x": 7.5676,
+        "y": 14.1347,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r16__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r16",
+      "position": {
+        "x": 10.5156,
+        "y": 11.8694,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r9__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r9",
+      "position": {
+        "x": 27.5408,
+        "y": 14.1541,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r2__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r2",
+      "position": {
+        "x": 10.5156,
+        "y": 14.1351,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r6__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r6",
+      "position": {
+        "x": 31.8901,
+        "y": 9.368,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r6__proc_wall_light_0",
+      "kind": "wall_light",
+      "room_id": "r6",
+      "position": {
+        "x": 32.361,
+        "y": 9.9595,
+        "z": 1.95
+      },
+      "mounting": "wall",
+      "color_temperature_k": 2700.0,
+      "power_w": 20.0,
+      "size": 0.14,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r4__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r4",
+      "position": {
+        "x": 32.6653,
+        "y": 4.2672,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r14__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r14",
+      "position": {
+        "x": 29.8172,
+        "y": 4.2672,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r14__proc_wall_light_0",
+      "kind": "wall_light",
+      "room_id": "r14",
+      "position": {
+        "x": 30.1698,
+        "y": 3.6749,
+        "z": 1.95
+      },
+      "mounting": "wall",
+      "color_temperature_k": 2700.0,
+      "power_w": 20.0,
+      "size": 0.14,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r15__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r15",
+      "position": {
+        "x": 15.8499,
+        "y": 9.2331,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r17__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r17",
+      "position": {
+        "x": 13.9829,
+        "y": 9.2226,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r18__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r18",
+      "position": {
+        "x": 8.3058,
+        "y": 10.8966,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r19__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r19",
+      "position": {
+        "x": 25.3501,
+        "y": 10.9728,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    },
+    {
+      "id": "r20__proc_ceiling_light_0",
+      "kind": "ceiling_light",
+      "room_id": "r20",
+      "position": {
+        "x": 0.6566,
+        "y": 13.9443,
+        "z": 2.9
+      },
+      "mounting": "ceiling",
+      "color_temperature_k": 3200.0,
+      "power_w": 45.0,
+      "size": 0.35,
+      "length": 0.0,
+      "wall_id": "",
+      "confidence": 0.7,
+      "uncertain": false,
+      "source_images": []
+    }
+  ],
+  "objects": [
+    {
+      "id": "r13__proc_sofa_0",
+      "category": "sofa",
+      "label": "sofa (generated)",
+      "group": "furniture",
+      "room_id": "r13",
+      "position": {
+        "x": 21.37,
+        "y": 6.5902,
+        "z": 0.0
+      },
+      "rotation_z": 270.42,
+      "dimensions": {
+        "width": 2.1,
+        "depth": 0.9,
+        "height": 0.85
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "sofa_low_modern",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits sofa_low_modern"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_coffee_table_0",
+      "category": "coffee_table",
+      "label": "coffee table (generated)",
+      "group": "furniture",
+      "room_id": "r13",
+      "position": {
+        "x": 26.1293,
+        "y": 8.9305,
+        "z": 0.0
+      },
+      "rotation_z": 116.19,
+      "dimensions": {
+        "width": 1.2,
+        "depth": 0.6,
+        "height": 0.42
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "table_rect_tapered",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits table_rect_tapered"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_tv_unit_0",
+      "category": "tv_unit",
+      "label": "tv unit (generated)",
+      "group": "furniture",
+      "room_id": "r13",
+      "position": {
+        "x": 23.7979,
+        "y": 5.6265,
+        "z": 0.0
+      },
+      "rotation_z": 0.11,
+      "dimensions": {
+        "width": 1.8,
+        "depth": 0.45,
+        "height": 0.5
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "unknown",
+      "asset": "tv_unit_low_wide",
+      "asset_score": 0.87,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits tv_unit_low_wide"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_tv_0",
+      "category": "tv",
+      "label": "tv (generated)",
+      "group": "decor",
+      "room_id": "r13",
+      "position": {
+        "x": 26.1293,
+        "y": 10.1306,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 1.2,
+        "depth": 0.07,
+        "height": 0.7
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "plastic",
+      "asset": "tv_panel",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_armchair_0",
+      "category": "armchair",
+      "label": "armchair (generated)",
+      "group": "furniture",
+      "room_id": "r13",
+      "position": {
+        "x": 26.1293,
+        "y": 7.3304,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.85,
+        "depth": 0.85,
+        "height": 0.9
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "armchair_tub",
+      "asset_score": 0.998,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits armchair_tub"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_armchair_1",
+      "category": "armchair",
+      "label": "armchair (generated)",
+      "group": "furniture",
+      "room_id": "r13",
+      "position": {
+        "x": 27.7555,
+        "y": 8.9305,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.85,
+        "depth": 0.85,
+        "height": 0.9
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "armchair_tub",
+      "asset_score": 0.998,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits armchair_tub"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_rug_0",
+      "category": "rug",
+      "label": "rug (generated)",
+      "group": "decor",
+      "room_id": "r13",
+      "position": {
+        "x": 26.1293,
+        "y": 8.9305,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 2.4,
+        "depth": 1.7,
+        "height": 0.02
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "carpet",
+      "asset": "rug_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_bookshelf_0",
+      "category": "bookshelf",
+      "label": "bookshelf (generated)",
+      "group": "furniture",
+      "room_id": "r13",
+      "position": {
+        "x": 21.0727,
+        "y": 9.6031,
+        "z": 0.0
+      },
+      "rotation_z": 270.42,
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.35,
+        "height": 1.8
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "bookshelf_open",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_side_table_0",
+      "category": "side_table",
+      "label": "side table (generated)",
+      "group": "furniture",
+      "room_id": "r13",
+      "position": {
+        "x": 24.5031,
+        "y": 8.9305,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.5,
+        "depth": 0.5,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "side_table_simple",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_plant_0",
+      "category": "plant",
+      "label": "plant (generated)",
+      "group": "decor",
+      "room_id": "r13",
+      "position": {
+        "x": 27.7555,
+        "y": 10.5306,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 1.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "foliage",
+      "asset": "plant_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_plant_1",
+      "category": "plant",
+      "label": "plant (generated)",
+      "group": "decor",
+      "room_id": "r13",
+      "position": {
+        "x": 24.5031,
+        "y": 10.1306,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 1.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "foliage",
+      "asset": "plant_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_plant_2",
+      "category": "plant",
+      "label": "plant (generated)",
+      "group": "decor",
+      "room_id": "r13",
+      "position": {
+        "x": 27.7555,
+        "y": 7.3304,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 1.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "foliage",
+      "asset": "plant_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r13__proc_painting_0",
+      "category": "painting",
+      "label": "painting (generated)",
+      "group": "decor",
+      "room_id": "r13",
+      "position": {
+        "x": 26.1293,
+        "y": 10.9307,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.05,
+        "height": 1.0
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "canvas",
+      "asset": "painting_frame",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r11__proc_sofa_0",
+      "category": "sofa",
+      "label": "sofa (generated)",
+      "group": "furniture",
+      "room_id": "r11",
+      "position": {
+        "x": 11.1283,
+        "y": 1.5938,
+        "z": 0.0
+      },
+      "rotation_z": 90.33,
+      "dimensions": {
+        "width": 2.1,
+        "depth": 0.9,
+        "height": 0.85
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "sofa_low_modern",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits sofa_low_modern"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r11__proc_coffee_table_0",
+      "category": "coffee_table",
+      "label": "coffee table (generated)",
+      "group": "furniture",
+      "room_id": "r11",
+      "position": {
+        "x": 8.6864,
+        "y": 2.4177,
+        "z": 0.0
+      },
+      "rotation_z": 251.36,
+      "dimensions": {
+        "width": 1.2,
+        "depth": 0.6,
+        "height": 0.42
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "table_rect_tapered",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits table_rect_tapered"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r11__proc_tv_unit_0",
+      "category": "tv_unit",
+      "label": "tv unit (generated)",
+      "group": "furniture",
+      "room_id": "r11",
+      "position": {
+        "x": 6.012,
+        "y": 3.9189,
+        "z": 0.0
+      },
+      "rotation_z": 270.0,
+      "dimensions": {
+        "width": 1.8,
+        "depth": 0.45,
+        "height": 0.5
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "unknown",
+      "asset": "tv_unit_low_wide",
+      "asset_score": 0.87,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits tv_unit_low_wide"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r11__proc_tv_0",
+      "category": "tv",
+      "label": "tv (generated)",
+      "group": "decor",
+      "room_id": "r11",
+      "position": {
+        "x": 8.6864,
+        "y": 3.6843,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 1.2,
+        "depth": 0.07,
+        "height": 0.7
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "plastic",
+      "asset": "tv_panel",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r11__proc_armchair_0",
+      "category": "armchair",
+      "label": "armchair (generated)",
+      "group": "furniture",
+      "room_id": "r11",
+      "position": {
+        "x": 8.6864,
+        "y": 1.1511,
+        "z": 0.0
+      },
+      "rotation_z": 90.0,
+      "dimensions": {
+        "width": 0.85,
+        "depth": 0.85,
+        "height": 0.9
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "armchair_tub",
+      "asset_score": 0.998,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits armchair_tub"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r11__proc_rug_0",
+      "category": "rug",
+      "label": "rug (generated)",
+      "group": "decor",
+      "room_id": "r11",
+      "position": {
+        "x": 8.6864,
+        "y": 2.4177,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 2.4,
+        "depth": 1.7,
+        "height": 0.02
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "carpet",
+      "asset": "rug_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r11__proc_bookshelf_0",
+      "category": "bookshelf",
+      "label": "bookshelf (generated)",
+      "group": "furniture",
+      "room_id": "r11",
+      "position": {
+        "x": 5.962,
+        "y": 0.8229,
+        "z": 0.0
+      },
+      "rotation_z": 270.0,
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.35,
+        "height": 1.8
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "bookshelf_open",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r11__proc_side_table_0",
+      "category": "side_table",
+      "label": "side table (generated)",
+      "group": "furniture",
+      "room_id": "r11",
+      "position": {
+        "x": 7.001,
+        "y": 1.9955,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.5,
+        "depth": 0.5,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "side_table_simple",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r11__proc_plant_0",
+      "category": "plant",
+      "label": "plant (generated)",
+      "group": "decor",
+      "room_id": "r11",
+      "position": {
+        "x": 10.3717,
+        "y": 3.6843,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 1.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "foliage",
+      "asset": "plant_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r11__proc_painting_0",
+      "category": "painting",
+      "label": "painting (generated)",
+      "group": "decor",
+      "room_id": "r11",
+      "position": {
+        "x": 9.9504,
+        "y": 1.9955,
+        "z": 0.0
+      },
+      "rotation_z": 90.0,
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.05,
+        "height": 1.0
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "canvas",
+      "asset": "painting_frame",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r3__proc_bed_0",
+      "category": "bed",
+      "label": "bed (generated)",
+      "group": "furniture",
+      "room_id": "r3",
+      "position": {
+        "x": 15.6942,
+        "y": 11.3983,
+        "z": 0.0
+      },
+      "rotation_z": 90.03,
+      "dimensions": {
+        "width": 1.6,
+        "depth": 2.0,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "bed_platform_low",
+      "asset_score": 0.92,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits bed_platform_low"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r3__proc_bedside_table_0",
+      "category": "bedside_table",
+      "label": "bedside table (generated)",
+      "group": "furniture",
+      "room_id": "r3",
+      "position": {
+        "x": 15.6935,
+        "y": 12.4833,
+        "z": 0.0
+      },
+      "rotation_z": 90.03,
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.4,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "bedside_simple",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r3__proc_bedside_table_1",
+      "category": "bedside_table",
+      "label": "bedside table (generated)",
+      "group": "furniture",
+      "room_id": "r3",
+      "position": {
+        "x": 15.6935,
+        "y": 12.4833,
+        "z": 0.0
+      },
+      "rotation_z": 90.03,
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.4,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "bedside_simple",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r3__proc_wardrobe_0",
+      "category": "wardrobe",
+      "label": "wardrobe (generated)",
+      "group": "furniture",
+      "room_id": "r3",
+      "position": {
+        "x": 15.6995,
+        "y": 14.6554,
+        "z": 0.0
+      },
+      "rotation_z": 180.21,
+      "dimensions": {
+        "width": 1.8,
+        "depth": 0.6,
+        "height": 2.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "wardrobe_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r3__proc_study_table_0",
+      "category": "study_table",
+      "label": "study table (generated)",
+      "group": "furniture",
+      "room_id": "r3",
+      "position": {
+        "x": 12.8291,
+        "y": 14.5948,
+        "z": 0.0
+      },
+      "rotation_z": 180.21,
+      "dimensions": {
+        "width": 1.4,
+        "depth": 0.7,
+        "height": 0.75
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "desk_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r3__proc_office_chair_0",
+      "category": "office_chair",
+      "label": "office chair (generated)",
+      "group": "furniture",
+      "room_id": "r3",
+      "position": {
+        "x": 13.7511,
+        "y": 12.8825,
+        "z": 0.0
+      },
+      "rotation_z": 28.3,
+      "dimensions": {
+        "width": 0.62,
+        "depth": 0.62,
+        "height": 1.1
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "unknown",
+      "asset": "office_chair_task",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r3__proc_armchair_0",
+      "category": "armchair",
+      "label": "armchair (generated)",
+      "group": "furniture",
+      "room_id": "r3",
+      "position": {
+        "x": 15.0341,
+        "y": 13.3078,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.85,
+        "depth": 0.85,
+        "height": 0.9
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "armchair_tub",
+      "asset_score": 0.998,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits armchair_tub"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r3__proc_rug_0",
+      "category": "rug",
+      "label": "rug (generated)",
+      "group": "decor",
+      "room_id": "r3",
+      "position": {
+        "x": 13.7511,
+        "y": 12.8825,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 2.4,
+        "depth": 1.7,
+        "height": 0.02
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "carpet",
+      "asset": "rug_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r3__proc_plant_0",
+      "category": "plant",
+      "label": "plant (generated)",
+      "group": "decor",
+      "room_id": "r3",
+      "position": {
+        "x": 12.4681,
+        "y": 12.8825,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 1.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "foliage",
+      "asset": "plant_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r7__proc_bed_0",
+      "category": "bed",
+      "label": "bed (generated)",
+      "group": "furniture",
+      "room_id": "r7",
+      "position": {
+        "x": 30.1466,
+        "y": 11.436,
+        "z": 0.0
+      },
+      "rotation_z": 269.99,
+      "dimensions": {
+        "width": 1.6,
+        "depth": 2.0,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "bed_platform_low",
+      "asset_score": 0.92,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits bed_platform_low"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r7__proc_bedside_table_0",
+      "category": "bedside_table",
+      "label": "bedside table (generated)",
+      "group": "furniture",
+      "room_id": "r7",
+      "position": {
+        "x": 30.1467,
+        "y": 12.521,
+        "z": 0.0
+      },
+      "rotation_z": 269.99,
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.4,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "bedside_simple",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r7__proc_bedside_table_1",
+      "category": "bedside_table",
+      "label": "bedside table (generated)",
+      "group": "furniture",
+      "room_id": "r7",
+      "position": {
+        "x": 30.1467,
+        "y": 12.521,
+        "z": 0.0
+      },
+      "rotation_z": 269.99,
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.4,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "bedside_simple",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r7__proc_wardrobe_0",
+      "category": "wardrobe",
+      "label": "wardrobe (generated)",
+      "group": "furniture",
+      "room_id": "r7",
+      "position": {
+        "x": 33.4451,
+        "y": 14.0475,
+        "z": 0.0
+      },
+      "rotation_z": 89.99,
+      "dimensions": {
+        "width": 1.8,
+        "depth": 0.6,
+        "height": 2.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "wardrobe_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r7__proc_study_table_0",
+      "category": "study_table",
+      "label": "study table (generated)",
+      "group": "furniture",
+      "room_id": "r7",
+      "position": {
+        "x": 29.88,
+        "y": 14.6754,
+        "z": 0.0
+      },
+      "rotation_z": 180.0,
+      "dimensions": {
+        "width": 1.4,
+        "depth": 0.7,
+        "height": 0.75
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "desk_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r7__proc_office_chair_0",
+      "category": "office_chair",
+      "label": "office chair (generated)",
+      "group": "furniture",
+      "room_id": "r7",
+      "position": {
+        "x": 31.2323,
+        "y": 13.3739,
+        "z": 0.0
+      },
+      "rotation_z": 46.1,
+      "dimensions": {
+        "width": 0.62,
+        "depth": 0.62,
+        "height": 1.1
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "unknown",
+      "asset": "office_chair_task",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r7__proc_armchair_0",
+      "category": "armchair",
+      "label": "armchair (generated)",
+      "group": "furniture",
+      "room_id": "r7",
+      "position": {
+        "x": 32.5138,
+        "y": 12.0978,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.85,
+        "depth": 0.85,
+        "height": 0.9
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "armchair_tub",
+      "asset_score": 0.998,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits armchair_tub"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r7__proc_rug_0",
+      "category": "rug",
+      "label": "rug (generated)",
+      "group": "decor",
+      "room_id": "r7",
+      "position": {
+        "x": 31.2323,
+        "y": 12.9485,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 2.4,
+        "depth": 1.7,
+        "height": 0.02
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "carpet",
+      "asset": "rug_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r7__proc_plant_0",
+      "category": "plant",
+      "label": "plant (generated)",
+      "group": "decor",
+      "room_id": "r7",
+      "position": {
+        "x": 31.6594,
+        "y": 12.5232,
+        "z": 0.0
+      },
+      "rotation_z": 90.0,
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 1.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "foliage",
+      "asset": "plant_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r5__proc_bed_0",
+      "category": "bed",
+      "label": "bed (generated)",
+      "group": "furniture",
+      "room_id": "r5",
+      "position": {
+        "x": 30.1429,
+        "y": 7.3974,
+        "z": 0.0
+      },
+      "rotation_z": 179.68,
+      "dimensions": {
+        "width": 1.6,
+        "depth": 2.0,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "bed_platform_low",
+      "asset_score": 0.92,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits bed_platform_low"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r5__proc_bedside_table_0",
+      "category": "bedside_table",
+      "label": "bedside table (generated)",
+      "group": "furniture",
+      "room_id": "r5",
+      "position": {
+        "x": 31.2279,
+        "y": 7.3913,
+        "z": 0.0
+      },
+      "rotation_z": 179.68,
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.4,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "bedside_simple",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r5__proc_bedside_table_1",
+      "category": "bedside_table",
+      "label": "bedside table (generated)",
+      "group": "furniture",
+      "room_id": "r5",
+      "position": {
+        "x": 31.2279,
+        "y": 7.3913,
+        "z": 0.0
+      },
+      "rotation_z": 179.68,
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.4,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "bedside_simple",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r5__proc_wardrobe_0",
+      "category": "wardrobe",
+      "label": "wardrobe (generated)",
+      "group": "furniture",
+      "room_id": "r5",
+      "position": {
+        "x": 33.4306,
+        "y": 6.3611,
+        "z": 0.0
+      },
+      "rotation_z": 90.0,
+      "dimensions": {
+        "width": 1.8,
+        "depth": 0.6,
+        "height": 2.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "wardrobe_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r5__proc_study_table_0",
+      "category": "study_table",
+      "label": "study table (generated)",
+      "group": "furniture",
+      "room_id": "r5",
+      "position": {
+        "x": 31.9649,
+        "y": 5.7283,
+        "z": 0.0
+      },
+      "rotation_z": 360.0,
+      "dimensions": {
+        "width": 1.4,
+        "depth": 0.7,
+        "height": 0.75
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "desk_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r5__proc_rug_0",
+      "category": "rug",
+      "label": "rug (generated)",
+      "group": "decor",
+      "room_id": "r5",
+      "position": {
+        "x": 31.6582,
+        "y": 6.6676,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 2.375,
+        "depth": 1.682,
+        "height": 0.02
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "carpet",
+      "asset": "rug_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r5__proc_plant_0",
+      "category": "plant",
+      "label": "plant (generated)",
+      "group": "decor",
+      "room_id": "r5",
+      "position": {
+        "x": 32.0827,
+        "y": 7.114,
+        "z": 0.0
+      },
+      "rotation_z": 90.0,
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 1.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "foliage",
+      "asset": "plant_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r12__proc_bed_0",
+      "category": "bed",
+      "label": "bed (generated)",
+      "group": "furniture",
+      "room_id": "r12",
+      "position": {
+        "x": 15.7328,
+        "y": 6.3788,
+        "z": 0.0
+      },
+      "rotation_z": 359.46,
+      "dimensions": {
+        "width": 1.6,
+        "depth": 2.0,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "fabric",
+      "asset": "bed_platform_low",
+      "asset_score": 0.92,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: proportions match (1.00)",
+        "asset: style 'modern' suits bed_platform_low"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r12__proc_bedside_table_0",
+      "category": "bedside_table",
+      "label": "bedside table (generated)",
+      "group": "furniture",
+      "room_id": "r12",
+      "position": {
+        "x": 14.6478,
+        "y": 6.389,
+        "z": 0.0
+      },
+      "rotation_z": 359.46,
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.4,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "bedside_simple",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r12__proc_bedside_table_1",
+      "category": "bedside_table",
+      "label": "bedside table (generated)",
+      "group": "furniture",
+      "room_id": "r12",
+      "position": {
+        "x": 14.6478,
+        "y": 6.389,
+        "z": 0.0
+      },
+      "rotation_z": 359.46,
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.4,
+        "height": 0.55
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "bedside_simple",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r12__proc_wardrobe_0",
+      "category": "wardrobe",
+      "label": "wardrobe (generated)",
+      "group": "furniture",
+      "room_id": "r12",
+      "position": {
+        "x": 12.3065,
+        "y": 6.3783,
+        "z": 0.0
+      },
+      "rotation_z": 269.24,
+      "dimensions": {
+        "width": 1.8,
+        "depth": 0.6,
+        "height": 2.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "wardrobe_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r12__proc_study_table_0",
+      "category": "study_table",
+      "label": "study table (generated)",
+      "group": "furniture",
+      "room_id": "r12",
+      "position": {
+        "x": 13.7096,
+        "y": 7.8431,
+        "z": 0.0
+      },
+      "rotation_z": 180.52,
+      "dimensions": {
+        "width": 1.4,
+        "depth": 0.7,
+        "height": 0.75
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "desk_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r12__proc_rug_0",
+      "category": "rug",
+      "label": "rug (generated)",
+      "group": "decor",
+      "room_id": "r12",
+      "position": {
+        "x": 13.2488,
+        "y": 7.4273,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 2.201,
+        "depth": 1.559,
+        "height": 0.019
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "carpet",
+      "asset": "rug_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r12__proc_plant_0",
+      "category": "plant",
+      "label": "plant (generated)",
+      "group": "decor",
+      "room_id": "r12",
+      "position": {
+        "x": 13.6841,
+        "y": 6.5841,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 1.2
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "foliage",
+      "asset": "plant_tall",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r10__proc_console_table_0",
+      "category": "console_table",
+      "label": "console table (generated)",
+      "group": "furniture",
+      "room_id": "r10",
+      "position": {
+        "x": 2.839,
+        "y": 3.6673,
+        "z": 0.0
+      },
+      "rotation_z": 270.0,
+      "dimensions": {
+        "width": 1.2,
+        "depth": 0.35,
+        "height": 0.8
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "console_slim",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r10__proc_mirror_0",
+      "category": "mirror",
+      "label": "mirror (generated)",
+      "group": "decor",
+      "room_id": "r10",
+      "position": {
+        "x": 3.9624,
+        "y": 3.7187,
+        "z": 0.0
+      },
+      "rotation_z": 90.0,
+      "dimensions": {
+        "width": 0.7,
+        "depth": 0.05,
+        "height": 1.2
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "glass",
+      "asset": "mirror_frame",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r10__proc_rug_0",
+      "category": "rug",
+      "label": "rug (generated)",
+      "group": "decor",
+      "room_id": "r10",
+      "position": {
+        "x": 3.9624,
+        "y": 3.7187,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 1.306,
+        "depth": 0.925,
+        "height": 0.015
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "carpet",
+      "asset": "rug_rect",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r10__proc_painting_0",
+      "category": "painting",
+      "label": "painting (generated)",
+      "group": "decor",
+      "room_id": "r10",
+      "position": {
+        "x": 4.8613,
+        "y": 3.7187,
+        "z": 0.0
+      },
+      "rotation_z": 90.0,
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.05,
+        "height": 1.0
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "canvas",
+      "asset": "painting_frame",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r8__proc_cabinet_0",
+      "category": "cabinet",
+      "label": "cabinet (generated)",
+      "group": "furniture",
+      "room_id": "r8",
+      "position": {
+        "x": 25.5679,
+        "y": 14.8186,
+        "z": 0.0
+      },
+      "rotation_z": 180.0,
+      "dimensions": {
+        "width": 1.0,
+        "depth": 0.45,
+        "height": 0.9
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "cabinet_doors",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r8__proc_mirror_0",
+      "category": "mirror",
+      "label": "mirror (generated)",
+      "group": "decor",
+      "room_id": "r8",
+      "position": {
+        "x": 24.4615,
+        "y": 13.6844,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 0.7,
+        "depth": 0.05,
+        "height": 1.2
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "glass",
+      "asset": "mirror_frame",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r1__proc_shelves_0",
+      "category": "shelves",
+      "label": "shelves (generated)",
+      "group": "decor",
+      "room_id": "r1",
+      "position": {
+        "x": 7.7562,
+        "y": 14.1347,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 1.0,
+        "depth": 0.28,
+        "height": 0.3
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "wood",
+      "asset": "shelf_floating",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r1__proc_shelves_1",
+      "category": "shelves",
+      "label": "shelves (generated)",
+      "group": "decor",
+      "room_id": "r1",
+      "position": {
+        "x": 6.5499,
+        "y": 14.1347,
+        "z": 0.0
+      },
+      "rotation_z": 90.0,
+      "dimensions": {
+        "width": 1.0,
+        "depth": 0.28,
+        "height": 0.3
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "wood",
+      "asset": "shelf_floating",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r1__proc_cabinet_0",
+      "category": "cabinet",
+      "label": "cabinet (generated)",
+      "group": "furniture",
+      "room_id": "r1",
+      "position": {
+        "x": 8.1583,
+        "y": 14.577,
+        "z": 0.0
+      },
+      "rotation_z": 0.0,
+      "dimensions": {
+        "width": 1.0,
+        "depth": 0.45,
+        "height": 0.9
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "cabinet_doors",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r6__proc_cabinet_0",
+      "category": "cabinet",
+      "label": "cabinet (generated)",
+      "group": "furniture",
+      "room_id": "r6",
+      "position": {
+        "x": 33.2606,
+        "y": 8.8715,
+        "z": 0.0
+      },
+      "rotation_z": 359.67,
+      "dimensions": {
+        "width": 0.657,
+        "depth": 0.3,
+        "height": 0.746
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "cabinet_doors",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r6__proc_mirror_0",
+      "category": "mirror",
+      "label": "mirror (generated)",
+      "group": "decor",
+      "room_id": "r6",
+      "position": {
+        "x": 32.1591,
+        "y": 9.1376,
+        "z": 0.0
+      },
+      "rotation_z": 90.0,
+      "dimensions": {
+        "width": 0.657,
+        "depth": 0.047,
+        "height": 1.163
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "glass",
+      "asset": "mirror_frame",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r14__proc_cabinet_0",
+      "category": "cabinet",
+      "label": "cabinet (generated)",
+      "group": "furniture",
+      "room_id": "r14",
+      "position": {
+        "x": 30.6986,
+        "y": 3.7749,
+        "z": 0.0
+      },
+      "rotation_z": 360.0,
+      "dimensions": {
+        "width": 0.635,
+        "depth": 0.3,
+        "height": 0.736
+      },
+      "scale": 1.0,
+      "support": "floor",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#B5AFA5",
+      "material": "wood",
+      "asset": "cabinet_doors",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: against a wall",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    },
+    {
+      "id": "r14__proc_mirror_0",
+      "category": "mirror",
+      "label": "mirror (generated)",
+      "group": "decor",
+      "room_id": "r14",
+      "position": {
+        "x": 29.5352,
+        "y": 4.0364,
+        "z": 0.0
+      },
+      "rotation_z": 90.0,
+      "dimensions": {
+        "width": 0.635,
+        "depth": 0.045,
+        "height": 1.144
+      },
+      "scale": 1.0,
+      "support": "wall",
+      "support_id": "",
+      "wall_id": "",
+      "color_hex": "#9AA5AE",
+      "material": "glass",
+      "asset": "mirror_frame",
+      "asset_score": 1.0,
+      "confidence": 0.7,
+      "uncertain": false,
+      "flags": [
+        "procedural",
+        "placed: in open floor",
+        "asset: only variant"
+      ],
+      "locked": false,
+      "source_images": [],
+      "observation_count": 0,
+      "distance_to_nearest_wall": 0.0,
+      "distance_to_room_center": 0.0
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "r13__proc_coffee_table_0",
+      "predicate": "faces",
+      "object": "r13__proc_sofa_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r13__proc_rug_0",
+      "predicate": "centered_under",
+      "object": "r13__proc_coffee_table_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r11__proc_coffee_table_0",
+      "predicate": "faces",
+      "object": "r11__proc_sofa_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r11__proc_rug_0",
+      "predicate": "centered_under",
+      "object": "r11__proc_coffee_table_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r3__proc_bedside_table_0",
+      "predicate": "beside",
+      "object": "r3__proc_bed_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r3__proc_bedside_table_1",
+      "predicate": "beside",
+      "object": "r3__proc_bed_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r3__proc_office_chair_0",
+      "predicate": "faces",
+      "object": "r3__proc_study_table_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r7__proc_bedside_table_0",
+      "predicate": "beside",
+      "object": "r7__proc_bed_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r7__proc_bedside_table_1",
+      "predicate": "beside",
+      "object": "r7__proc_bed_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r7__proc_office_chair_0",
+      "predicate": "faces",
+      "object": "r7__proc_study_table_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r5__proc_bedside_table_0",
+      "predicate": "beside",
+      "object": "r5__proc_bed_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r5__proc_bedside_table_1",
+      "predicate": "beside",
+      "object": "r5__proc_bed_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r12__proc_bedside_table_0",
+      "predicate": "beside",
+      "object": "r12__proc_bed_0",
+      "confidence": 0.7,
+      "satisfied": true
+    },
+    {
+      "subject": "r12__proc_bedside_table_1",
+      "predicate": "beside",
+      "object": "r12__proc_bed_0",
+      "confidence": 0.7,
+      "satisfied": true
+    }
+  ],
+  "viewpoints": [],
+  "provenance": {
+    "elapsed_s": 0.15,
+    "images": []
+  },
+  "diagnostics": {
+    "errors": [
+      "no reference images supplied"
+    ],
+    "reason": "no usable observations",
+    "images": [],
+    "segmentation": {
+      "mode": "reconstruction",
+      "rooms_kept": 20,
+      "total_area_m2": 217.29
+    },
+    "room_classification": {
+      "rooms": 20,
+      "identified": 14,
+      "unidentified": 6,
+      "confident": 12,
+      "mean_confidence": 0.544,
+      "by_type": {
+        "unknown": 6,
+        "bathroom": 5,
+        "bedroom": 4,
+        "living_room": 2,
+        "hallway": 2,
+        "store": 1
+      },
+      "decided_by": {
+        "room_label": 12
+      },
+      "conflicts": 4,
+      "rooms_detail": [
+        {
+          "room_id": "r11",
+          "room_type": "living_room",
+          "specific_type": "",
+          "confidence": 0.904,
+          "decided_by": "room_label",
+          "runner_up": "studio",
+          "reasons": [
+            "text label \"LIVING 20'0\" X 15'9\"\" inside the room",
+            "29.1 m2 floor area",
+            "adjacent to hallway",
+            "3 window(s)",
+            "1.3:1 proportions are room-like"
+          ],
+          "conflicts": []
+        },
+        {
+          "room_id": "r17",
+          "room_type": "bathroom",
+          "specific_type": "",
+          "confidence": 0.897,
+          "decided_by": "room_label",
+          "runner_up": "store",
+          "reasons": [
+            "text label \"TOILET 6'6\" X 5'6\"\" inside the room",
+            "2.4 m2 floor area",
+            "adjacent to bedroom",
+            "no windows",
+            "1.1:1 proportions are room-like"
+          ],
+          "conflicts": []
+        },
+        {
+          "room_id": "r14",
+          "room_type": "bathroom",
+          "specific_type": "",
+          "confidence": 0.894,
+          "decided_by": "room_label",
+          "runner_up": "store",
+          "reasons": [
+            "text label \"TOILET 8'0\" X 5'0\"\" inside the room",
+            "3.5 m2 floor area",
+            "adjacent to bedroom",
+            "no windows",
+            "deep in the plan (depth 0.67)",
+            "1.5:1 proportions are room-like"
+          ],
+          "conflicts": []
+        },
+        {
+          "room_id": "r3",
+          "room_type": "bedroom",
+          "specific_type": "",
+          "confidence": 0.889,
+          "decided_by": "room_label",
+          "runner_up": "living_room",
+          "reasons": [
+            "text label \"BED ROOM 16'0\" X 15'9\"\" inside the room",
+            "23.5 m2 floor area",
+            "2 window(s)",
+            "1.0:1 proportions are room-like"
+          ],
+          "conflicts": []
+        },
+        {
+          "room_id": "r8",
+          "room_type": "bathroom",
+          "specific_type": "",
+          "confidence": 0.888,
+          "decided_by": "room_label",
+          "runner_up": "office",
+          "reasons": [
+            "text label \"TOILET 10'0\" X 6'6\"\" inside the room",
+            "6.1 m2 floor area",
+            "deep in the plan (depth 1.00)",
+            "against: 1 window(s)",
+            "1.5:1 proportions are room-like"
+          ],
+          "conflicts": []
+        },
+        {
+          "room_id": "r12",
+          "room_type": "bedroom",
+          "specific_type": "",
+          "confidence": 0.871,
+          "decided_by": "room_label",
+          "runner_up": "hallway",
+          "reasons": [
+            "text label \"BED ROOM 16'0\" X 10'0\"\" inside the room",
+            "15.1 m2 floor area",
+            "against: 4 door(s)",
+            "adjacent to bathroom",
+            "1 window(s)",
+            "1.6:1 proportions are room-like"
+          ],
+          "conflicts": []
+        },
+        {
+          "room_id": "r6",
+          "room_type": "bathroom",
+          "specific_type": "",
+          "confidence": 0.863,
+          "decided_by": "room_label",
+          "runner_up": "balcony",
+          "reasons": [
+            "text label \"TOILET 10'0\" X 5'0\"\" inside the room",
+            "4.5 m2 floor area",
+            "1 door(s)",
+            "against: 1 window(s)",
+            "2.0:1 proportions are room-like",
+            "against: near the entrance (depth 0.33)"
+          ],
+          "conflicts": []
+        },
+        {
+          "room_id": "r7",
+          "room_type": "bedroom",
+          "specific_type": "",
+          "confidence": 0.845,
+          "decided_by": "room_label",
+          "runner_up": "hallway",
+          "reasons": [
+            "text label \"BED ROOM 16'0\" X 15'9\"\" inside the room",
+            "23.5 m2 floor area",
+            "against: 3 door(s)",
+            "2 window(s)",
+            "8 entities on a furniture layer",
+            "1.0:1 proportions are room-like"
+          ],
+          "conflicts": []
+        },
+        {
+          "room_id": "r5",
+          "room_type": "bedroom",
+          "specific_type": "",
+          "confidence": 0.836,
+          "decided_by": "room_label",
+          "runner_up": "hallway",
+          "reasons": [
+            "text label \"BED ROOM 16'0\" X 10'0\"\" inside the room",
+            "15.8 m2 floor area",
+            "against: 4 door(s)",
+            "adjacent to bathroom, adjacent to living_room",
+            "1 window(s)",
+            "1.5:1 proportions are room-like"
+          ],
+          "conflicts": []
+        },
+        {
+          "room_id": "r20",
+          "room_type": "bathroom",
+          "specific_type": "",
+          "confidence": 0.832,
+          "decided_by": "room_label",
+          "runner_up": "shaft",
+          "reasons": [
+            "text label \"TOILET 4'0\" X 5'0\"\" inside the room",
+            "no windows",
+            "against: 1.6 m2 floor area",
+            "1.4:1 proportions are room-like"
+          ],
+          "conflicts": []
+        },
+        {
+          "room_id": "r10",
+          "room_type": "hallway",
+          "specific_type": "",
+          "confidence": 0.73,
+          "decided_by": "room_label",
+          "runner_up": "balcony",
+          "reasons": [
+            "text label \"FOYER\" inside the room",
+            "6.4 m2 floor area",
+            "adjacent to living_room",
+            "against: 2 window(s)",
+            "1.3:1 proportions are room-like"
+          ],
+          "conflicts": [
+            {
+              "claimed": "hallway",
+              "contradicted_by": "balcony",
+              "signal": "room_label",
+              "detail": "room_label says 'hallway' but room_label says 'balcony'",
+              "severity": 0.9
+            }
+          ]
+        },
+        {
+          "room_id": "r1",
+          "room_type": "store",
+          "specific_type": "",
+          "confidence": 0.722,
+          "decided_by": "room_label",
+          "runner_up": "bathroom",
+          "reasons": [
+            "text label \"STORE 9'6\" X 6'3\"\" inside the room",
+            "5.7 m2 floor area",
+            "against: 1 window(s)",
+            "1.6:1 proportions are room-like"
+          ],
+          "conflicts": [
+            {
+              "claimed": "store",
+              "contradicted_by": "bathroom",
+              "signal": "room_label",
+              "detail": "room_label says 'store' but room_label says 'bathroom'",
+              "severity": 0.9
+            }
+          ]
+        },
+        {
+          "room_id": "r13",
+          "room_type": "living_room",
+          "specific_type": "",
+          "confidence": 0.415,
+          "decided_by": "",
+          "runner_up": "hallway",
+          "reasons": [
+            "54.7 m2 floor area",
+            "against: 7 door(s)",
+            "2 window(s)",
+            "39 entities on a furniture layer",
+            "near the entrance (depth 0.00)",
+            "1.3:1 proportions are room-like"
+          ],
+          "conflicts": [
+            {
+              "claimed": "living_room",
+              "contradicted_by": "living_room",
+              "signal": "uniqueness",
+              "detail": "a plan usually has one living room; r11 is the stronger candidate (90% vs 41%)",
+              "severity": 0.4
+            }
+          ]
+        },
+        {
+          "room_id": "r19",
+          "room_type": "hallway",
+          "specific_type": "",
+          "confidence": 0.301,
+          "decided_by": "",
+          "runner_up": "shaft",
+          "reasons": [
+            "1.8 m2 floor area",
+            "no windows",
+            "adjacent to living_room",
+            "near the entrance (depth 0.33)",
+            "1.3:1 proportions are room-like"
+          ],
+          "conflicts": [
+            {
+              "claimed": "hallway",
+              "contradicted_by": "shaft",
+              "signal": "fused_evidence",
+              "detail": "'hallway' (30%) and 'shaft' (25%) are too close to separate",
+              "severity": 0.6
+            }
+          ]
+        },
+        {
+          "room_id": "r16",
+          "room_type": "unknown",
+          "specific_type": "",
+          "confidence": 0.0,
+          "decided_by": "",
+          "runner_up": "bathroom",
+          "reasons": [],
+          "conflicts": []
+        },
+        {
+          "room_id": "r9",
+          "room_type": "unknown",
+          "specific_type": "",
+          "confidence": 0.0,
+          "decided_by": "",
+          "runner_up": "hallway",
+          "reasons": [],
+          "conflicts": []
+        },
+        {
+          "room_id": "r2",
+          "room_type": "unknown",
+          "specific_type": "",
+          "confidence": 0.0,
+          "decided_by": "",
+          "runner_up": "kitchen",
+          "reasons": [],
+          "conflicts": []
+        },
+        {
+          "room_id": "r4",
+          "room_type": "unknown",
+          "specific_type": "",
+          "confidence": 0.0,
+          "decided_by": "",
+          "runner_up": "bathroom",
+          "reasons": [],
+          "conflicts": []
+        },
+        {
+          "room_id": "r15",
+          "room_type": "unknown",
+          "specific_type": "",
+          "confidence": 0.0,
+          "decided_by": "",
+          "runner_up": "hallway",
+          "reasons": [],
+          "conflicts": []
+        },
+        {
+          "room_id": "r18",
+          "room_type": "unknown",
+          "specific_type": "",
+          "confidence": 0.0,
+          "decided_by": "",
+          "runner_up": "store",
+          "reasons": [],
+          "conflicts": []
+        }
+      ]
+    },
+    "furnishing": {
+      "objects_created": 68,
+      "lights_created": 39,
+      "rooms_furnished": 11,
+      "rooms_skipped": 9,
+      "total_rejections": 0,
+      "rooms": [
+        {
+          "room_id": "r13",
+          "room_type": "living_room",
+          "placed": [
+            "sofa",
+            "coffee_table",
+            "tv_unit",
+            "tv",
+            "armchair",
+            "armchair",
+            "rug",
+            "bookshelf",
+            "side_table",
+            "plant",
+            "plant",
+            "plant",
+            "painting"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light",
+            "ceiling_light",
+            "ceiling_light",
+            "floor_lamp",
+            "floor_lamp"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r11",
+          "room_type": "living_room",
+          "placed": [
+            "sofa",
+            "coffee_table",
+            "tv_unit",
+            "tv",
+            "armchair",
+            "rug",
+            "bookshelf",
+            "side_table",
+            "plant",
+            "painting"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light",
+            "ceiling_light",
+            "floor_lamp"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r3",
+          "room_type": "bedroom",
+          "placed": [
+            "bed",
+            "bedside_table",
+            "bedside_table",
+            "wardrobe",
+            "study_table",
+            "office_chair",
+            "armchair",
+            "rug",
+            "plant"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light",
+            "ceiling_light",
+            "table_lamp",
+            "table_lamp"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r7",
+          "room_type": "bedroom",
+          "placed": [
+            "bed",
+            "bedside_table",
+            "bedside_table",
+            "wardrobe",
+            "study_table",
+            "office_chair",
+            "armchair",
+            "rug",
+            "plant"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light",
+            "ceiling_light",
+            "table_lamp",
+            "table_lamp"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r5",
+          "room_type": "bedroom",
+          "placed": [
+            "bed",
+            "bedside_table",
+            "bedside_table",
+            "wardrobe",
+            "study_table",
+            "rug",
+            "plant"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light",
+            "table_lamp",
+            "table_lamp"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r12",
+          "room_type": "bedroom",
+          "placed": [
+            "bed",
+            "bedside_table",
+            "bedside_table",
+            "wardrobe",
+            "study_table",
+            "rug",
+            "plant"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light",
+            "table_lamp",
+            "table_lamp"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r10",
+          "room_type": "hallway",
+          "placed": [
+            "console_table",
+            "mirror",
+            "rug",
+            "painting"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r8",
+          "room_type": "bathroom",
+          "placed": [
+            "cabinet",
+            "mirror"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light",
+            "wall_light"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r1",
+          "room_type": "store",
+          "placed": [
+            "shelves",
+            "shelves",
+            "cabinet"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r16",
+          "room_type": "unknown",
+          "placed": [],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": "room type 'unknown' is deliberately left unfurnished"
+        },
+        {
+          "room_id": "r9",
+          "room_type": "unknown",
+          "placed": [],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": "room type 'unknown' is deliberately left unfurnished"
+        },
+        {
+          "room_id": "r2",
+          "room_type": "unknown",
+          "placed": [],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": "room type 'unknown' is deliberately left unfurnished"
+        },
+        {
+          "room_id": "r6",
+          "room_type": "bathroom",
+          "placed": [
+            "cabinet",
+            "mirror"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light",
+            "wall_light"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r4",
+          "room_type": "unknown",
+          "placed": [],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": "room type 'unknown' is deliberately left unfurnished"
+        },
+        {
+          "room_id": "r14",
+          "room_type": "bathroom",
+          "placed": [
+            "cabinet",
+            "mirror"
+          ],
+          "rejected": [],
+          "lights": [
+            "ceiling_light",
+            "wall_light"
+          ],
+          "skipped_reason": ""
+        },
+        {
+          "room_id": "r15",
+          "room_type": "unknown",
+          "placed": [],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": "room type 'unknown' is deliberately left unfurnished"
+        },
+        {
+          "room_id": "r17",
+          "room_type": "bathroom",
+          "placed": [],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": "room measures 2.4 m2 but the smallest item in the bathroom programme needs 2.5 m2 - the room outline is probably incomplete"
+        },
+        {
+          "room_id": "r18",
+          "room_type": "unknown",
+          "placed": [],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": "room type 'unknown' is deliberately left unfurnished"
+        },
+        {
+          "room_id": "r19",
+          "room_type": "hallway",
+          "placed": [],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": "room measures 1.8 m2 but the smallest item in the hallway programme needs 5.0 m2 - the room outline is probably incomplete"
+        },
+        {
+          "room_id": "r20",
+          "room_type": "bathroom",
+          "placed": [],
+          "rejected": [],
+          "lights": [
+            "ceiling_light"
+          ],
+          "skipped_reason": "room measures 1.6 m2 but the smallest item in the bathroom programme needs 2.5 m2 - the room outline is probably incomplete"
+        }
+      ],
+      "enabled": true
+    }
+  }
+}

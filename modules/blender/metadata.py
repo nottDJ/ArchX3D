@@ -38,6 +38,13 @@ scene to Y-up on the way out, so a viewer reading these must apply the same
 conversion: ``(x, y) → (x, -y)`` in the ground plane. ``up_axis`` in the
 manifest records which convention the *file* ended up in, so the viewer never
 has to assume.
+
+They describe where each storey was **built**, not where it was drawn. A first
+floor drawn beside the ground floor on the same sheet is registered over it and
+raised; the shell, the furniture and the luminaires all move with it, and so do
+these bounds — see ``room_transforms`` in ``scene_manifest``. ``elevation``
+carries the vertical half of that transform, because the ground-plane pair
+cannot.
 """
 
 from __future__ import annotations
@@ -51,7 +58,11 @@ except ImportError:  # pragma: no cover
 
 #: Bump when the meaning of a field changes, so a viewer can refuse to
 #: misinterpret an older file rather than rendering it wrongly.
-METADATA_VERSION = "1.0"
+#:
+#: 1.1 — room bounds and polygons moved from the storey's *drawn* position to
+#:       its *built* one, and rooms gained ``elevation``. In a single-storey
+#:       model 1.1 and 1.0 are byte-identical apart from ``elevation: 0.0``.
+METADATA_VERSION = "1.1"
 
 
 # ---------------------------------------------------------------------------
@@ -114,6 +125,13 @@ def classify(obj) -> str:
     is the last resort precisely because it is the thing that breaks silently
     when a builder is renamed.
     """
+    # A kind the shell builder already declared wins: it built the object from
+    # the architectural model and knows what it is, whatever storey suffix its
+    # name carries.
+    declared = obj.get("archx3d_kind")
+    if isinstance(declared, str) and declared in KINDS and declared != UNKNOWN:
+        return declared
+
     group = obj.get("archx3d_group")
     if isinstance(group, str) and group:
         return _GROUP_TO_KIND.get(group, FURNITURE)
@@ -183,12 +201,22 @@ def tag_objects(graph=None) -> dict:
     return counts
 
 
-def scene_manifest(graph=None, config=None) -> dict:
+def scene_manifest(graph=None, config=None, room_transforms=None) -> dict:
     """The scene-level block describing the building as a whole.
 
     Kept small on purpose. It is not a second copy of the scene graph — it is
     the handful of facts a viewer needs that it cannot read off the meshes:
     which rooms exist, where they are, and how tall they are.
+
+    ``room_transforms`` maps a room id to its storey's ``(dx, dy, z)``, as
+    ``blender_build.room_transforms`` computes it. The scene graph positions
+    every room where its storey was *drawn on the sheet*, which for an upper
+    floor drawn beside the ground floor is metres away from where that storey
+    was *built*. The shell, the furniture and the luminaires are all moved by
+    this transform; without it the manifest would be the only thing left
+    describing the drawn positions, and a viewer trusting it would put the
+    first floor's rooms outside the building. Omit it for a single-storey
+    model, where every transform is the identity.
     """
     manifest = {
         "version": METADATA_VERSION,
@@ -203,7 +231,10 @@ def scene_manifest(graph=None, config=None) -> dict:
     if graph is None:
         return manifest
 
+    transforms = room_transforms or {}
+
     for room in graph.rooms:
+        dx, dy, dz = transforms.get(room.id, (0.0, 0.0, 0.0))
         manifest["rooms"].append({
             "id": room.id,
             "name": (room.room_type or "room").replace("_", " ").title(),
@@ -211,10 +242,17 @@ def scene_manifest(graph=None, config=None) -> dict:
             "style": room.style,
             "area_m2": round(room.area, 2),
             "ceiling_height": round(room.ceiling_height, 3),
-            # Plan metres, +Z up — the viewer applies (x, y) -> (x, -y).
-            "bounds_min": [round(room.bounds_min[0], 4), round(room.bounds_min[1], 4)],
-            "bounds_max": [round(room.bounds_max[0], 4), round(room.bounds_max[1], 4)],
-            "polygon": [[round(p[0], 4), round(p[1], 4)] for p in room.polygon],
+            # Height of this room's floor above the model's datum. Without it a
+            # viewer flying to a first-floor room lands on the ground floor.
+            "elevation": round(dz, 4),
+            # Plan metres, +Z up, on the storey's *built* position — the viewer
+            # applies (x, y) -> (x, -y).
+            "bounds_min": [round(room.bounds_min[0] + dx, 4),
+                           round(room.bounds_min[1] + dy, 4)],
+            "bounds_max": [round(room.bounds_max[0] + dx, 4),
+                           round(room.bounds_max[1] + dy, 4)],
+            "polygon": [[round(p[0] + dx, 4), round(p[1] + dy, 4)]
+                        for p in room.polygon],
             "connected_to": list(room.connected_to),
             "object_count": len([o for o in graph.objects if o.room_id == room.id]),
         })
@@ -222,7 +260,7 @@ def scene_manifest(graph=None, config=None) -> dict:
     return manifest
 
 
-def tag_scene(graph=None, config=None) -> dict:
+def tag_scene(graph=None, config=None, room_transforms=None) -> dict:
     """Stamp the whole scene: every object, plus the scene-level manifest.
 
     Call immediately before export. Returns the per-kind counts.
@@ -235,7 +273,8 @@ def tag_scene(graph=None, config=None) -> dict:
     # Blender custom properties hold scalars and strings, not nested
     # structures, so the manifest travels as a JSON string. The viewer parses
     # it; anything that cannot is expected to ignore it.
-    bpy.context.scene["archx3d"] = json.dumps(scene_manifest(graph, config))
+    bpy.context.scene["archx3d"] = json.dumps(
+        scene_manifest(graph, config, room_transforms))
     bpy.context.scene["archx3d_version"] = METADATA_VERSION
 
     return counts

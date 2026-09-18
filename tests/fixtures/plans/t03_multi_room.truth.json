@@ -1,0 +1,266 @@
+{
+ "truth_units": "metres",
+ "frame": "drawing",
+ "units": "m",
+ "openings": [
+  {
+   "kind": "window",
+   "centre": [
+    2.75,
+    0.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "window",
+   "centre": [
+    7.75,
+    0.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "window",
+   "centre": [
+    11.75,
+    0.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "window",
+   "centre": [
+    14.0,
+    4.25
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "window",
+   "centre": [
+    11.25,
+    9.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "window",
+   "centre": [
+    4.25,
+    9.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "door",
+   "centre": [
+    0.0,
+    4.55
+   ],
+   "width": 0.9000000000000004
+  },
+  {
+   "kind": "door",
+   "centre": [
+    2.45,
+    4.0
+   ],
+   "width": 0.8999999999999999
+  },
+  {
+   "kind": "door",
+   "centre": [
+    6.45,
+    4.0
+   ],
+   "width": 0.9000000000000004
+  },
+  {
+   "kind": "door",
+   "centre": [
+    10.95,
+    4.0
+   ],
+   "width": 0.9000000000000004
+  },
+  {
+   "kind": "door",
+   "centre": [
+    3.45,
+    5.2
+   ],
+   "width": 0.8999999999999999
+  },
+  {
+   "kind": "door",
+   "centre": [
+    8.45,
+    5.2
+   ],
+   "width": 0.9000000000000004
+  }
+ ],
+ "walls": [
+  {
+   "start": [
+    0.0,
+    0.0
+   ],
+   "end": [
+    14.0,
+    0.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    14.0,
+    0.0
+   ],
+   "end": [
+    14.0,
+    9.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    14.0,
+    9.0
+   ],
+   "end": [
+    0.0,
+    9.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    0.0,
+    9.0
+   ],
+   "end": [
+    0.0,
+    0.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    0.0,
+    4.0
+   ],
+   "end": [
+    14.0,
+    4.0
+   ],
+   "thickness": 0.1
+  },
+  {
+   "start": [
+    0.0,
+    5.2
+   ],
+   "end": [
+    14.0,
+    5.2
+   ],
+   "thickness": 0.1
+  },
+  {
+   "start": [
+    4.5,
+    0.0
+   ],
+   "end": [
+    4.5,
+    4.0
+   ],
+   "thickness": 0.1
+  },
+  {
+   "start": [
+    9.0,
+    0.0
+   ],
+   "end": [
+    9.0,
+    4.0
+   ],
+   "thickness": 0.1
+  },
+  {
+   "start": [
+    5.5,
+    5.2
+   ],
+   "end": [
+    5.5,
+    9.0
+   ],
+   "thickness": 0.1
+  },
+  {
+   "start": [
+    10.0,
+    5.2
+   ],
+   "end": [
+    10.0,
+    9.0
+   ],
+   "thickness": 0.1
+  }
+ ],
+ "labels": [
+  {
+   "text": "BEDROOM 1",
+   "point": [
+    1.5,
+    1.8
+   ]
+  },
+  {
+   "text": "BEDROOM 2",
+   "point": [
+    6.0,
+    1.8
+   ]
+  },
+  {
+   "text": "BATH",
+   "point": [
+    10.5,
+    1.8
+   ]
+  },
+  {
+   "text": "BEDROOM 3",
+   "point": [
+    1.8,
+    7.0
+   ]
+  },
+  {
+   "text": "LIVING",
+   "point": [
+    7.0,
+    7.0
+   ]
+  },
+  {
+   "text": "BATH 2",
+   "point": [
+    11.2,
+    7.0
+   ]
+  },
+  {
+   "text": "HALL",
+   "point": [
+    6.5,
+    4.4
+   ]
+  }
+ ]
+}

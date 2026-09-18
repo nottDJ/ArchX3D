@@ -1,0 +1,175 @@
+{
+ "truth_units": "metres",
+ "frame": "drawing",
+ "units": "m",
+ "openings": [
+  {
+   "kind": "window",
+   "centre": [
+    3.75,
+    0.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "door",
+   "centre": [
+    9.0,
+    3.2
+   ],
+   "width": 2.4000000000000004
+  },
+  {
+   "kind": "window",
+   "centre": [
+    5.25,
+    8.0
+   ],
+   "width": 1.5
+  },
+  {
+   "kind": "door",
+   "centre": [
+    0.0,
+    4.05
+   ],
+   "width": 0.9000000000000004
+  },
+  {
+   "kind": "door",
+   "centre": [
+    4.45,
+    4.0
+   ],
+   "width": 0.9000000000000004
+  },
+  {
+   "kind": "door",
+   "centre": [
+    12.0,
+    0.0
+   ],
+   "width": 4.800000000000001
+  }
+ ],
+ "walls": [
+  {
+   "start": [
+    0.0,
+    0.0
+   ],
+   "end": [
+    9.0,
+    0.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    9.0,
+    0.0
+   ],
+   "end": [
+    9.0,
+    8.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    9.0,
+    8.0
+   ],
+   "end": [
+    0.0,
+    8.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    0.0,
+    8.0
+   ],
+   "end": [
+    0.0,
+    0.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    0.0,
+    4.0
+   ],
+   "end": [
+    9.0,
+    4.0
+   ],
+   "thickness": 0.1
+  },
+  {
+   "start": [
+    9.0,
+    0.0
+   ],
+   "end": [
+    15.0,
+    0.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    15.0,
+    0.0
+   ],
+   "end": [
+    15.0,
+    8.0
+   ],
+   "thickness": 0.15
+  },
+  {
+   "start": [
+    15.0,
+    8.0
+   ],
+   "end": [
+    9.0,
+    8.0
+   ],
+   "thickness": 0.15
+  }
+ ],
+ "labels": [
+  {
+   "text": "LIVING",
+   "point": [
+    2.0,
+    1.8
+   ]
+  },
+  {
+   "text": "BEDROOM",
+   "point": [
+    2.0,
+    6.0
+   ]
+  },
+  {
+   "text": "GARAGE",
+   "point": [
+    11.0,
+    4.0
+   ]
+  },
+  {
+   "text": "PORCH",
+   "point": [
+    -2.4,
+    3.4
+   ]
+  }
+ ]
+}

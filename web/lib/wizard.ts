@@ -213,6 +213,13 @@ export interface ReviewPayload {
   schema_version: string;
   generated_at: string | null;
   images: ImageProfileView[];
+  /** How the analysis ran. Absent on reviews produced before it was recorded. */
+  analysis?: {
+    engine: string;
+    ai: string;
+    network: string;
+    reference_images: number;
+  } | null;
   image_summary: Record<string, unknown>;
   rooms: ReviewRoom[];
   unassigned_objects: ReviewObject[];

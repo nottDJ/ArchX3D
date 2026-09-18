@@ -29,7 +29,7 @@
  */
 
 import { useFrame, useThree } from "@react-three/fiber";
-import { useCallback, useEffect, useImperativeHandle, useMemo, useRef } from "react";
+import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type {
   OrbitControls as OrbitControlsImpl,
@@ -43,12 +43,19 @@ import type { Box } from "@/lib/viewer/bounds";
 import {
   fitCameraToBox,
   floorProbeHeight,
-  interiorSpawn,
   lookAngles,
   planToViewer,
   roomViewpoint,
 } from "@/lib/viewer/bounds";
 import { loadCamera, saveCamera } from "@/lib/viewer/settings";
+import {
+  afterFallingOut,
+  chooseWalkSpawn,
+  hasFallenOut,
+  openestYaw,
+  spawnCandidates,
+  supportAt,
+} from "@/lib/viewer/spawn";
 import type { CameraMode, CameraPose, RoomInfo, SavedCamera } from "@/types/viewer";
 
 // ---------------------------------------------------------------------------
@@ -148,15 +155,24 @@ export function CameraController({
     [],
   );
 
-  /** The largest room's centre — a better walk spawn than the plan centroid. */
-  const spawnHint = useMemo(() => {
-    const largest = rooms[0];
-    if (!largest) return undefined;
-    return [
-      (largest.bounds_min[0] + largest.bounds_max[0]) / 2,
-      (largest.bounds_min[1] + largest.bounds_max[1]) / 2,
-    ] as const;
-  }, [rooms]);
+  /**
+   * Set when walk mode found nowhere with a floor under it. Gravity is then
+   * withheld - the walk controller gets no collider - so the user flies rather
+   * than falls. Falling from an unsupported spawn is exactly the G5 black
+   * screen; see lib/viewer/spawn.ts.
+   */
+  const [unsupported, setUnsupported] = useState(false);
+  /** Fall-outs this model has had; see `afterFallingOut`. */
+  const fallOuts = useRef(0);
+  /**
+   * The pose a fresh walk spawn was given, until the user moves or looks.
+   *
+   * A spawn chosen before the collider exists can only face the building's
+   * centre. When the collider arrives the facing is chosen again from real
+   * sightlines — but only if this pose is still exactly where the camera is,
+   * so nobody who has started looking around gets turned.
+   */
+  const freshSpawn = useRef<{ position: THREE.Vector3; quaternion: THREE.Quaternion } | null>(null);
 
   // -- Persistence -------------------------------------------------------
 
@@ -164,6 +180,8 @@ export function CameraController({
     saved.current = loadCamera(modelUrl);
     framed.current = false;
     previousMode.current = null;
+    fallOuts.current = 0;
+    setUnsupported(false);
   }, [modelUrl]);
 
   const persist = useCallback(
@@ -248,33 +266,83 @@ export function CameraController({
     [collider, eyeHeight],
   );
 
-  const enterWalk = useCallback(() => {
-    const stored = saved.current.walk;
-    const base =
-      stored?.position ??
-      (bounds
-        ? interiorSpawn(bounds, { eyeHeight, preferred: spawnHint })
-        : ([0, eyeHeight, 0] as const));
+  /**
+   * Whether a walk pose is somewhere a person could be standing.
+   *
+   * A pose captured mid-fall used to be persisted, so the next session spawned
+   * straight back into the void. Without a collider there is no way to tell,
+   * so only the fall-out test applies.
+   */
+  const isStandable = useCallback(
+    (position: readonly [number, number, number]) => {
+      if (hasFallenOut(position[1], bounds)) return false;
+      return collider ? supportAt(collider, position, eyeHeight) !== null : true;
+    },
+    [bounds, collider, eyeHeight],
+  );
 
-    const position = groundedSpawn(base);
-    camera.position.set(position[0], position[1], position[2]);
-
-    if (stored?.yaw !== undefined) {
-      scratch.euler.set(stored.pitch ?? 0, stored.yaw, 0, "YXZ");
-      camera.quaternion.setFromEuler(scratch.euler);
-    } else if (bounds) {
-      // Face the middle of the building, so the first thing you see is the
-      // interior rather than whichever wall you happen to be standing against.
+  /**
+   * Level the camera and turn it toward the most open view from `position`.
+   *
+   * Facing the middle of the building is the fallback, and all there is before
+   * the collider exists; with it, `openestYaw` avoids the wall a corner-room
+   * spawn would otherwise stare at.
+   */
+  const faceOpenest = useCallback(
+    (position: readonly [number, number, number]) => {
+      if (!bounds) return;
       const centre: readonly [number, number, number] = [
         (bounds.min[0] + bounds.max[0]) / 2,
         position[1],
         (bounds.min[2] + bounds.max[2]) / 2,
       ];
-      const { yaw, pitch } = lookAngles(position, centre);
-      scratch.euler.set(pitch, yaw, 0, "YXZ");
+      const towardCentre = lookAngles(position, centre).yaw;
+      const yaw = collider ? openestYaw(collider, position, towardCentre, bounds) : towardCentre;
+      scratch.euler.set(0, yaw, 0, "YXZ");
       camera.quaternion.setFromEuler(scratch.euler);
+    },
+    [bounds, camera, collider, scratch],
+  );
+
+  const enterWalk = useCallback(() => {
+    const remembered = saved.current.walk;
+    const stored =
+      remembered?.position && isStandable(remembered.position) ? remembered : undefined;
+
+    let position: readonly [number, number, number];
+    if (stored?.position) {
+      position = groundedSpawn(stored.position);
+      setUnsupported(afterFallingOut(fallOuts.current) === "fly");
+    } else if (bounds) {
+      // Storey-aware, inside a room, and on a floor when the collider can say
+      // so. Before the collider exists this is unconfirmed; the effect below
+      // re-checks the moment it arrives.
+      const spawn = chooseWalkSpawn(spawnCandidates(rooms, bounds, eyeHeight), collider, eyeHeight);
+      position = spawn.position;
+      setUnsupported(
+        afterFallingOut(fallOuts.current) === "fly" || (collider !== null && !spawn.supported),
+      );
+      if (collider && !spawn.supported) {
+        console.warn("[viewer] walk mode found no floor to stand on; flying instead of falling");
+      }
+    } else {
+      position = [0, eyeHeight, 0];
     }
-  }, [bounds, camera, eyeHeight, groundedSpawn, scratch, spawnHint]);
+
+    camera.position.set(position[0], position[1], position[2]);
+
+    freshSpawn.current = null;
+    if (stored?.yaw !== undefined) {
+      scratch.euler.set(stored.pitch ?? 0, stored.yaw, 0, "YXZ");
+      camera.quaternion.setFromEuler(scratch.euler);
+    } else if (bounds) {
+      faceOpenest(position);
+      freshSpawn.current = {
+        position: camera.position.clone(),
+        quaternion: camera.quaternion.clone(),
+      };
+    }
+  }, [bounds, camera, collider, eyeHeight, faceOpenest, groundedSpawn, isStandable, rooms, scratch]);
 
   const enterOrbit = useCallback(() => {
     const stored = saved.current.orbit;
@@ -304,9 +372,13 @@ export function CameraController({
     }
     if (previousMode.current === mode) return;
 
-    // Save where we were before moving.
+    // Save where we were before moving - but never a walk pose with no floor
+    // under it, or the next entry resumes the fall.
     if (previousMode.current === "orbit") persist({ orbit: captureOrbit() });
-    if (previousMode.current === "walk") persist({ walk: captureWalk() });
+    if (previousMode.current === "walk") {
+      const pose = captureWalk();
+      persist({ walk: isStandable(pose.position) ? pose : undefined });
+    }
 
     flight.current = null;
     if (mode === "walk") enterWalk();
@@ -314,7 +386,54 @@ export function CameraController({
 
     persist({ mode });
     previousMode.current = mode;
-  }, [mode, ready, captureOrbit, captureWalk, enterOrbit, enterWalk, persist]);
+  }, [mode, ready, captureOrbit, captureWalk, enterOrbit, enterWalk, isStandable, persist]);
+
+  // -- The collider arrives late -----------------------------------------
+
+  /**
+   * Re-check the walk spawn once there is something to check it against.
+   *
+   * The collider is built in an effect after the model is indexed, so the
+   * initial walk entry almost always runs without one and cannot know whether
+   * it placed the camera over a floor. The moment it exists, ask; if the answer
+   * is no, choose again with the collider in hand.
+   */
+  useEffect(() => {
+    if (!collider || mode !== "walk" || !framed.current || flight.current) return;
+    const p = camera.position;
+    if (supportAt(collider, [p.x, p.y, p.z], eyeHeight) === null) {
+      saved.current = { ...saved.current, walk: undefined };
+      enterWalk();
+      return;
+    }
+    // Standing is fine; the facing was chosen blind. Choose again if untouched.
+    const spawn = freshSpawn.current;
+    if (
+      spawn &&
+      spawn.position.distanceToSquared(p) < 1e-8 &&
+      spawn.quaternion.angleTo(camera.quaternion) < 1e-6
+    ) {
+      faceOpenest([p.x, p.y, p.z]);
+      spawn.quaternion.copy(camera.quaternion);
+    }
+    // Only the collider's arrival should trigger this; re-running whenever
+    // enterWalk changes identity would teleport a user who is walking.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collider]);
+
+  /** Called by the walk controller when the camera has left the model. */
+  const handleFellOut = useCallback(() => {
+    flight.current = null;
+    saved.current = { ...saved.current, walk: undefined };
+    saveCamera(modelUrl, saved.current);
+    fallOuts.current += 1;
+    enterWalk();
+    if (afterFallingOut(fallOuts.current) === "fly") {
+      // enterWalk may have just cleared this; the repeat fall overrides it.
+      setUnsupported(true);
+      console.warn("[viewer] the walk camera fell out of this model twice; flying instead of falling");
+    }
+  }, [enterWalk, modelUrl]);
 
   // -- Flight ------------------------------------------------------------
 
@@ -346,7 +465,9 @@ export function CameraController({
 
   const flyToRoom = useCallback(
     (room: RoomInfo) => {
-      const floorY = bounds?.min[1] ?? 0;
+      // The room's own storey, not the model's lowest point: flying to a
+      // first-floor bedroom at ground level lands the camera under its floor.
+      const floorY = (bounds?.min[1] ?? 0) + room.elevation;
       const view = roomViewpoint(room.bounds_min, room.bounds_max, eyeHeight, floorY);
 
       if (mode === "walk") {
@@ -482,9 +603,10 @@ export function CameraController({
 
   const handleWalkSettled = useCallback(
     (position: readonly [number, number, number], yaw: number, pitch: number) => {
+      if (!isStandable(position)) return;
       persist({ walk: { position, yaw, pitch } });
     },
-    [persist],
+    [isStandable, persist],
   );
 
   return mode === "orbit" ? (
@@ -497,10 +619,12 @@ export function CameraController({
   ) : (
     <WalkController
       enabled
-      collider={collider}
+      collider={unsupported ? null : collider}
+      bounds={bounds}
       controlsRef={walkRef}
       onLockChange={onLockChange}
       onSettled={handleWalkSettled}
+      onFellOut={handleFellOut}
     />
   );
 }

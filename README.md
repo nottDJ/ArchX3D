@@ -1,25 +1,53 @@
 # ArchX3D
 
-**ArchX3D** is an automated pipeline that converts 2D DXF floor plans into 3D GLB models and walkthrough videos using Python, Blender, and Gemini AI.
+**ArchX3D** converts 2D architectural DXF floor plans into 3D GLB models and
+walkthrough videos. The geometry engine is deterministic and runs entirely on
+the CPU: **no API key is needed to reconstruct a building**. AI is an optional
+enrichment layer that adds furniture, finishes and lighting from reference
+photographs — it never decides where a wall is.
 
 ## Features
-- **DXF Geometry Extraction**: Parses raw CAD floor plans to extract meaningful wall segments and structural layouts.
-- **Generative AI Styling**: Uses Gemini AI to procedurally dictate materials and styles based on the floor plan context.
-- **Automated Blender 3D Generation**: Extrudes 2D geometry into 3D objects, sets up lighting, applies materials, and exports to GLB format automatically.
-- **FastAPI Bridge Server**: Provides a RESTful API to accept DXF uploads, trigger the background generation pipeline, and serve resulting 3D assets to a frontend (e.g., Next.js).
+- **Deterministic CAD reconstruction** (`modules/recon/`): resolves the
+  drawing's units from its own evidence, classifies every entity as building
+  or documentation, reconstructs wall systems with measured thicknesses,
+  separates the sheet into structures, derives rooms from wall topology, and
+  finds doors and windows as real openings. Offline, reproducible, and
+  validated before anything is built.
+- **Buildings and storeys from the drawing's own words**: two plans on one
+  sheet become two buildings or two storeys of one building only on the
+  evidence of plan titles, layer level tokens and block designations — and are
+  flagged as ambiguous, not guessed at, when the drawing does not settle it.
+- **Validation before 3D**: a reconstruction that does not describe a building
+  is refused with diagnostics rather than exported as a distorted model, and
+  the exported GLB is checked back against the model it came from
+  (`modules/glb_validate.py`).
+- **Measured against ground truth**: a 79-drawing corpus with exact truth
+  (`tests/corpus/`) holds the engine to a floor per dataset group on openings,
+  walls, rooms, footprint and scale. Current numbers:
+  [`docs/CORPUS_REPORT.md`](docs/CORPUS_REPORT.md).
+- **Diagnostics bundle**: per-stage SVG and JSON for every run, so a bad
+  result can be traced to the stage that produced it.
+- **Automated Blender 3D generation**: a direct extrusion of the validated 2D
+  model — walls at their own thicknesses, floors on the real footprint,
+  openings cut as holes — plus lighting, materials and GLB export.
+- **Optional vision enrichment**: with reference photographs, Gemini produces a
+  scene graph of furniture, finishes and luminaires.
+- **FastAPI bridge server** and an installable **Windows desktop app**.
 
 ## Pipeline Architecture
 
 ```mermaid
 flowchart TD
-    DXF[2D DXF floor plan] --> EX[DXF Extraction<br/>modules/dxf_extractor.py]
-    EX --> GEO[(geometry.json)]
-    GEO --> ST[AI Style Generation<br/>modules/style_generator.py]
-    IMG[Reference images] -.-> ST
-    ST --> STY[(styling.json)]
-    GEO --> BL[Blender 3D Generation<br/>modules/blender_generator.py]
-    STY --> BL
+    DXF[2D DXF floor plan] --> RC[Deterministic Reconstruction<br/>modules/recon/]
+    RC --> BJ[(building.json)]
+    BJ --> GEO[(geometry.json — projected<br/>for vision and the viewer)]
+    GEO --> SA[Scene Analysis<br/>modules/scene_analyzer.py]
+    IMG[Reference images] -.-> SA
+    SA --> SG[(scene_graph.json)]
+    BJ --> BL[Blender 3D Generation<br/>modules/blender_generator.py<br/>modules/blender_build.py]
+    SG -.-> BL
     BL --> GLB[model.glb + scene.blend]
+    GLB --> VAL[GLB validation<br/>modules/glb_validate.py]
     BL --> PRV[Preview renders<br/>modules/render/]
     PRV --> VID[Video Stitching<br/>modules/video_stitcher.py]
     VID --> MP4[walkthrough.mp4]
@@ -30,24 +58,41 @@ flowchart TD
     OPT -->|keep only measured improvements| BL
 
     classDef opt stroke-dasharray: 4 3
-    class ST,EV,OPT opt
+    class SA,EV,OPT opt
 ```
 
-<sub>Dashed borders mark optional stages: styling (`--skip-styling`), evaluation (`--evaluate`), and refinement (`--refine`).</sub>
+<sub>Dashed borders mark the optional stages: vision enrichment (`--skip-vision`,
+or `--offline` to state the intent outright), evaluation (`--evaluate`) and
+refinement (`--refine`). Reconstruction is not among them — it is the only stage
+whose failure stops the build.</sub>
 
 The system is orchestrated by `main.py`, which sequences the following stages:
-1. **Step 1: DXF Extraction** (`modules/dxf_extractor.py`)
-2. **Step 2: AI Style Generation** (`modules/style_generator.py`) [Optional]
-3. **Step 3: Blender 3D Generation** (`modules/blender_generator.py`) — also renders evaluation previews (`modules/render/`)
+
+1. **Step 1: DXF Reconstruction** (`modules/recon/`) — deterministic, CPU-only,
+   and the only step whose failure stops the build:
+
+       DXF -> read + classify -> units -> opening evidence -> walls
+           -> structures -> openings -> rooms -> buildings and storeys
+           -> evidence bridge -> validate -> building.json
+
+2. **Step 2: Scene Analysis** (`modules/scene_analyzer.py`) [Optional, needs a key]
+3. **Step 3: Blender 3D Generation** (`modules/blender_generator.py` +
+   `modules/blender_build.py`) — also renders evaluation previews (`modules/render/`)
 4. **Step 4: Video Stitching** (`modules/video_stitcher.py`)
 5. **Step 5: Reconstruction Evaluation** (`modules/evaluation/`) [Optional, `--evaluate`]
 6. **Step 6: Planning & Optimisation** (`modules/planner/`, `modules/optimizer/`) [Optional, `--refine`]
+
+Step 1 is documented in [`docs/RECONSTRUCTION.md`](docs/RECONSTRUCTION.md),
+and measured in [`docs/CORPUS_REPORT.md`](docs/CORPUS_REPORT.md).
 
 ## Prerequisites
 - Python 3.9+
 - **Blender 5.0** installed on your system. 
   *(Ensure the path in `main.py` under `BLENDER_EXECUTABLE_PATH` matches your Blender installation path. Default is `C:\Program Files\Blender Foundation\Blender 5.0\blender.exe`)*.
-- **GEMINI_API_KEY** environment variable set (for AI styling).
+- **GEMINI_API_KEY** environment variable — **optional**. Needed only for
+  vision-based furnishing and styling. Without it the pipeline still produces
+  a complete, geometrically correct building; run `--offline` to state that
+  intent explicitly.
 
 ## Installation
 
@@ -80,11 +125,22 @@ python main.py path/to/your_file.dxf
 ```
 
 **Options:**
+- `--offline`: Deterministic CPU-only build — no vision, no styling, no
+  network. The geometry engine never needed a key; this says so out loud.
 - `--skip-styling`: Bypass the Gemini AI material generation for a faster, unstyled export.
 - `--skip-render`: Skip rendering animation frames and stitching a video, exporting only the GLB model and Blend file.
-- `--layers`: Define specific layer names to extract (e.g., `--layers "WALLS,DOORS"`).
+- `--scale`: Metres per DXF unit, overriding the engine's own unit resolution.
+  Use only when the drawing's evidence is genuinely wrong.
+- `--diagnostics DIR`: Where to write the per-stage diagnostics bundle
+  (default `output/diagnostics`; pass `''` to disable).
 - `--evaluate`: Score the reconstruction against the reference photographs and write `output/evaluation/`.
 - `--refine`: Plan improvements from the evaluation and run the optimisation loop (implies `--evaluate`; budget minutes).
+
+The reconstruction can also be run on its own, with no Blender and no config:
+
+```bash
+python -m modules.recon.pipeline plan.dxf building.json --diagnostics diag/
+```
 
 ### 2. Running the API Server
 Start the FastAPI bridge server to connect with your web frontend:
@@ -175,6 +231,8 @@ contributors; normative where they disagree with the current code.
 ### Subsystems
 How the code works today.
 
+- [`docs/RECONSTRUCTION.md`](docs/RECONSTRUCTION.md) — The deterministic DXF engine: the intermediate representation, unit resolution, entity classification, wall reconstruction, structures, openings, topology, buildings and storeys, validation and diagnostics — and why each stage is shaped the way it is.
+- [`docs/CORPUS_REPORT.md`](docs/CORPUS_REPORT.md) — What the engine measures on 79 drawings with exact ground truth, per group and per drawing. Generated by `tools/corpus/evaluate.py`; [`tests/corpus/README.md`](tests/corpus/README.md) says where each drawing came from, what is real in it, and why each release threshold is what it is.
 - [`docs/VIEWER.md`](docs/VIEWER.md) — The interactive architectural viewer: camera modes, roof detection, BVH collision, view modes, room navigation, GLB metadata and performance.
 - [`docs/DESKTOP.md`](docs/DESKTOP.md) — The installable Windows app: how the frontend, the frozen Python backend and the Tauri shell fit together, how to build it, and where user data lives.
 
@@ -201,9 +259,26 @@ cd web && npm test             # editor document, history, snapping, alignment
 cd web && npm run typecheck
 ```
 
+The reconstruction engine is also *measured*, not only asserted on. The corpus
+gates run with the rest of the suite and fail the build with the number that
+moved; remeasure and rewrite the report with:
+
+```bash
+python -m pytest tests/test_corpus_metrics.py -q
+python tools/corpus/evaluate.py
+```
+
 ## Outputs
 All generated content is saved to the following directories:
-- `data/` — Contains intermediate JSON files (`geometry.json`, `styling.json`).
+- `data/` — Intermediate JSON. `building.json` is the validated 2D building
+  model and the authority for the 3D build; `geometry.json` is projected from
+  it for the vision, furnishing and viewer stages; `styling.json` is legacy.
+- `output/diagnostics/` — Per-stage evidence for the run: `entities.json`,
+  `units.json`, `walls.json`, `rooms.json`, `doors.json`, `windows.json`,
+  `levels.json`, `validation.json`, and the SVG series `debug_raw`,
+  `debug_normalized`, `debug_walls`, `debug_rooms`, `debug_openings`,
+  `debug_topology`, `debug_structures`, `reconstruction`. Written on failure as
+  well as on success.
 - `output/` — Contains the final deliverables: `model.glb`, `scene.blend`, and `walkthrough.mp4`.
 - `output/preview/` — Evaluation renders (`<room>/viewpoint_NN.png`, auxiliary passes, `manifest.json`). Diagnostics, not deliverables.
 - `output/evaluation/` — Scores, findings and the HTML report (`evaluation.json`, `per_viewpoint.json`, `per_room.json`, `building_summary.json`, `report.html`).

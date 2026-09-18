@@ -2413,6 +2413,16 @@ photographs are large and their licensing is separate:
 regenerated at any size — a scale test you cannot resize stops being a scale test
 as hardware improves.
 
+**What exists today.** The reconstruction corpus is in-repo at `tests/corpus/`:
+79 DXF drawings, each with a `.truth.json` beside it, covering residential,
+apartment, multi-storey, multi-building and site-plan sheets in five unit
+conventions. `modules/recon/metrics.py` measures a reconstruction against that
+truth, `tests/test_corpus_metrics.py` gates each dataset group on it, and
+`docs/CORPUS_REPORT.md` is the current measurement. It is smaller and narrower
+than the corpus specified above — no photographs, no `.arx` history, one
+commercial building — and it is the part of this section that is real rather
+than planned.
+
 ### Coverage
 
 Line coverage is reported, not gated — gating it produces tests written for the

@@ -46,6 +46,17 @@ export interface NodeDescriptor {
   readonly userData: Readonly<Record<string, unknown>>;
   /** Ancestor names, nearest parent first. */
   readonly ancestors?: readonly string[];
+  /**
+   * Ancestor `userData`, nearest parent first.
+   *
+   * glTF splits a mesh with several materials into a group of primitives, and
+   * `GLTFLoader` puts the node's extras on the *group*. A sofa with a fabric
+   * and a wood material therefore arrives as three meshes with no metadata of
+   * their own under one tagged parent. Reading names alone, 155 of 196 pieces
+   * of furniture in a real model classified as `unknown` — which collides — so
+   * the walk camera was pushed around by sofas and ended up inside a bed.
+   */
+  readonly ancestorData?: ReadonlyArray<Readonly<Record<string, unknown>>>;
   /** Whether the node is a light rather than a mesh. */
   readonly isLight?: boolean;
   /** World-space axis-aligned bounds, Y-up. Required only for rung 5. */
@@ -221,10 +232,28 @@ function verdict(
  * `scene` is only consulted for the geometric roof test; omit it and rung 5 is
  * skipped, which is the right behaviour while scene bounds are still unknown.
  */
+/** Whether a `userData` block carries anything the generator wrote. */
+function hasGeneratorMetadata(data: Readonly<Record<string, unknown>>): boolean {
+  return (
+    isElementKind(data.archx3d_kind) ||
+    Boolean(str(data.archx3d_category)) ||
+    Boolean(str(data.archx3d_group))
+  );
+}
+
 export function classifyNode(
-  node: NodeDescriptor,
+  input: NodeDescriptor,
   scene?: SceneExtent,
 ): Classification {
+  // The generator's metadata on this node, or failing that on the nearest
+  // ancestor that has any — the glTF primitive split puts it on the parent.
+  // Inherited this way, the room and object ids come with it.
+  const inherited =
+    hasGeneratorMetadata(input.userData)
+      ? undefined
+      : input.ancestorData?.find((data) => hasGeneratorMetadata(data));
+  const node: NodeDescriptor = inherited ? { ...input, userData: inherited } : input;
+
   // -- 1. The generator said so ------------------------------------------
   const declared = node.userData.archx3d_kind;
   if (isElementKind(declared)) return verdict(declared, "metadata", node);
